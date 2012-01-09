@@ -1,8 +1,7 @@
-<?php
+<?php require("../lib/UA.php"); ?>
+<pre>
+	<?php print_r($ua); ?>
+</pre>	
 
-	require("../lib/UA.php");
-	
-	print_r($ua);
-	
-?>
+<?php echo("touch: ".$ua->touch); ?>
 
