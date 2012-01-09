@@ -1,6 +1,6 @@
 <?php
 
-class UA {
+class Detector {
 	
 	public static $ua;
 	static $uaHash;
@@ -107,6 +107,6 @@ class UA {
 	}
 }
 
-$ua = UA::get();
+$ua = Detector::get();
 
 ?>
