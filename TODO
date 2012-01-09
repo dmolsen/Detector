@@ -2,3 +2,4 @@ Things to implement for Detector
 
  - how to add Modernizr tests
  - how to add extra info to the ua info (e.g screen size)
+ - sampling
