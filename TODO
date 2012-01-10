@@ -3,3 +3,11 @@ Things to implement for Detector
  - how to add Modernizr tests
  - how to add extra info to the ua info (e.g screen size)
  - sampling
+ - families
+
+ - break the cookie into 'core' & 'extra'
+ - use extra to build a ua.{hash}.extra.json features file
+
+ - how to update session with session specific tests (e.g. screenSize & dpi)
+
+ - can add small modernizr?
