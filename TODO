@@ -1,13 +1,10 @@
-Things to implement for Detector
+Things to Implement for Detector
 
- - how to add Modernizr tests
- - how to add extra info to the ua info (e.g screen size)
- - sampling
- - families
-
- - break the cookie into 'core' & 'extra'
- - use extra to build a ua.{hash}.extra.json features file
-
- - how to update session with session specific tests (e.g. screenSize & dpi)
-
- - can add small modernizr?
+x - separating core tests from user-supplied tests, and saving that data separately...
+  - how to version the data?
+x - how to have "core" feature detection that updates server-side but gets run every time (e.g. DPI which doesn't track w/ UA string)
+  - sampling the data so that we can update properties just in case
+  - have a way to update extended even if core tests exist
+  - how do we version control the data and share across sites... i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
+  - need a good README
+  - need a good demo
