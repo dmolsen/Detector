@@ -1,4 +1,4 @@
-<?php require("../lib/UA.php"); ?>
+<?php require("../lib/Detector.php"); ?>
 <pre>
 	<?php print_r($ua); ?>
 </pre>	
