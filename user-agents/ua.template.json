@@ -1,6 +1,12 @@
 {
 	ua: "",
 	uaHash: "",
-	isBot: false,
-	features: []
+	deviceOSGeneral: "",
+	deviceOSSpecific: "",
+	majorVersion: 0,
+	minorVersion: 0,
+	isSpider: false,
+	isComputer: false,
+	isTablet: false,
+	isMobile: false
 }
