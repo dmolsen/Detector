@@ -1,4 +1,4 @@
-<?php require("../lib/Detector.php"); ?>
+<?php require("../lib/Detector/Detector.php"); ?>
 
 <html>
 	<head>
