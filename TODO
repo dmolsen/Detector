@@ -6,5 +6,5 @@ x - how to have "core" feature detection that updates server-side but gets run e
   - sampling the data so that we can update properties just in case
   - have a way to update extended even if core tests exist
   - how do we version control the data and share across sites... i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
-  - need a good README
+x - need a good README
   - need a good demo
