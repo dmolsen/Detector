@@ -73,12 +73,12 @@ class Detector {
 			self::classifyUA();
 			
 			// open the JSON template core file that will be populated
-			if ($uaJSONTemplateCore = @file_get_contents(__DIR__."/../user-agents-core/ua.template.json")) {
+			if ($uaJSONTemplateCore = @file_get_contents(__DIR__."/user-agents-core/ua.template.json")) {
 				$jsonTemplateCore = json_decode($uaJSONTemplateCore);
 			} 
 			
 			// open the JSON template core file that will be populated
-			if ($uaJSONTemplateExtended = @file_get_contents(__DIR__."/../user-agents-extended/ua.template.json")) {
+			if ($uaJSONTemplateExtended = @file_get_contents(__DIR__."/user-agents-extended/ua.template.json")) {
 				$jsonTemplateExtended = json_decode($uaJSONTemplateExtended);
 			}
 			
@@ -137,32 +137,17 @@ class Detector {
 
 			// merge the data for future requests
 			$mergedInfo = new stdClass();
-			foreach ($jsonTemplateCore as $key => $value) {
-				$mergedInfo->$key = ($value == 1) ? true : false;
-			}
-			if ($jsonTemplateExtended) {
-				foreach ($jsonTemplateExtended as $key => $value) {
-					$mergedInfo->$key = ($value == 1) ? true : false;
-				}
-			}
-			if ($cookiePerRequest) {
-				foreach ($cookiePerRequest as $key => $value) {
-					$mergedInfo->$key = ($value == 1) ? true : false;
-				}
-			}
-
-			// merge the data
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
 			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
 
 			// write out to disk for future requests that might have the same UA
 			$jsonTemplateCore = json_encode($jsonTemplateCore);
-			$fp = fopen(__DIR__."/../user-agents-core/ua.".self::$uaHash.".json", "w");
+			$fp = fopen(__DIR__."/user-agents-core/ua.".self::$uaHash.".json", "w");
 			fwrite($fp, $jsonTemplateCore);
 			fclose($fp);
 			
 			$jsonTemplateExtended = json_encode($jsonTemplateExtended);
-			$fp = fopen(__DIR__."/../user-agents-extended/ua.".self::$uaHash.".json", "w");
+			$fp = fopen(__DIR__."/user-agents-extended/ua.".self::$uaHash.".json", "w");
 			fwrite($fp, $jsonTemplateExtended);
 			fclose($fp);
 			
@@ -177,7 +162,7 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 			
-		} else if ($uaJSONCore = @file_get_contents(__DIR__."/../user-agents-core/ua.".self::$uaHash.".json")) {
+		} else if ($uaJSONCore = @file_get_contents(__DIR__."/user-agents-core/ua.".self::$uaHash.".json")) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "file";
@@ -186,7 +171,7 @@ class Detector {
 			$uaJSONCore     = json_decode($uaJSONCore);
 			
 			// find and decode the extended data
-			$uaJSONExtended = @file_get_contents(__DIR__."/../user-agents-extended/ua.".self::$uaHash.".json");
+			$uaJSONExtended = @file_get_contents(__DIR__."/user-agents-extended/ua.".self::$uaHash.".json");
 			$uaJSONExtended = json_decode($uaJSONExtended);
 			
 			// merge the data
@@ -209,7 +194,7 @@ class Detector {
 			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesCore)) {
 			    while (false !== ($entry = readdir($handle))) {
 			        if ($entry != "." && $entry != "..") {
-			            readfile(__DIR__ . '/' . self::$uaFeaturesCore . $entry);
+			            readfile(__DIR__ .'/'. self::$uaFeaturesCore . $entry);
 			        }
 			    }
 			    closedir($handle);
@@ -217,7 +202,7 @@ class Detector {
 			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesExtended)) {
 			    while (false !== ($entry = readdir($handle))) {
 			        if ($entry != "." && $entry != "..") {
-			            readfile(__DIR__ . '/' . self::$uaFeaturesExtended . $entry);
+			            readfile(__DIR__ .'/'. self::$uaFeaturesExtended . $entry);
 			        }
 			    }
 			    closedir($handle);
@@ -225,7 +210,7 @@ class Detector {
 			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesPerRequest)) {
 			    while (false !== ($entry = readdir($handle))) {
 			        if ($entry != "." && $entry != "..") {
-			            readfile(__DIR__ . '/' . self::$uaFeaturesPerRequest . $entry);
+			            readfile(__DIR__ .'/'. self::$uaFeaturesPerRequest . $entry);
 			        }
 			    }
 			    closedir($handle);
