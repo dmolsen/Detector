@@ -5,6 +5,8 @@ x - separating core tests from user-supplied tests, and saving that data separat
 x - how to have "core" feature detection that updates server-side but gets run every time (e.g. DPI which doesn't track w/ UA string)
   - sampling the data so that we can update properties just in case
   - have a way to update extended even if core tests exist
-  - how do we version control the data and share across sites... i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
+  - how do we version control the data and share across sites? i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
 x - need a good README
+  - document the code
   - need a good demo
+  - offer an api into the data
