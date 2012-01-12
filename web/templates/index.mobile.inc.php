@@ -69,13 +69,11 @@
         </div>
         <div class="row">
           <div class="span10">
-						<? include("templates/_about.inc.php"); ?>
-						<? include("templates/_browserprofile.inc.php"); ?>
-						<? include("templates/_featureprofile.inc.php"); ?>
-          </div>
-          <div class="span4">
-						<? include("templates/_moreinfo.inc.php"); ?>
-            			<? include("templates/_credits.inc.php"); ?>
+				<? include("templates/_about.inc.php"); ?>
+				<? include("templates/_browserprofile.inc.php"); ?>
+				<? include("templates/_featureprofile.inc.php"); ?>
+				<? include("templates/_moreinfo.inc.php"); ?>
+				<? include("templates/_credits.inc.php"); ?>
           </div>
         </div>
       </div>
