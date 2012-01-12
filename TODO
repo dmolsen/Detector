@@ -11,4 +11,4 @@ x - need a good README
 x - need a good demo
   - offer an api into the data
 x - BUG: issue with cookies and sessions dying
-x - BUG: media query core tests not working properly
+ - BUG: media query core tests not working properly (works locally but not on iOS 5?)
