@@ -4,7 +4,7 @@
 require("../lib/Detector/Detector.php"); 
 
 // switch templates based on device type
-if ($ua->isMobile) {
+if ($ua->isMobile && (Detector::$foundIn != "archive")) {
 	include("templates/index.mobile.inc.php");
 } else {
 	include("templates/index.default.inc.php");
