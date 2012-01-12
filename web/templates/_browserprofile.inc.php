@@ -1,4 +1,4 @@
-<h3>Detector's Browser Profile for You</h3>
+<h3>Your Detector Browser Profile</h3>
 <p>
 	The following browser profile was created using the browser-detection of Detector. It, as well as the the following feature profile, were <strong>
 	<?php

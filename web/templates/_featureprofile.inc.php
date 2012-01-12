@@ -1,4 +1,4 @@
-<h3>Detector's Feature Profile for You</h3>
+<h3>Your Detector Feature Profile</h3>
 <p>
 	The following feature profile was primarily created using <a href="http://www.modernizr.com/docs/#s2">Modernizr's core tests</a>. The left column, <strong>Browser</strong>, is populated by JavaScript using a copy of Modernizr that is loaded with this page. The right column, <strong>Server</strong>, is populated by PHP using the profile created by Detector for your browser.
 	In addition to the core tests
@@ -46,6 +46,6 @@
 		?>
 	</tbody>
 </table>
-<p>
-	Please note, the only reason why a full slate of Modernizr tests is always done with this demo is for the feature profile comparison. You can include as much or as little of Modernizr as you want on your site. You can even leave it out entirely.
-</p>
+<div class="alert-message warning">
+	<strong>Please note:</strong> the media query-based tests for browser class <em>(mobile, tablet, &amp; desktop)</em> don't seem to always report correctly. I'm trying to figure out why.
+</div>
