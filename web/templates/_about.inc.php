@@ -1,0 +1,7 @@
+<h3>About Detector</h3>
+<p>
+	<a href="https://github.com/dmolsen/Detector">Detector</a> is a simple, PHP- and JavaScript-based browser- and feature-detection library. Detector gives
+	server-side developers information on what types of devices may be requesting their content as well as the HTML5 &amp; CSS3 features a requesting browser may or may not support. With Detector a developer 
+	can serve the appropriate markup, stylesheets, and JavaScript to a requesting browser without being completely dependent on front-end-only 
+	script loaders. <a href="https://github.com/dmolsen/Detector">Check out the README</a> for more information.
+</p>
