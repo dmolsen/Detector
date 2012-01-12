@@ -38,7 +38,7 @@ class Detector {
 			self::$foundIn = "session";
 			
 			// grab features out of the cookie that are being checked on every request. update the session as appropriate
-			$uaFeatures = self::_ang($_COOKIE[self::$uaHash]);
+			$uaFeatures = self::_ang($_COOKIE[self::$uaHash."-pr"]);
 			$cookiePerRequest = new stdClass();
 			foreach($uaFeatures as $key => $value) {
 				$key = str_replace("pr-", "", $key);
@@ -230,17 +230,17 @@ class Detector {
 		    }
 		    closedir($handle);
 		}
-		print self::_mer(false);
+		print self::_mer(false,'-pr');
 	}
 	
-	private static function _mer($reload = true) {
+	private static function _mer($reload = true, $cookieExtra = '') {
 		$output = "".
 		  "var m=Modernizr;c='';".
 		  "for(var f in m){".
 		    "if(f[0]=='_'){continue;}".
 		    "var t=typeof m[f];".
 		    "if(t=='function'){continue;}".
-		    "c+=(c?'|':'".self::$uaHash."=')+f+':';".
+		    "c+=(c?'|':'".self::$uaHash.$cookieExtra."=')+f+':';".
 		    "if(t=='object'){".
 		      "for(var s in m[f]){".
 		        "c+='/'+s+':'+(m[f][s]?'1':'0');".
