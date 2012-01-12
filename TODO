@@ -7,8 +7,9 @@ x - how to have "core" feature detection that updates server-side but gets run e
   - have a way to update extended even if core tests exist
   - how do we version control the data and share across sites? i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
 x - need a good README
-  - document the code
+x - document the code
 x - need a good demo
   - offer an api into the data
 x - BUG: issue with cookies and sessions dying
- - BUG: media query core tests not working properly (works locally but not on iOS 5?)
+  - BUG: media query core tests not working properly (works locally but not on iOS 5?)
+x - add support for an archive feature so others can view the already saved profiles
