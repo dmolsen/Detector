@@ -10,3 +10,4 @@ x - need a good README
   - document the code
   - need a good demo
   - offer an api into the data
+x - BUG: issue with cookies and sessions dying
