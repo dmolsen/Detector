@@ -1,6 +1,7 @@
 <h3>Detector's Feature Profile for You</h3>
 <p>
-	The following feature profile was primarily created using <a href="http://www.modernizr.com/docs/#s2">Modernizr's core tests</a>. In addition to the core tests
+	The following feature profile was primarily created using <a href="http://www.modernizr.com/docs/#s2">Modernizr's core tests</a>. The left column, <strong>Browser</strong>, is populated by JavaScript using a copy of Modernizr that is loaded with this page. The right column, <strong>Server</strong>, is populated by PHP using the profile created by Detector for your browser.
+	In addition to the core tests
 	I've added an extended test that checks for emoji support as well as a per request test to check the device pixel ratio. Both were added using the <a href="http://www.modernizr.com/docs/#addtest">Modernizr.addTest() Plugin API</a>.
 	To learn more about core, extended, and per request tests please <a href="https://github.com/dmolsen/Detector">review the README</a>.  To access any of these options in your PHP app you'd simple type <code>$ua->featureName</code>.
 </p>
@@ -27,7 +28,11 @@
 						$jsonTemplateCore->$key = $value;
 					} else { ?>
 						<tr>
-							<th class="span7"><?=$key?>:</th>
+							<? if (preg_match("/(desktop|mobile|tablet)/",$key)) { ?>
+								<th class="span7"><?=$key?>: <small><em>(via media queries)</em></small></th>
+							<? } else { ?>
+								<th class="span7"><?=$key?>:</th>
+							<? } ?>
 							<? if (!preg_match("/(desktop|mobile|tablet|colordepth|json|overflowscrolling|emoji|hirescapable)/",$key)) { ?>
 								<td class="span1"><script type="text/javascript">if (Modernizr['<?=$key?>']) { document.write("<span class='label success'>true</span>"); } else { document.write("<span class='label important'>false</span>"); }</script></td>
 							<? } else { ?>
