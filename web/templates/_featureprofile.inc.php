@@ -21,19 +21,25 @@
 						foreach ($value as $vkey => $vvalue) { ?>
 							<tr>
 								<th class="span7"><?=$key?>-><?=$vkey?>:</th>
-								<td class="span1"><script type="text/javascript">if (Modernizr['<?=$key?>']['<?=$vkey?>']) { document.write("<span class='label success'>true</span>"); } else { document.write("<span class='label important'>false</span>"); }</script></td>
+								<? if (Detector::$foundIn == "archive") { ?>
+									<td class="span1"><span class='label'>N/A</span></td>
+								<? } else { ?>
+									<td class="span1"><script type="text/javascript">if (Modernizr['<?=$key?>']['<?=$vkey?>']) { document.write("<span class='label success'>true</span>"); } else { document.write("<span class='label important'>false</span>"); }</script></td>
+								<? } ?>
 								<td class="span1"><?=convertTF($vvalue)?></td>
 							</tr>
 						<?php }
 						$jsonTemplateCore->$key = $value;
 					} else { ?>
-						<tr>
+						<tr>	
 							<? if (preg_match("/(desktop|mobile|tablet)/",$key)) { ?>
 								<th class="span7"><?=$key?>: <small><em>(via media queries)</em></small></th>
 							<? } else { ?>
 								<th class="span7"><?=$key?>:</th>
 							<? } ?>
-							<? if (!preg_match("/(desktop|mobile|tablet|colordepth|json|overflowscrolling|emoji|hirescapable)/",$key)) { ?>
+							<? if (Detector::$foundIn == "archive") { ?>
+								<td class="span1"><span class='label'>N/A</span></td>
+							<? } else if (!preg_match("/(desktop|mobile|tablet|colordepth|json|overflowscrolling|emoji|hirescapable)/",$key)) { ?>
 								<td class="span1"><script type="text/javascript">if (Modernizr['<?=$key?>']) { document.write("<span class='label success'>true</span>"); } else { document.write("<span class='label important'>false</span>"); }</script></td>
 							<? } else { ?>
 								<td class="span1"><span class='label'>N/A</span></td>
