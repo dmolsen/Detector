@@ -8,6 +8,7 @@ x - how to have "core" feature detection that updates server-side but gets run e
   - how do we version control the data and share across sites? i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
 x - need a good README
   - document the code
-  - need a good demo
+x - need a good demo
   - offer an api into the data
 x - BUG: issue with cookies and sessions dying
+x - BUG: media query core tests not working properly
