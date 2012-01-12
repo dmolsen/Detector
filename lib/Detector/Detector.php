@@ -1,5 +1,12 @@
 <?php
 
+/*!
+ * Detector v0.1
+ *
+ * Copyright (c) 2011-2012 Dave Olsen, http://dmolsen.com
+ * Licensed under the MIT license
+ */
+
 class Detector {
 	
 	public static  $ua;
@@ -24,6 +31,17 @@ class Detector {
 	private static $majorVersion         = 0;
 	private static $minorVersion         = 0;
 	
+	/**
+	* Tests to see if:
+	*     - a session has already been opened for the request browser, if so send the info back, else
+	*     - see if the cookie has been set so we can build the profile, if so build the profile & send the info back, else
+	*     - see if detector can find an already created profile for the browser, if so send the info back, else
+	*     - start the process for building a profile for this unknown browser
+	*
+	* Based heavily on modernizr-server
+	*
+	* @return {Object}       an object that contains all the properties for this particular user agent
+	*/
 	public function build() {
 		
 		// populate some standard variables
@@ -220,6 +238,13 @@ class Detector {
 		}
 	}
 	
+	/**
+	* Reads in the per request feature tests and sends them to the function that builds out the JS & cookie
+	*
+	* from modernizr-server
+	*
+	* @return {String}       the HTML & JavaScript that tracks the per request test
+	*/
 	public static function perrequest() {
 		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
 		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesPerRequest)) {
@@ -233,6 +258,15 @@ class Detector {
 		print self::_mer(false,'-pr');
 	}
 	
+	/**
+	* Creates the JavaScript & cookie that tracks the features for a particular browser
+	* @param  {Boolean}      if the javascript should include a page reload statement
+	* @param  {String}       if the cookie that is created should have a string appended to it. used for per request tests.
+	*
+	* from modernizr-server
+	*
+	* @return {String}       the HTML & JavaScript that tracks the per request test
+	*/
 	private static function _mer($reload = true, $cookieExtra = '') {
 		$output = "".
 		  "var m=Modernizr;c='';".
@@ -260,6 +294,14 @@ class Detector {
 		return $output;
 	}
 
+	/**
+	* Reads in the cookie values and breaks them up into an object for use in build()
+	* @param  {String}       the value from the cookie
+	*
+	* from modernizr-server
+	*
+	* @return {Object}       key/value pairs based on the cookie
+	*/
 	private static function _ang($cookie) {
 		$uaFeatures = new Detector();
 		if ($cookie != '') {
@@ -280,7 +322,11 @@ class Detector {
 		return $uaFeatures;
 	}
 
-	// returns the general device type based on user agent string matching. can get very specific depending on usage.
+	/**
+	* returns the general device type based on user agent string matching. can get very specific depending on usage.
+	*
+	* from mobile web osp
+	*/
 	private static function classifyUA() {
 
 		if (preg_match("/ipod/i",self::$ua)) {
@@ -362,6 +408,9 @@ class Detector {
 		}
 	}
 
+	/**
+	* attempts to create version numbers from the user agent. only used for iPhone, iPod, iPad and Android devices.
+	*/
 	private static function findUAVersion() {
 		if (preg_match('/\ ([0-9]{1,2})(\.|\_)([0-9]{1,2})/i',self::$ua,$matches)) {
 			self::$majorVersion = $matches[1];
