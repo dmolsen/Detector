@@ -75,7 +75,7 @@
 
       <div class="content">
         <div class="page-header">
-          <h1>Detector <small>browser- &amp; feature-detection combined for your app</small></h1>
+          <h1><a href="/" style="color: black;">Detector</a> <small>combined browser- &amp; feature-detection for your app</small></h1>
         </div>
         <div class="row">
           <div class="span10">
@@ -92,6 +92,7 @@
 						<? include("templates/_about.inc.php"); ?>
 						<? include("templates/_moreinfo.inc.php"); ?>
             			<? include("templates/_credits.inc.php"); ?>
+						<? include("templates/_archive.inc.php"); ?>
           </div>
         </div>
       </div>
