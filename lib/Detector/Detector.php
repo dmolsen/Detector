@@ -26,6 +26,7 @@ class Detector {
 	private static $isTablet             = false;
 	private static $isComputer           = false;
 	private static $isSpider             = false;
+	private static $mobileType           = '';
 	private static $deviceOSGeneral;
 	private static $deviceOSSpecific;
 	private static $majorVersion         = 0;
@@ -50,7 +51,32 @@ class Detector {
 		self::$sessionID = self::$uaHash."-session";
 	    self::$accept    = $_SERVER["HTTP_ACCEPT"];
 		
-		if (session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID])) {
+		// offer the ability to review profiles saved in the system
+		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid'])) {
+			
+			// where did we find this info to display... probably only need this for the demo
+			self::$foundIn = "archive";
+			
+			// decode the core data
+			$uaJSONCore     = @file_get_contents(__DIR__."/user-agents-core/ua.".$_REQUEST['pid'].".json");
+			$uaJSONCore     = json_decode($uaJSONCore);
+			
+			// find and decode the extended data
+			$uaJSONExtended = @file_get_contents(__DIR__."/user-agents-extended/ua.".$_REQUEST['pid'].".json");
+			$uaJSONExtended = json_decode($uaJSONExtended);
+			
+			// merge the data
+			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;
+			
+			// put the merged JSON info into session
+			if (isset($_SESSION)) {
+				$_SESSION[self::$sessionID] = $mergedInfo;
+			}
+			
+			// return to the script
+			return $mergedInfo;
+		
+		} else if (session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID])) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "session";
@@ -206,6 +232,8 @@ class Detector {
 		} else {
 			
 			// didn't recognize that the user had been here before nor the UA string.
+			
+			// check to see if it's a spider or device without javascript (currently throwing generic feature phones under the bus)
 			// gather info by sending Modernizr & custom tests
 			print "<html><head><script type='text/javascript'>";
 			readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
@@ -405,6 +433,7 @@ class Detector {
 		self::$isSpider = ($type == "spider");
 		if (!self::$isTablet && !self::$isComputer && !self::$isSpider) {
 			self::$isMobile = true;
+			self::$mobileType = $type;
 		}
 	}
 
