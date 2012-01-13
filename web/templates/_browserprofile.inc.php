@@ -66,3 +66,7 @@
 		</tr>
 	</tbody>
 </table>
+
+<p>
+	If there is something wrong with this profile <a href="contact.php?pid=<?=$ua->uaHash?>">please let me know</a>.
+</p>
