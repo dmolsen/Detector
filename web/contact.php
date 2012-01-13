@@ -15,6 +15,10 @@ Their message:
 	mail('dmolsen@gmail.com', 'Detector Feedback', $message);
 }
 
-include("templates/contact.inc.php");
+if ($ua->isMobile) {
+	include("templates/contact.mobile.inc.php");
+} else {
+	include("templates/contact.default.inc.php");
+}
 
 ?>
