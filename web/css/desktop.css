@@ -46,3 +46,9 @@ html, body {
 }
 
 thead > tr > th { font-size: 14px; }
+
+#forkme {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
