@@ -24,10 +24,15 @@
 			<th class="span3">User Agent:</th>
 			<td><?=$ua->ua?></td>
 		</tr>
-		<tr>
-			<th class="span3">UA Hash:</th>
-			<td><?=$ua->uaHash?></td>
-		</tr>
+		<?php
+			if ($ua->isMobile && (Detector::$foundIn != "archive")) {
+				
+			} else { ?>
+				<tr>
+					<th class="span3">UA Hash:</th>
+					<td><?=$ua->uaHash?></td>
+				</tr>
+		<?php } ?>
 		<tr>
 			<th class="span3">Gen. <? if ($ua->isMobile) { ?>OS<? } else { ?> Grouping<? } ?>:</th>
 			<td><?=$ua->deviceOSGeneral?></td>
@@ -68,5 +73,5 @@
 </table>
 
 <p>
-	If there is something wrong with this profile <a href="contact.php?pid=<?=$ua->uaHash?>">please let me know</a>.
+	<strong>Something wrong with this profile?</strong> Please, <a href="contact.php?cid=<?=$ua->uaHash?>">let me know</a>.
 </p>
