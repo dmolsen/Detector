@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Detector - browser- &amp; feature-detection combined for your app</title>
+    <title>Detector [BETA] - combined browser- &amp; feature-detection for your app</title>
     <meta name="description" content="">
     <meta name="author" content="">
 	<meta name="viewport" content="width=device-width">
