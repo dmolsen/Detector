@@ -1,4 +1,3 @@
-<? include("templates/_convertTF.inc.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -61,6 +60,8 @@
       .topbar .btn {
         border: 0;
       }
+
+	  thead > tr > th { font-size: 14px; }
 
     </style>
 

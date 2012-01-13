@@ -1,4 +1,3 @@
-<? include("templates/_convertTF.inc.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
