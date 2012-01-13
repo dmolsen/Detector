@@ -1,6 +1,8 @@
 {
 	ua: "",
 	uaHash: "",
+	uaVendor: "",
+	uaName: "",
 	deviceOSGeneral: "",
 	deviceOSSpecific: "",
 	majorVersion: 0,
