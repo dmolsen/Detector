@@ -396,6 +396,9 @@ class Detector {
 		else if (preg_match('/kindle/i',self::$ua)) {
 			$type = "kindle";
 		}
+		else if (preg_match('/silk/i',self::$ua) && preg_match('/webkit/i',self::$ua)) {
+			$type = "kindle_fire";
+		}
 		else if (preg_match('/psp/i',self::$ua)) {
 			$type = "playstationportable";
 		}
@@ -428,7 +431,7 @@ class Detector {
 		self::$deviceOSGeneral = $type;
 		self::$deviceOSSpecific = $type.self::$majorVersion.self::$minorVersion;
 		
-		self::$isTablet = (preg_match('/ipad|kindle/',$type)) ? true : false;
+		self::$isTablet = (preg_match('/ipad|kindle|kindle_fire/',$type)) ? true : false;
 		self::$isComputer = ($type == "computer");
 		self::$isSpider = ($type == "spider");
 		if (!self::$isTablet && !self::$isComputer && !self::$isSpider) {
