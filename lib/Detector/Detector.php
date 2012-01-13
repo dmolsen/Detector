@@ -313,12 +313,11 @@ class Detector {
 		  "}".
 		  "c+=';path=/';".
 		  "try{".
-		    "console.log(c);".
 		    "document.cookie=c;";
 		if ($reload) {
 			$output .= "document.location.reload();";
 		}
-		$output .= "}catch(e){console.log(e)}"."";
+		$output .= "}catch(e){}"."";
 		return $output;
 	}
 
