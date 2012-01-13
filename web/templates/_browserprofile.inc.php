@@ -25,6 +25,10 @@
 			<td><?=$ua->ua?></td>
 		</tr>
 		<tr>
+			<th class="span3">UA Hash:</th>
+			<td><?=$ua->uaHash?></td>
+		</tr>
+		<tr>
 			<th class="span3">Gen. <? if ($ua->isMobile) { ?>OS<? } else { ?> Grouping<? } ?>:</th>
 			<td><?=$ua->deviceOSGeneral?></td>
 		</tr>
