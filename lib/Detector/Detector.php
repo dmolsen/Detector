@@ -17,7 +17,7 @@ class Detector {
 	private static $uaHash;
 	private static $sessionID;
 	private static $uaFeaturesMaxJS      = "modernizr/modernizr.pre21.js";    // all the default Modernizr Tests
-	private static $uaFeaturesMinJS      = "modernizr/modernizr.no-tests.js"; // NO default tests except media queries, meant to run those in the perrequest folder
+	private static $uaFeaturesMinJS      = "modernizr/modernizr.pre21.no-tests.js"; // NO default tests except media queries, meant to run those in the perrequest folder
 	private static $uaFeaturesCore       = "tests/core/"; 
 	private static $uaFeaturesExtended   = "tests/extended/";
 	private static $uaFeaturesPerRequest = "tests/perrequest/";
@@ -88,7 +88,15 @@ class Detector {
 				$key = str_replace("pr-", "", $key);
 				if (is_object($value)) {
 					foreach ($value as $vkey => $vvalue) {
-						$value->$vkey = ($vvalue == 1) ? true : false;
+						if ($vvalue == "probably") { // hack for modernizr
+							$value->$vkey = true;
+						} else if ($vvalue == "maybe") { // hack for modernizr
+							$value->$vkey = false;
+						} else if (($vvalue == 1) || ($vvalue == 0)) {
+							$value->$vkey = ($vvalue == 1) ? true : false;
+						} else {
+							$value->$vkey = $vvalue;
+						}
 					}
 					$cookiePerRequest->$key = $value;
 				} else {
@@ -143,6 +151,7 @@ class Detector {
 			
 			// push features into the same level as the general device information
 			// change 1/0 to true/false. why? 'cause that's what i like to read ;)
+			// this section is all sorts of redundant but i don't feel like DRYing it right now
 			foreach($uaFeatures as $key => $value) {
 				$pos1 = strpos($key,"extended-");
 				$pos2 = strpos($key,"pr-");
@@ -150,7 +159,15 @@ class Detector {
 					$key = str_replace("extended-", "", $key);
 					if (is_object($value)) {
 						foreach ($value as $vkey => $vvalue) {
-							$value->$vkey = ($vvalue == 1) ? true : false;
+							if ($vvalue == "probably") { // hack for modernizr
+								$value->$vkey = true;
+							} else if ($vvalue == "maybe") { // hack for modernizr
+								$value->$vkey = false;
+							} else if (($vvalue == 1) || ($vvalue == 0)) {
+								$value->$vkey = ($vvalue == 1) ? true : false;
+							} else {
+								$value->$vkey = $vvalue;
+							}
 						}
 						$jsonTemplateExtended->$key = $value;
 					} else {
@@ -160,7 +177,15 @@ class Detector {
 					$key = str_replace("pr-", "", $key);
 					if (is_object($value)) {
 						foreach ($value as $vkey => $vvalue) {
-							$value->$vkey = ($vvalue == 1) ? true : false;
+							if ($vvalue == "probably") { // hack for modernizr
+								$value->$vkey = true;
+							} else if ($vvalue == "maybe") { // hack for modernizr
+								$value->$vkey = false;
+							} else if (($vvalue == 1) || ($vvalue == 0)) {
+								$value->$vkey = ($vvalue == 1) ? true : false;
+							} else {
+								$value->$vkey = $vvalue;
+							}
 						}
 						$cookiePerRequest->$key = $value;
 					} else {
@@ -170,7 +195,15 @@ class Detector {
 					$key = str_replace("core-", "", $key);
 					if (is_object($value)) {
 						foreach ($value as $vkey => $vvalue) {
-							$value->$vkey = ($vvalue == 1) ? true : false;
+							if ($vvalue == "probably") { // hack for modernizr
+								$value->$vkey = true;
+							} else if ($vvalue == "maybe") { // hack for modernizr
+								$value->$vkey = false;
+							} else if (($vvalue == 1) || ($vvalue == 0)) {
+								$value->$vkey = ($vvalue == 1) ? true : false;
+							} else {
+								$value->$vkey = $vvalue;
+							}
 						}
 						$jsonTemplateCore->$key = $value;
 					} else {
@@ -239,7 +272,7 @@ class Detector {
 			readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
 			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesCore)) {
 			    while (false !== ($entry = readdir($handle))) {
-			        if ($entry != "." && $entry != "..") {
+			        if ($entry != "." && $entry != ".." && $entry != "README") {
 			            readfile(__DIR__ .'/'. self::$uaFeaturesCore . $entry);
 			        }
 			    }
@@ -305,7 +338,8 @@ class Detector {
 		    "c+=(c?'|':'".self::$uaHash.$cookieExtra."=')+f+':';".
 		    "if(t=='object'){".
 		      "for(var s in m[f]){".
-		        "c+='/'+s+':'+(m[f][s]?'1':'0');".
+				"if (typeof m[f][s]=='boolean') { c+='/'+s+':'+(m[f][s]?1:0); }".
+		        "else { c+='/'+s+':'+m[f][s]; }".
 		      "}".
 		    "}else{".
 		      "c+=m[f]?'1':'0';".
