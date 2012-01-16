@@ -7,5 +7,6 @@
 
     </div> <!-- /container -->
 	<?php include("templates/_gauges.inc.php"); ?>
+	<?php include("templates/_googleanalytics.inc.php"); ?>
   </body>
 </html>
