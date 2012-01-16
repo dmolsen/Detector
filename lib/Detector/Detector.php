@@ -18,9 +18,9 @@ class Detector {
 	private static $sessionID;
 	private static $uaFeaturesMaxJS      = "modernizr/modernizr.pre21.js";    // all the default Modernizr Tests
 	private static $uaFeaturesMinJS      = "modernizr/modernizr.no-tests.js"; // NO default tests except media queries, meant to run those in the perrequest folder
-	private static $uaFeaturesCore       = "modernizr/core/"; 
-	private static $uaFeaturesExtended   = "modernizr/extended/";
-	private static $uaFeaturesPerRequest = "modernizr/perrequest/";
+	private static $uaFeaturesCore       = "tests/core/"; 
+	private static $uaFeaturesExtended   = "tests/extended/";
+	private static $uaFeaturesPerRequest = "tests/perrequest/";
 	
 	private static $isMobile             = false;
 	private static $isTablet             = false;
