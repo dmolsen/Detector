@@ -26,6 +26,14 @@
 			font-size: 20px;
 			vertical-align: bottom;
 		}
+		
+		thead > tr > th { 
+			vertical-align: bottom; 
+		}
+		
+		thead > tr {
+			background-color: #efefef;
+		}
 	</style>
 
 	<!-- My Scripts -->

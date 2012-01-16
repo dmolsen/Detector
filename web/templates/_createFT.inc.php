@@ -4,8 +4,8 @@
 			<thead>
 				<tr>
 					<th>".$title."</th>
-					<th>Browser</th>
-					<th>Server</th>
+					<th>Your Browser</th>
+					<th>Detector Profile</th>
 				</tr>
 			</thead>
 			<tbody>";

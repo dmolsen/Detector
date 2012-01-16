@@ -45,7 +45,9 @@ html, body {
   border: 0;
 }
 
-thead > tr > th { font-size: 14px; }
+thead > tr > th { 
+	font-size: 14px; 
+}
 
 #forkme {
 	position: absolute;
