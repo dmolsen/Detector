@@ -15,15 +15,15 @@
 	$miscFeatures       = "/(geolocation|inlinesvg|smil|svg|svgclippaths|touch|webgl|json)/";
 	$mqFeatures         = "/(desktop|mobile|tablet)/";
 	$extendedFeatures   = "/(emoji)/";
-	$perRequestFeatures = "/(hirescapable)/";
+	$perRequestFeatures = "/(hirescapable|screenattributes)/";
 	
 	// create separate tables
 	createFT($ua,$css3Features,"CSS3 Features");
 	createFT($ua,$html5Features,"HTML5 Features");
 	createFT($ua,$miscFeatures,"Misc. Features");
-	createFT($ua,$mqFeatures,"Browser Class via Media Queries","This feature needs some love as it's not always returning information correctly.");
-	createFT($ua,$extendedFeatures,"Detector Extended Test Features","To learn more about extended tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a>");
+	createFT($ua,$mqFeatures,"Browser Class via Media Queries","core-","This feature needs some love as it's not always returning information correctly.");
+	createFT($ua,$extendedFeatures,"Detector Extended Test Features","extended-","To learn more about extended tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a>");
 	if (Detector::$foundIn != 'archive') {
-		createFT($ua,$perRequestFeatures,"Detector Per Request Test Features","To learn more about per request tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a>");	
+		createFT($ua,$perRequestFeatures,"Detector Per Request Test Features","pr-","To learn more about per request tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a> If this section isn't populated hit \"refresh\". Attributes are captured via a cookie.");	
 	}
 ?>

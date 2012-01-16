@@ -1,5 +1,5 @@
 <?php
-	function createFT($ua,$match,$title,$note = '') {
+	function createFT($ua,$match,$title,$prefix = '',$note = '') {
 		print "<table class=\"zebra-striped span9\">
 			<thead>
 				<tr>
@@ -18,7 +18,17 @@
 						if (Detector::$foundIn == "archive") {
 							print "<td class=\"span1\"><span class='label'>N/A</span></td>";
 						} else {
-							print "<td class=\"span1\"><script type=\"text/javascript\">if (Modernizr['".$key."']['".$vkey."']) { document.write(\"<span class='label success'>true</span>\"); } else { document.write(\"<span class='label important'>false</span>\"); }</script></td>";
+							print "<td class=\"span1\">
+									<script type=\"text/javascript\">
+										if (Modernizr['".$prefix.$key."']['".$vkey."'] == true) { 
+											document.write(\"<span class='label success'>\"+Modernizr['".$prefix.$key."']['".$vkey."']+\"</span>\"); 
+										} else if (Modernizr['".$prefix.$key."']['".$vkey."']) {
+											document.write(\"<span class='label warning'>\"+Modernizr['".$prefix.$key."']['".$vkey."']+\"</span>\"); 
+										} else { 
+											document.write(\"<span class='label important'>false</span>\"); 
+										}
+									</script>
+								   </td>";
 						}
 						print "<td class=\"span1\">".convertTF($vvalue)."</td>";
 						print "</tr>";
@@ -28,10 +38,16 @@
 					print "<th class=\"span7\">".$key.":</th>";
 					if (Detector::$foundIn == "archive") {
 						print "<td class=\"span1\"><span class='label'>N/A</span></td>";
-					} else if (!preg_match("/(desktop|mobile|tablet|colordepth|json|overflowscrolling|emoji|hirescapable)/",$key)) {
-						print "<td class=\"span1\"><script type=\"text/javascript\">if (Modernizr['".$key."']) { document.write(\"<span class='label success'>true</span>\"); } else { document.write(\"<span class='label important'>false</span>\"); }</script></td>";
 					} else {
-						print "<td class=\"span1\"><span class='label'>N/A</span></td>";
+						print "<td class=\"span1\">
+								<script type=\"text/javascript\">
+									if (Modernizr['".$prefix.$key."']) { 
+										document.write(\"<span class='label success'>\"+Modernizr['".$prefix.$key."']+\"</span>\"); 
+									} else { 
+										document.write(\"<span class='label important'>false</span>\"); 
+									}
+								</script>
+							   </td>";
 					}
 					print "<td class=\"span1\">".convertTF($value)."</td>";
 					print "</tr>";
