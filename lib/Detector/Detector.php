@@ -32,6 +32,8 @@ class Detector {
 	private static $majorVersion         = 0;
 	private static $minorVersion         = 0;
 	
+	private static $isUIWebview          = false; // experimental & not to be relied upon
+	
 	/**
 	* Tests to see if:
 	*     - a session has already been opened for the request browser, if so send the info back, else
@@ -137,14 +139,27 @@ class Detector {
 			// create an object to hold any of the per request data. it shouldn't be saved to file but it should be added to the session
 			$cookiePerRequest = new stdClass();
 			
+			$coreMobile = 'core-mobile';
+			$coreTablet = 'core-tablet';
+			
 			$jsonTemplateCore->ua               = self::$ua;
 			$jsonTemplateCore->uaHash           = self::$uaHash;
 			$jsonTemplateCore->deviceOSGeneral  = self::$deviceOSGeneral;
 			$jsonTemplateCore->deviceOSSpecific = self::$deviceOSSpecific;
-			$jsonTemplateCore->isMobile         = (!self::$isMobile && ($uaFeatures->mobile == 1)) ? true : self::$isMobile;
-			$jsonTemplateCore->isTablet         = (!self::$isTablet && ($uaFeatures->tablet == 1)) ? true : self::$isTablet;
-			$jsonTemplateCore->isComputer       = self::$isComputer;
+			$jsonTemplateCore->majorVersion     = self::$majorVersion;
+			$jsonTemplateCore->minorVersion     = self::$minorVersion;
+			$jsonTemplateCore->isTablet         = (!self::$isTablet && ($uaFeatures->$coreTablet == 1)) ? true : self::$isTablet;
+			$jsonTemplateCore->isMobile         = (!self::$isMobile && !self::$isTablet && ($uaFeatures->$coreMobile == 1)) ? true : self::$isMobile;
+			$jsonTemplateCore->isComputer       = ($jsonTemplateCore->isTablet) ? false : self::$isComputer;
 			$jsonTemplateCore->isSpider         = self::$isSpider;
+			
+			// because android gets classified as mobile by default set isMobile to false if the device is really a tablet
+			if ($jsonTemplateCore->isTablet) {
+				$jsonTemplateCore->isMobile = false;
+			}
+			
+			// iOSUIWebview check is completely experimental
+			$jsonTemplateCore->iOSUIWebview     = self::$isUIWebview;
 			
 			$jsonTemplateExtended->ua           = self::$ua;
 			$jsonTemplateExtended->uaHash       = self::$uaHash;
@@ -392,13 +407,16 @@ class Detector {
 
 		if (preg_match("/ipod/i",self::$ua)) {
 			$type = 'ipod';
+			self::isUIWebView();
 			self::findUAVersion();
 		} else if (preg_match("/iphone/i",self::$ua)) {
 			$type = 'iphone';
+			self::isUIWebView();
 			self::findUAVersion();
 		}
 		else if (preg_match("/ipad/i",self::$ua)) {
 			$type = 'ipad';
+			self::isUIWebView();
 			self::findUAVersion();
 		}
 		else if (preg_match("/android/i",self::$ua)) {
@@ -483,6 +501,15 @@ class Detector {
 		}
 	}
 
+	/**
+	* attempts to figure out if the request from an iOS device is coming from a UIWebview
+	* EXPERIMENTAL. NOT TO BE RELIED UPON.
+	*/
+	private static function isUIWebview() {
+		if (!preg_match('/Safari/i',self::$ua)) {
+			self::$isUIWebview = true;
+		}
+	}
 }
 
 $ua = Detector::build();

@@ -53,6 +53,12 @@
 				<td><?=$ua->minorVersion?></td>
 			</tr>
 		<? } ?>
+		<? if (($ua->deviceOSGeneral == 'iphone') || ($ua->deviceOSGeneral == 'ipod') || ($ua->deviceOSGeneral == 'ipad')) { ?>
+			<tr>
+				<th>Is UIWebview?</th>
+				<td><?=convertTF($ua->iOSUIWebview)?></td>
+			</tr>
+		<? } ?>
 		<tr>
 			<th>Is Mobile?</th>
 			<td><?=convertTF($ua->isMobile)?></td>
