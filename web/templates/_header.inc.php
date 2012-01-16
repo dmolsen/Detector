@@ -31,8 +31,17 @@
 			vertical-align: bottom; 
 		}
 		
-		thead > tr {
+		thead > tr, div.alert-message {
 			background-color: #efefef;
+			background-image: none;
+		}
+		
+		.featureNote {
+			border: 0;
+			padding: 0;
+			margin: -5px 0 25px 4px;
+			color: #666;
+			font-size: 13px;
 		}
 	</style>
 

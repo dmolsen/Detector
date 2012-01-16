@@ -11,7 +11,7 @@
 	// organize what features show up in which section
 	$css3Features       = "/(fontface|backgroundsize|borderimage|borderradius|boxshadow|flexbox|flexbox-legacy|hsla|multiplebgs|opacity|rgba|textshadow|cssanimations|csscolumns|generatedcontent|cssgradients|cssreflections|csstransforms|csstransforms3d|csstransitions|overflowscrolling)/";
 	$html5Features      = "/(applicationcache|canvas|canvastext|draganddrop|hashchange|history|audio|video|indexeddb|input|inputtype|localstorage|postmessage|sessionstorage|websockets|websqldatabase|webworkers)/";
-	$miscFeatures      = "/(geolocation|inlinesvg|smil|svg|svgclippaths|touch|webgl|json)/";
+	$miscFeatures       = "/(geolocation|inlinesvg|smil|svg|svgclippaths|touch|webgl|json)/";
 	$mqFeatures         = "/(desktop|mobile|tablet)/";
 	$extendedFeatures   = "/(emoji)/";
 	$perRequestFeatures = "/(hirescapable)/";
@@ -20,13 +20,9 @@
 	createFT($ua,$css3Features,"CSS3 Features");
 	createFT($ua,$html5Features,"HTML5 Features");
 	createFT($ua,$miscFeatures,"Misc. Features");
-	createFT($ua,$mqFeatures,"Browser Class via Media Queries (flaky)");
-	createFT($ua,$extendedFeatures,"Detector Extended Test Features");
+	createFT($ua,$mqFeatures,"Browser Class via Media Queries","This feature needs some love as it's not always returning information correctly.");
+	createFT($ua,$extendedFeatures,"Detector Extended Test Features","To learn more about extended tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a>");
 	if (Detector::$foundIn != 'archive') {
-		createFT($ua,$perRequestFeatures,"Detector Per Request Test Features");	
+		createFT($ua,$perRequestFeatures,"Detector Per Request Test Features","To learn more about per request tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a>");	
 	}
 ?>
-
-<div class="alert-message warning">
-	<strong>Please note:</strong> the media query-based tests for browser class <em>(mobile, tablet, &amp; desktop)</em> don't seem to always report correctly. I'm trying to figure out why.
-</div>

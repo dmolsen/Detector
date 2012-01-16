@@ -1,5 +1,5 @@
 <?php
-	function createFT($ua,$match,$title) {
+	function createFT($ua,$match,$title,$note = '') {
 		print "<table class=\"zebra-striped span9\">
 			<thead>
 				<tr>
@@ -40,5 +40,10 @@
 		}
 		print "</tbody>";
 		print "</table>";
+		if ($note != '') {
+			print "<div class=\"featureNote span9\">";
+			print "<small><em>".$note."</em></small>";
+			print "</div>";
+		}
 	}
 ?>
