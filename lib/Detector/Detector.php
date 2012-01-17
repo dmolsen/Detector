@@ -251,6 +251,9 @@ class Detector {
 				$_SESSION[self::$sessionID] = $mergedInfo;
 			}
 			
+			// add the user agent & hash to a list of already saved user agents
+			self::addToUAList();
+			
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
@@ -290,6 +293,9 @@ class Detector {
 			if (isset($_SESSION)) {
 				$_SESSION[self::$sessionID] = $mergedInfo;
 			}
+			
+			// add the user agent & hash to a list of already saved user agents
+			self::addToUAList();
 			
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
@@ -446,6 +452,27 @@ class Detector {
 		return $uaFeatures;
 	}
 
+	/**
+	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
+	*/
+	private static function addToUAList() {
+		
+		// open user agent list and decode the JSON
+		if ($uaListJSON = @file_get_contents(__DIR__."/user-agents-core/ua.list.json")) {
+			$uaList = json_decode($uaListJSON);
+		} 
+		
+		// merge the old list with the new user agent
+		$mergedInfo = (object) array_merge((array) $uaList, array(self::$uaHash => self::$ua));
+		
+		// write out the data to the user agent list
+		$uaListJSON = json_encode($mergedInfo);
+		$fp = fopen(__DIR__."/user-agents-core/ua.list.json", "w");
+		fwrite($fp, $uaListJSON);
+		fclose($fp);
+		
+	}
+	
 	/**
 	* returns the general device type based on user agent string matching. can get very specific depending on usage.
 	*
