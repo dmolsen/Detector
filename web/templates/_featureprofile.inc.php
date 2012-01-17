@@ -1,6 +1,6 @@
 <h3><?= (Detector::$foundIn == 'archive') ? 'Archived' : 'Your'; ?> Detector Feature Profile</h3>
 <p>
-	The following feature profile was primarily created using <a href="http://www.modernizr.com/docs/#s2">Modernizr's core tests</a>. The left column, <strong>Browser</strong>, is populated by JavaScript using a copy of Modernizr that is loaded with this page. The right column, <strong>Server</strong>, is populated by PHP using the profile created by Detector for your browser.
+	The following feature profile was primarily created using <a href="http://www.modernizr.com/docs/#s2">Modernizr's core tests</a>. The left column of results, <strong>Your Browser</strong>, is populated by JavaScript using a copy of Modernizr that is loaded with this page. The right column, <strong>Detector Profile</strong>, is populated by PHP using the profile created by Detector for your browser.
 	In addition to the core tests
 	I've added an extended test that checks for emoji support as well as a per request test to check the device pixel ratio. Both were added using the <a href="http://www.modernizr.com/docs/#addtest">Modernizr.addTest() Plugin API</a>.
 	To learn more about core, extended, and per request tests please <a href="https://github.com/dmolsen/Detector">review the README</a>.  To access any of these options in your PHP app you'd simply type <code>$ua->featureName</code>.
