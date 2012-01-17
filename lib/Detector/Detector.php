@@ -253,6 +253,46 @@ class Detector {
 			
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
+		
+		} else if ($_REQUEST["nojs"] == "true") {
+			
+			// where did we find this info to display... probably only need this for the demo
+			self::$foundIn = "nojs";
+			
+			// classify the user agent string so we can learn more what device this really is. more for readability than anything
+			self::classifyUA();
+			
+			// open the JSON template core file that will be populated
+			if ($uaJSONTemplateCore = @file_get_contents(__DIR__."/user-agents-core/ua.template.json")) {
+				$jsonTemplateCore = json_decode($uaJSONTemplateCore);
+			} 
+			
+			$jsonTemplateCore->ua               = self::$ua;
+			$jsonTemplateCore->uaHash           = self::$uaHash;
+			$jsonTemplateCore->deviceOSGeneral  = self::$deviceOSGeneral;
+			$jsonTemplateCore->deviceOSSpecific = self::$deviceOSSpecific;
+			$jsonTemplateCore->majorVersion     = self::$majorVersion;
+			$jsonTemplateCore->minorVersion     = self::$minorVersion;
+			$jsonTemplateCore->isTablet         = self::$isTablet;
+			$jsonTemplateCore->isMobile         = self::$isMobile;
+			$jsonTemplateCore->isComputer       = self::$isComputer;
+			$jsonTemplateCore->isSpider         = self::$isSpider;
+			
+			$mergedInfo = $jsonTemplateCore;
+			
+			// write out to disk for future requests that might have the same UA
+			$jsonTemplateCore = json_encode($jsonTemplateCore);
+			$fp = fopen(__DIR__."/user-agents-core/ua.".self::$uaHash.".json", "w");
+			fwrite($fp, $jsonTemplateCore);
+			fclose($fp);
+			
+			// add our collected data to the session for use in future requests, also add the per request data
+			if (isset($_SESSION)) {
+				$_SESSION[self::$sessionID] = $mergedInfo;
+			}
+			
+			// return the collected data to the script for use in this go around
+			return $mergedInfo;
 			
 		} else if ($uaJSONCore = @file_get_contents(__DIR__."/user-agents-core/ua.".self::$uaHash.".json")) {
 			
@@ -280,6 +320,14 @@ class Detector {
 		} else {
 			
 			// didn't recognize that the user had been here before nor the UA string.
+			
+			// build the noscript link just in case
+			$noscriptLink = $_SERVER["REQUEST_URI"];
+			if (isset($_SERVER["QUERY_STRING"]) && ($_SERVER["QUERY_STRING"] != "")) {
+				$noscriptLink .= "?".$_SERVER["QUERY_STRING"]."&nojs=true";
+			} else {
+				$noscriptLink .= "?nojs=true";
+			}
 			
 			// check to see if it's a spider or device without javascript (currently throwing generic feature phones under the bus)
 			// gather info by sending Modernizr & custom tests
@@ -309,7 +357,7 @@ class Detector {
 			    }
 			    closedir($handle);
 			}
-			print self::_mer() . "</script></head><body></body></html>";
+			print self::_mer() . "</script></head><body><noscript>This version of the page you requested requires JavaScript. Please <a href=\"".$noscriptLink."\">view a version optimized for your browser</a>.</noscript></body></html>";
 			exit;
 		}
 	}
