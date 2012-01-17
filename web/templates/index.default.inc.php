@@ -15,6 +15,7 @@
 	<?php include("templates/_about.inc.php"); ?>
 	<?php include("templates/_moreinfo.inc.php"); ?>
 	<?php include("templates/_credits.inc.php"); ?>
+	<?php include("templates/_socialmedia.inc.php"); ?>
 	<?php include("templates/_archive.inc.php"); ?>
 </div>
 
