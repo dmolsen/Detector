@@ -283,7 +283,7 @@ class Detector {
 			
 			// check to see if it's a spider or device without javascript (currently throwing generic feature phones under the bus)
 			// gather info by sending Modernizr & custom tests
-			print "<html><head><script type='text/javascript'>";
+			print "<html><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
 			readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
 			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesCore)) {
 			    while (false !== ($entry = readdir($handle))) {
