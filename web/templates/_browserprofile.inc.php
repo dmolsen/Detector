@@ -1,6 +1,6 @@
 <h3><?= (Detector::$foundIn == 'archive') ? 'Archived' : 'Your'; ?> Detector Browser Profile</h3>
 <p>
-	The following browser profile was created using the browser-detection of Detector. It, as well as the the following feature profile, were <strong>
+	The following browser profile was created using the browser-detection half of Detector. It, as well as the the following feature profile, were <strong>
 	<?php
 		if (Detector::$foundIn == "archive") {
 			print " pulled from a profile already in the system that you asked to view. Because it's an archived profile the browser-side tests were not run.";
