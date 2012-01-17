@@ -13,3 +13,16 @@ x - need a good demo
 x - BUG: issue with cookies and sessions dying
   - BUG: media query core tests not working properly (works locally but not on iOS 5?)
 x - add support for an archive feature so others can view the already saved profiles
+x - update the wording for the headers for features. also add a background color.
+x - add noscript tag to the default to capture spiders & devices that don't support js
+x - figure out a default profile for spiders & what not... (how does $ua->feature react to not being present?)
+  - add check if user-agents-extended has been created and build if necessary.
+  - a way to skip ahead in browser profiles or someway to search across profiles/organize
+x - figure out a way to check if it's an ios app?
+  - write the introductory blog post
+  - revise the README
+x - support for objects from Modernizr, add example tests for that (screenSize?)
+x - add a google analytics include
+  - add an onwindowresize event to capture certain attributes like size? seems overkill...
+  - add a true archive page so some can see the full user agent string...
+  - add a method to store the user agents in a flat file so they can be pulled out for the archive page & side bar. { uahash => ua }?
