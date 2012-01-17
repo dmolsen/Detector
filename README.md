@@ -76,6 +76,17 @@ capture features that change on a per device basis versus a per browser basis. A
 simply follow the [Modernizr.addTest() format](http://www.modernizr.com/docs/#addtest) and put them in `tests/perrequest/`. The names of the tests should start with `pr-` so that their values
 are not added to any of the `user-agent` files. The string `pr-` is stripped from the test name when placing it in session.
 
+## Fun with Internet Explorer 9 /sarcasm ##
+
+There is a trick to IE 9 and making sure the profile created by Detector matches what IE 9 actually supports. The Detector profile will be based on the features that
+IE 9 supports when the following mark-up opens your page:
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+If you know your templates are going to use different mark-up than that please make sure to edit `line #340` of `Detector.php` so that the features Detector saves for IE 9 will match what IE 9 will
+support when using other pages on your site. There needs to be a longer-term solution for this "bug."
+
 ## Future Plans ##
 
 At some point I would like to see the following features implemented with this project:
