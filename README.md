@@ -1,17 +1,17 @@
-# Detector v0.1 #
+# Detector v0.2 #
 
 Detector is a simple, PHP- and JavaScript-based browser- and feature-detection library. Detector gives
-server-side developers information on what types of devices may be requesting their content as well as the HTML5 & CSS3 features a requesting browser may or may not support. With Detector a developer 
-can serve the appropriate markup, styles, and JavaScript to a requesting browser without being completely dependent on front-end-only 
-script loaders. The server-side portion of Detector is based upon [modernizr-server](https://github.com/jamesgpearce/modernizr-server) by James Pearce ([@jamespearce](http://twitter.com/#!/jamespearce)) and 
+server-side developers information about what types of devices may be requesting their content as well as the HTML5 & CSS3 features a requesting browser may or may not support. With Detector a developer 
+can serve the appropriate markup, stylesheets, and JavaScript to a requesting browser without being completely dependent on a browser-detection library being up-to-date nor completely dependent on a front-end-only resource loader.
+The server-side portion of Detector is based upon [modernizr-server](https://github.com/jamesgpearce/modernizr-server) by James Pearce ([@jamespearce](http://twitter.com/#!/jamespearce)) and 
 the browser-detection library from [Mobile Web OSP](https://github.com/dmolsen/MIT-Mobile-Web). Detector utilizes [Modernizr](http://www.modernizr.com/) 
-for its client-side, feature-detection support. By utilizing Modernizr developers can use the feature detection they're already used to in their server-side code.
+for its client-side, feature-detection support.
 
-## Demo ##
+## Demo of Detector ##
 
 A very [simple demo of Detector](http://detector.dmolsen.com/) is available for testing.
 
-## How It Works ##
+## How Detector Works ##
 
 Detector's implementation is fairly simple. Detector is based upon the notion that a browser's user agent string can _(sort of)_ be seen as a fingerprint.
 Essentially, if you've had one visit from a browser with a particular user agent string and recorded its features then their is a good chance that future visits from browsers with that user agent
@@ -42,8 +42,8 @@ same way that you would have used the `Modernizr` object on the client:
         ...
     }
         
-See the Modernizr [documents](www.modernizr.com/docs/) for all of the features
-that are tested and available through with Detector.
+See the [Modernizr documentation](www.modernizr.com/docs/) for all of the features
+that are tested and available with Detector.
         
 Some features, (in particular `video`, `audio`, `input`, and `inputtypes`)
 have sub-features, so these are available as nested PHP objects:
@@ -54,12 +54,12 @@ have sub-features, so these are available as nested PHP objects:
         print "<input type='text' ...";
     }
     
-All features and sub-features are returned as integer `1` or `0` for `true` or
-`false`, so they can be used in logical evaluations in PHP.
+All features are returned as integer `1` or `0` for `true` or
+`false`, so they can be used in logical evaluations in PHP. Sub-features can return `1`, `0`, or a real value (e.g. screen width).
 
 ## Adding Your Own Modernizr Tests ##
 
-Modernizr-based tests for Detector are broken down into three types: `Core`, `Extended`, and `Per Request`. Modifying Core tests should be avoided. Obviously at v0.1 it's not a huge deal
+Modernizr-based tests for Detector are broken down into three types: `Core`, `Extended`, and `Per Request`. Modifying Core tests should be avoided. Obviously at v0.2 it's not a huge deal
 but going forward I hope those tests can be firmed up into a standard.
 
 ### Extended Tests ###
