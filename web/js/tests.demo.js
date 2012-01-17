@@ -34,9 +34,9 @@ Modernizr.addTest("pr-screenAttributes",function() {
 });
 
 Modernizr.addTest("core-mobile", function() {
-	if (Modernizr.mq('only screen and (max-width: 320px)')) {
+	if (Modernizr.mq('only screen and (max-width: 320px) and (orientation: portrait)')) {
 		return true;
-	} else if (Modernizr.mq('only screen and (min-width: 321px) and (max-width: 480px)')) {
+	} else if (Modernizr.mq('only screen and (max-width: 480px) and (orientation: landscape)')) {
 		return true;
 	} else {
 		return false;
@@ -44,9 +44,9 @@ Modernizr.addTest("core-mobile", function() {
 });
 
 Modernizr.addTest("core-tablet",function() {
-	if (Modernizr.mq('only screen and (max-width: 600px)')) {
+	if (Modernizr.mq('only screen and (min-width: 600px) and (orientation:portrait)')) {
 		return true;
-	} else if (Modernizr.mq('only screen and (min-width: 601px) and (max-width: 801px)')) {
+	} else if (Modernizr.mq('only screen and (max-width: 1024px) and (orientation:landscape)')) {
 		return true;
 	} else {
 		return false;
