@@ -66,14 +66,14 @@ but going forward I hope those tests can be firmed up into a standard.
 
 Extended tests are tests that, when sending out the full suite of Modernizr tests, get run along-side Core tests but are instead saved to their own user-agent profile. They're meant
 to provide developers with a way to add their own Core-like tests but in a way that allows Core to be a standard. To add your own Extended tests 
-simply follow the [Modernizr.addTest() format](http://www.modernizr.com/docs/#addtest) and put them in `modernizr/extended/`. The names of the tests should start with `extended-` so that their values get put
+simply follow the [Modernizr.addTest() format](http://www.modernizr.com/docs/#addtest) and put them in `tests/extended/`. The names of the tests should start with `extended-` so that their values get put
 into the appropriate `user-agent` file. The string `extended-` is stripped from the test name when placing it in session.
 
 ### Per Request Tests ###
 
 Per Request tests are tests that get run on every request the browser sends. I'm not sure they'll operate this way in the future. They were designed to
 capture features that change on a per device basis versus a per browser basis. An example of this would be device pixel ratio. To add your own Per Request tests 
-simply follow the [Modernizr.addTest() format](http://www.modernizr.com/docs/#addtest) and put them in `modernizr/perrequest/`. The names of the tests should start with `pr-` so that their values
+simply follow the [Modernizr.addTest() format](http://www.modernizr.com/docs/#addtest) and put them in `tests/perrequest/`. The names of the tests should start with `pr-` so that their values
 are not added to any of the `user-agent` files. The string `pr-` is stripped from the test name when placing it in session.
 
 ## Future Plans ##
