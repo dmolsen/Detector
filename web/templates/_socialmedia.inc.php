@@ -5,7 +5,7 @@
 	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </div>
 
-<div style="margin-bottom: 9px">
+<div style="margin-bottom: 9px" class="span1">
 	<div id="fb-root"></div>
 	<script>(function(d, s, id) {
 	  var js, fjs = d.getElementsByTagName(s)[0];
@@ -14,7 +14,7 @@
 	  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=121664694538359";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
-	<div class="fb-like" data-href="http://detector.dmolsen.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-action="recommend"></div>
+	<div class="fb-like" data-href="http://detector.dmolsen.com" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false" data-action="like"></div>
 </div>
 
 <div style="margin-bottom: 7px">
