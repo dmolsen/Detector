@@ -20,7 +20,7 @@
 	// create separate tables
 	createFT($ua,$css3Features,"CSS3 Features");
 	createFT($ua,$html5Features,"HTML5 Features");
-	createFT($ua,$miscFeatures,"Misc. Features");
+	createFT($ua,$miscFeatures,"Misc. Features","","While a device may be touch-based that doesn't not mean it supports <a href=\"http://www.w3.org/TR/touch-events/\">touch events</a> which is what I'm testing for here.");
 	createFT($ua,$mqFeatures,"Browser Class via Media Queries","core-","This feature needs some love as it's not always returning information correctly.");
 	createFT($ua,$extendedFeatures,"Detector Extended Test Features","extended-","To learn more about extended tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a>");
 	if (Detector::$foundIn != 'archive') {
