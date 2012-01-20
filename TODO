@@ -27,3 +27,4 @@ x - add a google analytics include
 x - add a true archive page so some can see the full user agent string...
 x - add a method to store the user agents in a flat file so they can be pulled out for the archive page & side bar. { uahash => ua }?
 x - social media buttons
+  - debug methods/log
