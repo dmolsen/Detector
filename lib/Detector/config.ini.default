@@ -20,3 +20,7 @@ uaFeaturesPerRequest = "tests/perrequest/"
 // where to find the user agent profiles
 uaDirCore            = "user-agents-core/"
 uaDirExtended        = "user-agents-extended/"
+
+// version number so that core and extended profiles can be rebuilt if necessary
+coreVersion          = "0.9";
+extendedVersion      = "1.0";

@@ -18,6 +18,7 @@ class Detector {
 	
 	private static $uaHash;
 	private static $sessionID;
+	private static $cookieID;
 	private static $uaFeaturesMaxJS;     // all the default Modernizr Tests
 	private static $uaFeaturesMinJS;     // NO default tests except media queries, meant to run those in the perrequest folder
 	private static $uaFeaturesCore; 
@@ -64,11 +65,6 @@ class Detector {
 		}
 		
 		// populate some standard variables
-		self::$ua                   = $_SERVER["HTTP_USER_AGENT"];
-		self::$uaHash               = md5(self::$ua);
-		self::$sessionID            = self::$uaHash."-session";
-	    self::$accept               = $_SERVER["HTTP_ACCEPT"];
-	
 		self::$debug                = $config['debug'];
 		self::$uaFeaturesMaxJS      = $config['uaFeaturesMaxJS'];
 		self::$uaFeaturesMinJS      = $config['uaFeaturesMinJS']; 
@@ -79,11 +75,22 @@ class Detector {
 		self::$uaDirCore            = $config['uaDirCore'];
 		self::$uaDirExtended        = $config['uaDirExtended'];
 		
+		$coreVersion                = $config['coreVersion'];
+		$extendedVersion            = $config['extendedVersion'];
+		
+		self::$ua                   = $_SERVER["HTTP_USER_AGENT"];
+		self::$accept               = $_SERVER["HTTP_ACCEPT"];
+		self::$uaHash               = md5(self::$ua);
+		self::$sessionID            = md5(self::$ua."-session-".$coreVersion."-".$extendedVersion);
+		self::$cookieID             = md5(self::$ua."-cookie-".$coreVersion."-".$extendedVersion);
+		
 		$uaFileCore                 = __DIR__."/".self::$uaDirCore."ua.".self::$uaHash.".json";
 		$uaFileExtended             = __DIR__."/".self::$uaDirExtended."ua.".self::$uaHash.".json";
 		
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
 		$uaTemplateExtended         = __DIR__."/".self::$uaDirCore."ua.template.json";
+		
+
 		
 		// offer the ability to review profiles saved in the system
 		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid']) && self::$debug) {
@@ -116,7 +123,7 @@ class Detector {
 			self::$foundIn = "session";
 			
 			// grab features out of the cookie that are being checked on every request. update the session as appropriate
-			$uaFeatures = self::_ang($_COOKIE[self::$uaHash."-pr"]);
+			$uaFeatures = self::_ang($_COOKIE[self::$cookieID."-pr"]);
 			$cookiePerRequest = new stdClass();
 			foreach($uaFeatures as $key => $value) {
 				$key = str_replace("pr-", "", $key);
@@ -147,13 +154,13 @@ class Detector {
 			// send the data back to the script to be used
 			return $mergedInfo;
 			
-		} else if (isset($_COOKIE) && isset($_COOKIE[self::$uaHash])) {
+		} else if (isset($_COOKIE) && isset($_COOKIE[self::$cookieID])) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "cookie";
 			
 			// grab the features from the cookie and create an object with them (self::_ang)
-			$uaFeatures = self::_ang($_COOKIE[self::$uaHash]);
+			$uaFeatures = self::_ang($_COOKIE[self::$cookieID]);
 			
 			// classify the user agent string so we can learn more what device this really is. more for readability than anything
 			self::classifyUA();
@@ -184,6 +191,7 @@ class Detector {
 			$jsonTemplateCore->isMobile         = (!self::$isMobile && !self::$isTablet && ($uaFeatures->$coreMobile == 1)) ? true : self::$isMobile;
 			$jsonTemplateCore->isComputer       = ($jsonTemplateCore->isTablet) ? false : self::$isComputer;
 			$jsonTemplateCore->isSpider         = self::$isSpider;
+			$jsonTemplateCore->coreVersion      = $coreVersion;
 			
 			// because android gets classified as mobile by default set isMobile to false if the device is really a tablet
 			if ($jsonTemplateCore->isTablet) {
@@ -193,8 +201,9 @@ class Detector {
 			// iOSUIWebview check is completely experimental
 			$jsonTemplateCore->iOSUIWebview     = self::$isUIWebview;
 			
-			$jsonTemplateExtended->ua           = self::$ua;
-			$jsonTemplateExtended->uaHash       = self::$uaHash;
+			$jsonTemplateExtended->ua              = self::$ua;
+			$jsonTemplateExtended->uaHash          = self::$uaHash;
+			$jsonTemplateExtended->extendedVersion = $extendedVersion;
 			
 			// push features into the same level as the general device information
 			// change 1/0 to true/false. why? 'cause that's what i like to read ;)
@@ -264,13 +273,11 @@ class Detector {
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
 			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
 
-			// check to see if Core already exists. if it does skip because we really just want to populate extended
-			if (!file_exists($uaFileCore)) {
-				$jsonTemplateCore = json_encode($jsonTemplateCore);
-				$fp = fopen($uaFileCore, "w");
-				fwrite($fp, $jsonTemplateCore);
-				fclose($fp);
-			}
+			// write out to disk for future requests that might have the same UA
+			$jsonTemplateCore = json_encode($jsonTemplateCore);
+			$fp = fopen($uaFileCore, "w");
+			fwrite($fp, $jsonTemplateCore);
+			fclose($fp);
 			
 			// write out to disk for future requests that might have the same UA
 			$jsonTemplateExtended = json_encode($jsonTemplateExtended);
@@ -279,7 +286,7 @@ class Detector {
 			fclose($fp);
 			
 			// unset the cookie that held the vast amount of test data
-			setcookie(self::$uaHash,"");
+			setcookie(self::$cookieID,"");
 			
 			// add our collected data to the session for use in future requests, also add the per request data
 			if (isset($_SESSION)) {
@@ -315,6 +322,7 @@ class Detector {
 			$jsonTemplateCore->isMobile         = self::$isMobile;
 			$jsonTemplateCore->isComputer       = self::$isComputer;
 			$jsonTemplateCore->isSpider         = self::$isSpider;
+			$jsonTemplateCore->coreVersion      = $coreVersion;
 			
 			$mergedInfo = $jsonTemplateCore;
 			
@@ -346,59 +354,32 @@ class Detector {
 			// decode the extended data
 			$uaJSONExtended = json_decode($uaJSONExtended);
 			
-			// merge the data
-			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;
-			
-			// put the merged JSON info into session
-			if (isset($_SESSION)) {
-				$_SESSION[self::$sessionID] = $mergedInfo;
+			// double-check that the already created profile matches the current version of the core & extended templates
+			if (($uaJSONCore->coreVersion != $coreVersion) || ($uaJSONExtended->extendedVersion != $extendedVersion)) {
+				
+				// versions don't match so build the test page to get new data
+				self::buildTestPage();
+				
+			} else {
+				
+				// merge the data
+				$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;
+
+				// put the merged JSON info into session
+				if (isset($_SESSION)) {
+					$_SESSION[self::$sessionID] = $mergedInfo;
+				}
+
+				// return to the script
+				return $mergedInfo;
+				
 			}
-			
-			// return to the script
-			return $mergedInfo;
 			
 		} else {
 			
 			// didn't recognize that the user had been here before nor the UA string.
-			
-			// build the noscript link just in case
-			$noscriptLink = $_SERVER["REQUEST_URI"];
-			if (isset($_SERVER["QUERY_STRING"]) && ($_SERVER["QUERY_STRING"] != "")) {
-				$noscriptLink .= "?".$_SERVER["QUERY_STRING"]."&nojs=true";
-			} else {
-				$noscriptLink .= "?nojs=true";
-			}
-			
-			// check to see if it's a spider or device without javascript (currently throwing generic feature phones under the bus)
-			// gather info by sending Modernizr & custom tests
-			print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
-			readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
-			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesCore)) {
-			    while (false !== ($entry = readdir($handle))) {
-			        if ($entry != "." && $entry != ".." && $entry != "README") {
-			            readfile(__DIR__ .'/'. self::$uaFeaturesCore . $entry);
-			        }
-			    }
-			    closedir($handle);
-			}
-			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesExtended)) {
-			    while (false !== ($entry = readdir($handle))) {
-			        if ($entry != "." && $entry != "..") {
-			            readfile(__DIR__ .'/'. self::$uaFeaturesExtended . $entry);
-			        }
-			    }
-			    closedir($handle);
-			}
-			if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesPerRequest)) {
-			    while (false !== ($entry = readdir($handle))) {
-			        if ($entry != "." && $entry != "..") {
-			            readfile(__DIR__ .'/'. self::$uaFeaturesPerRequest . $entry);
-			        }
-			    }
-			    closedir($handle);
-			}
-			print self::_mer() . "</script></head><body><noscript>This version of the page you requested requires JavaScript. Please <a href=\"".$noscriptLink."\">view a version optimized for your browser</a>.</noscript></body></html>";
-			exit;
+			self::buildTestPage();
+
 		}
 	}
 	
@@ -423,6 +404,51 @@ class Detector {
 	}
 	
 	/**
+	* Builds the browser test page
+	*/
+	public static function buildTestPage() {
+		
+		// build the noscript link just in case
+		$noscriptLink = $_SERVER["REQUEST_URI"];
+		if (isset($_SERVER["QUERY_STRING"]) && ($_SERVER["QUERY_STRING"] != "")) {
+			$noscriptLink .= "?".$_SERVER["QUERY_STRING"]."&nojs=true";
+		} else {
+			$noscriptLink .= "?nojs=true";
+		}
+		
+		// gather info by sending Modernizr & custom tests
+		print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
+		readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
+		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesCore)) {
+		    while (false !== ($entry = readdir($handle))) {
+		        if ($entry != "." && $entry != ".." && $entry != "README") {
+		            readfile(__DIR__ .'/'. self::$uaFeaturesCore . $entry);
+		        }
+		    }
+		    closedir($handle);
+		}
+		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesExtended)) {
+		    while (false !== ($entry = readdir($handle))) {
+		        if ($entry != "." && $entry != "..") {
+		            readfile(__DIR__ .'/'. self::$uaFeaturesExtended . $entry);
+		        }
+		    }
+		    closedir($handle);
+		}
+		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesPerRequest)) {
+		    while (false !== ($entry = readdir($handle))) {
+		        if ($entry != "." && $entry != "..") {
+		            readfile(__DIR__ .'/'. self::$uaFeaturesPerRequest . $entry);
+		        }
+		    }
+		    closedir($handle);
+		}
+		print self::_mer() . "</script></head><body><noscript>This version of the page you requested requires JavaScript. Please <a href=\"".$noscriptLink."\">view a version optimized for your browser</a>.</noscript></body></html>";
+		exit;
+		
+	}
+	
+	/**
 	* Creates the JavaScript & cookie that tracks the features for a particular browser
 	* @param  {Boolean}      if the javascript should include a page reload statement
 	* @param  {String}       if the cookie that is created should have a string appended to it. used for per request tests.
@@ -438,7 +464,7 @@ class Detector {
 		    "if(f[0]=='_'){continue;}".
 		    "var t=typeof m[f];".
 		    "if(t=='function'){continue;}".
-		    "c+=(c?'|':'".self::$uaHash.$cookieExtra."=')+f+':';".
+		    "c+=(c?'|':'".self::$cookieID.$cookieExtra."=')+f+':';".
 		    "if(t=='object'){".
 		      "for(var s in m[f]){".
 				"if (typeof m[f][s]=='boolean') { c+='/'+s+':'+(m[f][s]?1:0); }".

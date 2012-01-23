@@ -11,5 +11,6 @@
 	isSpider: false,
 	isComputer: false,
 	isTablet: false,
-	isMobile: false
+	isMobile: false,
+	coreVersion: ""
 }

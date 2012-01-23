@@ -1,4 +1,5 @@
 {
 	ua: "",
-	uaHash: ""
+	uaHash: "",
+	extendedVersion: ""
 }
