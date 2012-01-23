@@ -1,9 +1,9 @@
 Things to Implement for Detector
 
 x - separating core tests from user-supplied tests, and saving that data separately...
-  - how to version the data?
+x - how to version the data?
 x - how to have "core" feature detection that updates server-side but gets run every time (e.g. DPI which doesn't track w/ UA string)  - sampling the data so that we can update properties just in case
-  - how do we version control the data and share across sites? i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
+x - how do we version control the data and share across sites? i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
 x - need a good README
 x - document the code
 x - need a good demo
