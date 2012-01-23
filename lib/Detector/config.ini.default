@@ -1,0 +1,18 @@
+/*
+ * Configuration options for Detector
+ * If config.ini doesn't exist Detector will attempt to read in config.ini.copy
+ * and write out config.ini.
+ */
+
+// if we should run in debug mode. only useful if we want to view the site populated
+// w/ other Detector profiles
+debug                = false
+
+// where to find the modernizr scripts
+uaFeaturesMaxJS      = "modernizr/modernizr.pre21.js"
+uaFeaturesMinJS      = "modernizr/modernizr.pre21.no-tests.js"
+
+// where to find the tests that should be run against browsers
+uaFeaturesCore       = "tests/core/"
+uaFeaturesExtended   = "tests/extended/"
+uaFeaturesPerRequest = "tests/perrequest/"

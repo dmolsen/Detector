@@ -9,6 +9,8 @@
 
 class Detector {
 	
+	private static $debug               = false;
+	
 	public static  $ua;
 	public static  $accept;
 	
@@ -16,11 +18,11 @@ class Detector {
 	
 	private static $uaHash;
 	private static $sessionID;
-	private static $uaFeaturesMaxJS      = "modernizr/modernizr.pre21.js";    // all the default Modernizr Tests
-	private static $uaFeaturesMinJS      = "modernizr/modernizr.pre21.no-tests.js"; // NO default tests except media queries, meant to run those in the perrequest folder
-	private static $uaFeaturesCore       = "tests/core/"; 
-	private static $uaFeaturesExtended   = "tests/extended/";
-	private static $uaFeaturesPerRequest = "tests/perrequest/";
+	private static $uaFeaturesMaxJS;     // all the default Modernizr Tests
+	private static $uaFeaturesMinJS;     // NO default tests except media queries, meant to run those in the perrequest folder
+	private static $uaFeaturesCore; 
+	private static $uaFeaturesExtended;
+	private static $uaFeaturesPerRequest;
 	
 	private static $isMobile             = false;
 	private static $isTablet             = false;
@@ -47,6 +49,24 @@ class Detector {
 	*/
 	public function build() {
 		
+		// set-up the configuration options for the system
+		if (!($config = @parse_ini_file(__DIR__."/config.ini"))) {
+			// config.ini didn't exist so attempt to create it using the default file
+			if (!@copy(__DIR__."/config.ini.default", __DIR__."/config.ini")) {
+			    print "Please make sure config.ini.copy exists before trying to have Detector build the config.ini file automagically.";
+				exit;
+			} else {
+				$config = @parse_ini_file(__DIR__."/config.ini");	
+			}
+		}
+		
+		self::$debug                = $config['debug'];
+		self::$uaFeaturesMaxJS      = $config['uaFeaturesMaxJS'];
+		self::$uaFeaturesMinJS      = $config['uaFeaturesMinJS']; 
+		self::$uaFeaturesCore       = $config['uaFeaturesCore']; 
+		self::$uaFeaturesExtended   = $config['uaFeaturesExtended'];
+		self::$uaFeaturesPerRequest = $config['uaFeaturesPerRequest'];
+		
 		// populate some standard variables
 		self::$ua        = $_SERVER["HTTP_USER_AGENT"];
 		self::$uaHash    = md5(self::$ua);
@@ -54,7 +74,7 @@ class Detector {
 	    self::$accept    = $_SERVER["HTTP_ACCEPT"];
 		
 		// offer the ability to review profiles saved in the system
-		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid'])) {
+		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid']) && self::$debug) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "archive";
