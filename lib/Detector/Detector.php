@@ -24,6 +24,9 @@ class Detector {
 	private static $uaFeaturesExtended;
 	private static $uaFeaturesPerRequest;
 	
+	private static $uaDirCore;
+	private static $uaDirExtended;
+	
 	private static $isMobile             = false;
 	private static $isTablet             = false;
 	private static $isComputer           = false;
@@ -60,6 +63,12 @@ class Detector {
 			}
 		}
 		
+		// populate some standard variables
+		self::$ua                   = $_SERVER["HTTP_USER_AGENT"];
+		self::$uaHash               = md5(self::$ua);
+		self::$sessionID            = self::$uaHash."-session";
+	    self::$accept               = $_SERVER["HTTP_ACCEPT"];
+	
 		self::$debug                = $config['debug'];
 		self::$uaFeaturesMaxJS      = $config['uaFeaturesMaxJS'];
 		self::$uaFeaturesMinJS      = $config['uaFeaturesMinJS']; 
@@ -67,11 +76,14 @@ class Detector {
 		self::$uaFeaturesExtended   = $config['uaFeaturesExtended'];
 		self::$uaFeaturesPerRequest = $config['uaFeaturesPerRequest'];
 		
-		// populate some standard variables
-		self::$ua        = $_SERVER["HTTP_USER_AGENT"];
-		self::$uaHash    = md5(self::$ua);
-		self::$sessionID = self::$uaHash."-session";
-	    self::$accept    = $_SERVER["HTTP_ACCEPT"];
+		self::$uaDirCore            = $config['uaDirCore'];
+		self::$uaDirExtended        = $config['uaDirExtended'];
+		
+		$uaFileCore                 = __DIR__."/".self::$uaDirCore."ua.".self::$uaHash.".json";
+		$uaFileExtended             = __DIR__."/".self::$uaDirExtended."ua.".self::$uaHash.".json";
+		
+		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
+		$uaTemplateExtended         = __DIR__."/".self::$uaDirCore."ua.template.json";
 		
 		// offer the ability to review profiles saved in the system
 		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid']) && self::$debug) {
@@ -80,11 +92,11 @@ class Detector {
 			self::$foundIn = "archive";
 			
 			// decode the core data
-			$uaJSONCore     = @file_get_contents(__DIR__."/user-agents-core/ua.".$_REQUEST['pid'].".json");
+			$uaJSONCore     = @file_get_contents(__DIR__."/".self::$uaDirCore."ua.".$_REQUEST['pid'].".json");
 			$uaJSONCore     = json_decode($uaJSONCore);
 			
 			// find and decode the extended data
-			$uaJSONExtended = @file_get_contents(__DIR__."/user-agents-extended/ua.".$_REQUEST['pid'].".json");
+			$uaJSONExtended = @file_get_contents(__DIR__."/".self::$uaDirExtended."ua.".$_REQUEST['pid'].".json");
 			$uaJSONExtended = json_decode($uaJSONExtended);
 			
 			// merge the data
@@ -147,12 +159,12 @@ class Detector {
 			self::classifyUA();
 			
 			// open the JSON template core file that will be populated
-			if ($uaJSONTemplateCore = @file_get_contents(__DIR__."/user-agents-core/ua.template.json")) {
+			if ($uaJSONTemplateCore = @file_get_contents($uaTemplateCore)) {
 				$jsonTemplateCore = json_decode($uaJSONTemplateCore);
 			} 
 			
 			// open the JSON template core file that will be populated
-			if ($uaJSONTemplateExtended = @file_get_contents(__DIR__."/user-agents-extended/ua.template.json")) {
+			if ($uaJSONTemplateExtended = @file_get_contents($uaTemplateExtended)) {
 				$jsonTemplateExtended = json_decode($uaJSONTemplateExtended);
 			}
 			
@@ -252,14 +264,17 @@ class Detector {
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
 			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
 
-			// write out to disk for future requests that might have the same UA
-			$jsonTemplateCore = json_encode($jsonTemplateCore);
-			$fp = fopen(__DIR__."/user-agents-core/ua.".self::$uaHash.".json", "w");
-			fwrite($fp, $jsonTemplateCore);
-			fclose($fp);
+			// check to see if Core already exists. if it does skip because we really just want to populate extended
+			if (!file_exists($uaFileCore)) {
+				$jsonTemplateCore = json_encode($jsonTemplateCore);
+				$fp = fopen($uaFileCore, "w");
+				fwrite($fp, $jsonTemplateCore);
+				fclose($fp);
+			}
 			
+			// write out to disk for future requests that might have the same UA
 			$jsonTemplateExtended = json_encode($jsonTemplateExtended);
-			$fp = fopen(__DIR__."/user-agents-extended/ua.".self::$uaHash.".json", "w");
+			$fp = fopen($uaFileExtended, "w");
 			fwrite($fp, $jsonTemplateExtended);
 			fclose($fp);
 			
@@ -286,7 +301,7 @@ class Detector {
 			self::classifyUA();
 			
 			// open the JSON template core file that will be populated
-			if ($uaJSONTemplateCore = @file_get_contents(__DIR__."/user-agents-core/ua.template.json")) {
+			if ($uaJSONTemplateCore = @file_get_contents($uaTemplateCore)) {
 				$jsonTemplateCore = json_decode($uaJSONTemplateCore);
 			} 
 			
@@ -305,7 +320,7 @@ class Detector {
 			
 			// write out to disk for future requests that might have the same UA
 			$jsonTemplateCore = json_encode($jsonTemplateCore);
-			$fp = fopen(__DIR__."/user-agents-core/ua.".self::$uaHash.".json", "w");
+			$fp = fopen($uaFileCore, "w");
 			fwrite($fp, $jsonTemplateCore);
 			fclose($fp);
 			
@@ -320,7 +335,7 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 			
-		} else if ($uaJSONCore = @file_get_contents(__DIR__."/user-agents-core/ua.".self::$uaHash.".json")) {
+		} else if (($uaJSONCore = @file_get_contents($uaFileCore)) && ($uaJSONExtended = @file_get_contents($uaFileExtended))) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "file";
@@ -328,8 +343,7 @@ class Detector {
 			// decode the core data
 			$uaJSONCore     = json_decode($uaJSONCore);
 			
-			// find and decode the extended data
-			$uaJSONExtended = @file_get_contents(__DIR__."/user-agents-extended/ua.".self::$uaHash.".json");
+			// decode the extended data
 			$uaJSONExtended = json_decode($uaJSONExtended);
 			
 			// merge the data
@@ -478,7 +492,7 @@ class Detector {
 	private static function addToUAList() {
 		
 		// open user agent list and decode the JSON
-		if ($uaListJSON = @file_get_contents(__DIR__."/user-agents-core/ua.list.json")) {
+		if ($uaListJSON = @file_get_contents(__DIR__."/".self::$uaDirCore."ua.list.json")) {
 			$uaList = json_decode($uaListJSON);
 		} 
 		
@@ -487,7 +501,7 @@ class Detector {
 		
 		// write out the data to the user agent list
 		$uaListJSON = json_encode($mergedInfo);
-		$fp = fopen(__DIR__."/user-agents-core/ua.list.json", "w");
+		$fp = fopen(__DIR__."/".self::$uaDirCore."ua.list.json", "w");
 		fwrite($fp, $uaListJSON);
 		fclose($fp);
 		

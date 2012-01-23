@@ -16,3 +16,7 @@ uaFeaturesMinJS      = "modernizr/modernizr.pre21.no-tests.js"
 uaFeaturesCore       = "tests/core/"
 uaFeaturesExtended   = "tests/extended/"
 uaFeaturesPerRequest = "tests/perrequest/"
+
+// where to find the user agent profiles
+uaDirCore            = "user-agents-core/"
+uaDirExtended        = "user-agents-extended/"
