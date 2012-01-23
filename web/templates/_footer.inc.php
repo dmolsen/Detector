@@ -6,7 +6,7 @@
       </footer>
 
     </div> <!-- /container -->
-	<?php include("templates/_gauges.inc.php"); ?>
-	<?php include("templates/_googleanalytics.inc.php"); ?>
+	<?php include($_SERVER['DOCUMENT_ROOT']."/templates/_gauges.inc.php"); ?>
+	<?php include($_SERVER['DOCUMENT_ROOT']."/templates/_googleanalytics.inc.php"); ?>
   </body>
 </html>

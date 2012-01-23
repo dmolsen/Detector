@@ -17,12 +17,12 @@
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 	<?php 
 		if ($ua->isMobile && (Detector::$foundIn != "archive")) {
-			print "<link href=\"css/mobile.css\" rel=\"stylesheet\">";
+			print "<link href=\"/css/mobile.css\" rel=\"stylesheet\">";
 		} else {
-			print "<link href=\"css/desktop.css\" rel=\"stylesheet\">";
+			print "<link href=\"/css/desktop.css\" rel=\"stylesheet\">";
 		}
 	?>
 	<style type="text/css">
@@ -50,9 +50,9 @@
 	</style>
 
 	<!-- My Scripts -->
-	<script type="text/javascript" src="js/features.js.php"></script>
-	<script type="text/javascript" src="js/modernizr.pre21.js"></script>
-	<script type="text/javascript" src="js/tests.demo.js"></script>
+	<script type="text/javascript" src="/js/features.js.php"></script>
+	<script type="text/javascript" src="/js/modernizr.pre21.js"></script>
+	<script type="text/javascript" src="/js/tests.demo.js"></script>
   </head>
 
   <body>
