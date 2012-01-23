@@ -2,9 +2,7 @@ Things to Implement for Detector
 
 x - separating core tests from user-supplied tests, and saving that data separately...
   - how to version the data?
-x - how to have "core" feature detection that updates server-side but gets run every time (e.g. DPI which doesn't track w/ UA string)
-  - sampling the data so that we can update properties just in case
-  - have a way to update extended even if core tests exist
+x - how to have "core" feature detection that updates server-side but gets run every time (e.g. DPI which doesn't track w/ UA string)  - sampling the data so that we can update properties just in case
   - how do we version control the data and share across sites? i assume a separate repo for user-agents (user-agents-core vs user-agents-extended)
 x - need a good README
 x - document the code
@@ -16,10 +14,10 @@ x - add support for an archive feature so others can view the already saved prof
 x - update the wording for the headers for features. also add a background color.
 x - add noscript tag to the default to capture spiders & devices that don't support js
 x - figure out a default profile for spiders & what not... (how does $ua->feature react to not being present?)
-  - add check if user-agents-extended has been created and build if necessary.
+x - add check if user-agents-extended has been created and build if necessary.
   - a way to skip ahead in browser profiles or someway to search across profiles/organize
 x - figure out a way to check if it's an ios app?
-  - write the introductory blog post
+x - write the introductory blog post
   - revise the README
 x - support for objects from Modernizr, add example tests for that (screenSize?)
 x - add a google analytics include
@@ -28,3 +26,5 @@ x - add a true archive page so some can see the full user agent string...
 x - add a method to store the user agents in a flat file so they can be pulled out for the archive page & side bar. { uahash => ua }?
 x - social media buttons
   - debug methods/log
+  - can i has support? would only be for the latest browsers but it's a decent way to double-check me
+x - add a configuration option
