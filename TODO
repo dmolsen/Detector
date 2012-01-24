@@ -28,3 +28,33 @@ x - social media buttons
   - debug methods/log
   - can i has support? would only be for the latest browsers but it's a decent way to double-check me
 x - add a configuration option
+  - update the browser detection lib
+  - add tests for
+     -- flash w/ version
+     -- webp?
+     -- gamepad?
+     -- sharedworkers
+     -- lowbandwidth
+     -- event source
+     -- scriptdefer
+     -- contenteditable
+     -- webaudio
+     -- dataworkers
+     -- progressbar
+     -- meter
+     -- fullscreen
+     -- device motion
+     -- device orientation w/ values
+     -- microdata
+     -- adownload
+     -- notification
+     -- datauri
+     -- track
+     -- time
+     -- userselect
+     -- audiodata
+     -- filesystem
+     -- cssscrollbar
+     -- filereader
+     -- scriptasync
+     -- getusermedia
