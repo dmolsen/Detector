@@ -2,7 +2,13 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
-DET-v0.2 (IN PROGRESS)
+DET-v0.3 (IN PROGRESS)
+ - ADD: a configuration file for configuring standard paths and variables for Detector
+ - ADD: a debug flag
+ - ADD: support for versioning of core & extended profiles
+ - ADD: youtube demo that uses Detector
+
+DET-v0.2 (Jan. 18, 2012)
  - ADD: handles browsers or spiders that don't support javascript
  - ADD: objects created with Modernizr.addTest() can now be used (see per request screen attributes test)
  - ADD: an experimental check to see if requests from iOS devices are coming from a UIWebview
