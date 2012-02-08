@@ -46,8 +46,11 @@
 			<? if ($previous != '') { ?>
 				<a href="/?pid=<?=$previous?>">Previous Profile</a>
 			<? } ?>
+			<? if (($next != '') && ($previous != '')) { ?>
+				|
+			<? } ?>
 			<? if ($next != '') { ?>
-				| <a href="/?pid=<?=$next?>">Next Profile</a>
+				<a href="/?pid=<?=$next?>">Next Profile</a>
 			<? } ?></span></th>
 		</tr>
 	</thead>
