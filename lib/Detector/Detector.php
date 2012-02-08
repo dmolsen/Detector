@@ -7,6 +7,9 @@
  * Licensed under the MIT license
  */
 
+// include the ua-parser-php library to rip apart user agent strings
+require(__DIR__."/lib/ua-parser-php/UAParser.php");
+
 class Detector {
 	
 	private static $debug               = false;
