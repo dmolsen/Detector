@@ -28,7 +28,8 @@ x - social media buttons
   - debug methods/log
   - can i has support? would only be for the latest browsers but it's a decent way to double-check me
 x - add a configuration option
-  - update the browser detection lib
+x - update the browser detection lib
+  - desktop mode where we can swap in another profile. similar to ?pid
   - add tests for
      -- flash w/ version
      -- webp?
