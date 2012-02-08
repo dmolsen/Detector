@@ -104,5 +104,6 @@
 </table>
 
 <p>
-	<strong>Something wrong with this profile?</strong> Please, <a href="contact.php?cid=<?=$ua->uaHash?>">let me know</a>.
+	<strong>Something wrong with this profile?</strong> Please, <a href="contact.php?cid=<?=$ua->uaHash?>">let me know</a>. Note that
+	the <strong>"tablet" classification may be incorrect</strong> for those Android tablets using an OS older than Android 3.0.
 </p>
