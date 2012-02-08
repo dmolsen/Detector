@@ -31,18 +31,6 @@ class Detector {
 	private static $uaDirCore;
 	private static $uaDirExtended;
 	
-	private static $isMobile             = false;
-	private static $isTablet             = false;
-	private static $isComputer           = false;
-	private static $isSpider             = false;
-	private static $mobileType           = '';
-	private static $deviceOSGeneral;
-	private static $deviceOSSpecific;
-	private static $majorVersion         = 0;
-	private static $minorVersion         = 0;
-	
-	private static $isUIWebview          = false; // experimental & not to be relied upon
-	
 	/**
 	* Tests to see if:
 	*     - a session has already been opened for the request browser, if so send the info back, else
