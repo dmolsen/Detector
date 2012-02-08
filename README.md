@@ -4,7 +4,7 @@ Detector is a simple, PHP- and JavaScript-based browser- and feature-detection l
 server-side developers information about what types of devices may be requesting their content as well as the HTML5 & CSS3 features a requesting browser may or may not support. With Detector a developer 
 can serve the appropriate markup, stylesheets, and JavaScript to a requesting browser without being completely dependent on a browser-detection library being up-to-date nor completely dependent on a front-end-only resource loader.
 The server-side portion of Detector is based upon [modernizr-server](https://github.com/jamesgpearce/modernizr-server) by James Pearce ([@jamespearce](http://twitter.com/#!/jamespearce)) and 
-the browser-detection library from [Mobile Web OSP](https://github.com/dmolsen/MIT-Mobile-Web). Detector utilizes [Modernizr](http://www.modernizr.com/) 
+the browser-detection library [ua-parser-php](https://github.com/dmolsen/ua-parser-php). Detector utilizes [Modernizr](http://www.modernizr.com/) 
 for its client-side, feature-detection support.
 
 ## Demo of Detector ##
