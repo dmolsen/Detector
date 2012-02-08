@@ -56,35 +56,37 @@
 					<td><?=$ua->uaHash?></td>
 				</tr>
 		<?php } ?>
-		<tr>
-			<th class="span3">Gen. <? if ($ua->isMobile) { ?>OS<? } else { ?> Grouping<? } ?>:</th>
-			<td><?=$ua->deviceOSGeneral?></td>
-		</tr>
-		<? if ($ua->isMobile) { ?>
+		<? if (isset($ua->full)) { ?>
 			<tr>
-				<th>Specific OS:</th>
-				<td><?=$ua->deviceOSSpecific?></td>
+				<th class="span3">Browser/OS:</th>
+				<td><?=$ua->full?></td>
+			</tr>
+		<? } else { ?>
+			<tr>
+				<th class="span3">Browser:</th>
+				<td><?=$ua->browserFull?></td>
 			</tr>
 		<? } ?>
-		<? if ($ua->majorVersion != 0) { ?>
+
+		<? if (isset($ua->device)) { ?>
 			<tr>
-				<th>Major Version:</th>
-				<td><?=$ua->majorVersion?></td>
-			</tr>
-			<tr>
-				<th>Minor Version:</th>
-				<td><?=$ua->minorVersion?></td>
+				<th>Device:</th>
+				<td><?=$ua->deviceFull?></td>
 			</tr>
 		<? } ?>
-		<? if (($ua->deviceOSGeneral == 'iphone') || ($ua->deviceOSGeneral == 'ipod') || ($ua->deviceOSGeneral == 'ipad')) { ?>
+		<? if ($ua->browser == 'Mobile Safari') { ?>
 			<tr>
 				<th>Is UIWebview?</th>
-				<td><?=convertTF($ua->iOSUIWebview)?></td>
+				<td><?=convertTF($ua->isUIWebview)?></td>
 			</tr>
 		<? } ?>
 		<tr>
 			<th>Is Mobile?</th>
 			<td><?=convertTF($ua->isMobile)?></td>
+		</tr>
+		<tr>
+			<th>Is Mobile Device?</th>
+			<td><?=convertTF($ua->isMobileDevice)?></td>
 		</tr>
 		<tr>
 			<th>Is Tablet?</th>
