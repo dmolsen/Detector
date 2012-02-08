@@ -55,7 +55,7 @@ class Detector {
 			}
 		}
 		
-		// populate some standard variables
+		// populate some standard variables out of the config
 		self::$debug                = $config['debug'];
 		self::$uaFeaturesMaxJS      = $config['uaFeaturesMaxJS'];
 		self::$uaFeaturesMinJS      = $config['uaFeaturesMinJS']; 
@@ -69,6 +69,7 @@ class Detector {
 		$coreVersion                = $config['coreVersion'];
 		$extendedVersion            = $config['extendedVersion'];
 		
+		// populate some standard variables based on the user agent string
 		self::$ua                   = $_SERVER["HTTP_USER_AGENT"];
 		self::$accept               = $_SERVER["HTTP_ACCEPT"];
 		self::$uaHash               = md5(self::$ua);
@@ -80,8 +81,6 @@ class Detector {
 		
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
 		$uaTemplateExtended         = __DIR__."/".self::$uaDirCore."ua.template.json";
-		
-
 		
 		// offer the ability to review profiles saved in the system
 		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid']) && self::$debug) {
@@ -147,6 +146,7 @@ class Detector {
 			
 		} else if (isset($_COOKIE) && isset($_COOKIE[self::$cookieID])) {
 			
+			// to be clear, this section means that a UA was unknown, was profiled with modernizr & now we're saving that data to build a new profile
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "cookie";
 			
