@@ -7,6 +7,7 @@
 		<a href="http://www.slideshare.net/yiibu/adaptation-why-responsive-design-actually-begins-on-the-server">Adaptation</a>, the core concepts & features of Detector have been floating around in my head. I've finally turned those ideas into <a href="https://github.com/dmolsen/Detector">code</a> and created this demo.
 		To learn more about <a href="https://github.com/dmolsen/Detector">Detector</a> and how it works please check out the <a href="https://github.com/dmolsen/Detector">README on GitHub</a>. 
 	</p>
+	<?php include("templates/_profileinfo.inc.php"); ?>
 	<?php include("templates/_browserprofile.inc.php"); ?>
 	<?php include("templates/_featureprofile.inc.php"); ?>
 </div>
