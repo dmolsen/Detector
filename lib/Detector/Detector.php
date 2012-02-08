@@ -147,6 +147,7 @@ class Detector {
 		} else if (isset($_COOKIE) && isset($_COOKIE[self::$cookieID])) {
 			
 			// to be clear, this section means that a UA was unknown, was profiled with modernizr & now we're saving that data to build a new profile
+			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "cookie";
 			
