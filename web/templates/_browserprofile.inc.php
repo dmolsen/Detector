@@ -15,10 +15,40 @@
 		}
 	?></strong>
 </p>
+<? 
+	if (Detector::$foundIn == 'archive') {
+		if ($uaListJSON = @file_get_contents(__DIR__."/../../lib/Detector/user-agents-core/ua.list.json")) {
+			$uaList = (array) json_decode($uaListJSON);
+			asort($uaList);
+			$i = 0;
+			$oldkey = '';
+			$next = '';
+			foreach($uaList as $key => $value) {
+				if ($i == 1) {
+					$next = $key;
+					break;
+				}
+				if ($key == $ua->uaHash) {
+					$previous = $oldkey;
+					$i = 1;
+				}
+				$oldkey = $key;
+			}
+
+		}
+	}
+?>
+
 <table class="zebra-striped span9">
 	<thead>
 		<tr>
-			<th colspan="2">Browser Properties</th>
+			<th colspan="2">Browser Properties <span style="float: right; font-weight: normal; font-size: 12px;">
+			<? if ($previous != '') { ?>
+				<a href="/?pid=<?=$previous?>">Previous Profile</a>
+			<? } ?>
+			<? if ($next != '') { ?>
+				| <a href="/?pid=<?=$next?>">Next Profile</a>
+			<? } ?></span></th>
 		</tr>
 	</thead>
 	<tbody>
