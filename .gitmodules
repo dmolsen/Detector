@@ -1,0 +1,3 @@
+[submodule "lib/Detector/lib/ua-parser-php"]
+	path = lib/Detector/lib/ua-parser-php
+	url = git://github.com/dmolsen/ua-parser-php.git
