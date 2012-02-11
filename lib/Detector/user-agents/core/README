@@ -1,2 +1,1 @@
-Any data for a user agent that you want to track & that you put in "modernizr/core" will fall here.
-You should really leave the "modernizr/core" tests alone.
+The core directory holds user agent & feature information for browsers that Detector has classified. Feature information comes come the tests run from "tests/core".
