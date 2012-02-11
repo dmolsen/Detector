@@ -72,7 +72,6 @@ class Detector {
 		$extendedVersion            = $config['extendedVersion'];
 		
 		self::$familyDefault        = $config['familyDefault'];
-		self::$familyDescription    = $config['familyDescription'];
 		
 		// populate some standard variables based on the user agent string
 		self::$ua                   = $_SERVER["HTTP_USER_AGENT"];
