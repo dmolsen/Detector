@@ -31,8 +31,7 @@ class Detector {
 	private static $uaDirCore;
 	private static $uaDirExtended;
 	
-	private static $familyDefault;
-	private static $familyDescription;
+	private static $familyDefault       = "basic";
 	
 	/**
 	* Tests to see if:
@@ -531,16 +530,16 @@ class Detector {
 	*
 	* @return {String}        the name of the family that this user agent matches. might just be the default.
 	*/
-	private static function findFamily($obj) {
-		
+	public static function findFamily($obj) {
+				
 		// set-up the configuration options for the system
-		if (!($familiesJSON = @file_get_contents(__DIR__."/".self::$familyDescription))) {
+		if (!($familiesJSON = @file_get_contents(__DIR__."/config/families.json"))) {
 			// config.ini didn't exist so attempt to create it using the default file
-			if (!@copy(__DIR__."/families.json.default", __DIR__."/families.json")) {
-			    print "Please make sure config.ini.copy exists before trying to have Detector build the config.ini file automagically.";
+			if (!@copy(__DIR__."/config/families.json.default", __DIR__."/config/families.json")) {
+			    print "Please make sure families.json.default exists before trying to have Detector build the families.json file automagically.";
 				exit;
 			} else {
-				$familiesJSON = @file_get_contents(__DIR__."/families.json");	
+				$familiesJSON = @file_get_contents(__DIR__."/config/families.json");	
 			}
 		}
 		
