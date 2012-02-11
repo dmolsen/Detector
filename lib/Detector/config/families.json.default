@@ -1,6 +1,5 @@
 {
  "adv-ios": { 
-    "os": "iOS", 
     "features": [ "cssanimations", "csstransforms||cssreflections" ]
  },
  "adv-misc": { 
