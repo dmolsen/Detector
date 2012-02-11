@@ -9,8 +9,8 @@
 debug                = false
 
 // where to find the modernizr scripts
-uaFeaturesMaxJS      = "modernizr/modernizr.2.5.1.min.custom.js"
-uaFeaturesMinJS      = "modernizr/modernizr.2.5.1.no-tests.js"
+uaFeaturesMaxJS      = "lib/modernizr/modernizr.2.5.1.min.custom.js"
+uaFeaturesMinJS      = "lib/modernizr/modernizr.2.5.1.no-tests.js"
 
 // where to find the tests that should be run against browsers
 uaFeaturesCore       = "tests/core/"
@@ -18,8 +18,8 @@ uaFeaturesExtended   = "tests/extended/"
 uaFeaturesPerRequest = "tests/perrequest/"
 
 // where to find the user agent profiles
-uaDirCore            = "user-agents-core/"
-uaDirExtended        = "user-agents-extended/"
+uaDirCore            = "user-agents/core/"
+uaDirExtended        = "user-agents/extended/"
 
 // version number so that core and extended profiles can be rebuilt if necessary
 coreVersion          = "0.9";
@@ -27,4 +27,3 @@ extendedVersion      = "1.0";
 
 // family classifications
 familyDefault        = "basic";
-familyDescription    = "families.json";
