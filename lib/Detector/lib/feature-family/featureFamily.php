@@ -1,14 +1,14 @@
 <?php
 
 /*!
- * browserFamily v0.1
+ * featureFamily v0.1
  * a helper library for Detector that classifies browsers based on features
  *
  * Copyright (c) 2011-2012 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
  */
 
-class browserFamily {
+class featureFamily {
 	
 	private static $familyDefault = "basic";
 	
@@ -60,24 +60,16 @@ class browserFamily {
 	}
 	
 	/**
-	* tests a value against the object to see if it's true or not
-	* @param  {String}        the value to be compared against the object
-	* @param  {Object}        the set of features that have already been defined for the user agent
-	* @param  {Boolean}       the current true/false status of tests
-	* @param  {Boolean}       whether the test of the testResult vs currentResult should be an && or ||
+	* figures out which test style should be run
+	* @param  {String}        the key that may be needed for the test
+	* @param  {String}        the value that may be needed for the test
+	* @param  {Object}        the set of features that have been already identified for the user agent
+	* @param  {Boolean}       whether or not both key & value should be tested or just the value
 	*
 	* @return {Boolean}       the result of testing the value against the object
 	*/
 	private static function runTest($testKey,$testValue,$currentObj,$testKeyValue) {
-		// still has to handle !
-		// doesn't handle device info correctly...
-		
-		// families["adv-ios"]  = '{ os: iOS', features: [ 'cssanimations', 'csstransforms||cssreflections' ] }";
-		
-		// if string test key->value against obj key->value, handle || & ! & -> (e.g. if os equals iOS then obj->os should equal iOS)
-		// if array test each value against obj key for true false, handle || & ! & ->  (e.g. if cssanimations then obj->cssanimations should equal true)
-		//   - if value contains an = check obj key for same value (e.g. if screenattributes->colorDepth = 24 then obj->screenattributes->colorDepth should equal 24)
-		
+
 		if ($testKeyValue) {
 			$testResult = false;
 			if ($values = explode("||",$testValue)) {
@@ -112,6 +104,14 @@ class browserFamily {
 		return $testResult;
 	}
 	
+	/**
+	* tests a key & value against the object to see if it's true or not
+	* @param  {String}        the key that will be tested
+	* @param  {String}        the value that will be tested
+	* @param  {Object}        the set of features that have been already identified for the user agent
+	*
+	* @return {Boolean}       the result of testing the value against the object
+	*/
 	private static function testKeyValue($key,$value,$currentObj) {
 		$pos = strpos($value,"!");
 		if ($pos !== false) {
@@ -125,6 +125,13 @@ class browserFamily {
 		return $testResult;
 	}
 	
+	/**
+	* tests a value against the object to see if it's true or not
+	* @param  {String}        the value that will be tested
+	* @param  {Object}        the set of features that have been already identified for the user agent
+	*
+	* @return {Boolean}       the result of testing the value against the object
+	*/
 	private static function testValue($value,$currentObj) {
 		$pos = strpos($value,"!");
 		if ($pos !== false) {

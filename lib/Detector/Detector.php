@@ -11,7 +11,7 @@
 require(__DIR__."/lib/ua-parser-php/UAParser.php");
 
 // include the browserFamily library to classify the browser by features
-require(__DIR__."/lib/browser-family/browserFamily.php");
+require(__DIR__."/lib/feature-family/featureFamily.php");
 
 class Detector {
 	
