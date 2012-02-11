@@ -74,7 +74,7 @@
 			</tr>
 		<? } ?>
 		<tr>
-			<th>Browser Family:</th>
+			<th>Feature Family:</th>
 			<td><?=$ua->family?></td>
 		</tr>
 		<? if ($ua->browser == 'Mobile Safari') { ?>
