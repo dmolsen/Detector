@@ -7,6 +7,9 @@ DET-v0.3 (IN PROGRESS)
  - ADD: a debug flag
  - ADD: support for versioning of core & extended profiles
  - ADD: youtube demo that uses Detector
+ - ADD: a browser family classification system that classifies browsers by ua info & features
+ - FIX: updated the browser detection library to use ua-parser-php
+ - FIX: reorganized detector's file system layout so it's a little cleaner
 
 DET-v0.2 (Jan. 18, 2012)
  - ADD: handles browsers or spiders that don't support javascript
