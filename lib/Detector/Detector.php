@@ -47,13 +47,13 @@ class Detector {
 	public function build() {
 		
 		// set-up the configuration options for the system
-		if (!($config = @parse_ini_file(__DIR__."/config.ini"))) {
+		if (!($config = @parse_ini_file(__DIR__."/config/config.ini"))) {
 			// config.ini didn't exist so attempt to create it using the default file
-			if (!@copy(__DIR__."/config.ini.default", __DIR__."/config.ini")) {
-			    print "Please make sure config.ini.copy exists before trying to have Detector build the config.ini file automagically.";
+			if (!@copy(__DIR__."/config/config.ini.default", __DIR__."/config/config.ini")) {
+			    print "Please make sure config.ini.default exists before trying to have Detector build the config.ini file automagically.";
 				exit;
 			} else {
-				$config = @parse_ini_file(__DIR__."/config.ini");	
+				$config = @parse_ini_file(__DIR__."/config/config.ini");	
 			}
 		}
 		
