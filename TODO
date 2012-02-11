@@ -15,7 +15,7 @@ x - update the wording for the headers for features. also add a background color
 x - add noscript tag to the default to capture spiders & devices that don't support js
 x - figure out a default profile for spiders & what not... (how does $ua->feature react to not being present?)
 x - add check if user-agents-extended has been created and build if necessary.
-  - a way to skip ahead in browser profiles or someway to search across profiles/organize
+x - a way to skip ahead in browser profiles or someway to search across profiles/organize
 x - figure out a way to check if it's an ios app?
 x - write the introductory blog post
   - revise the README
@@ -30,6 +30,7 @@ x - social media buttons
 x - add a configuration option
 x - update the browser detection lib
   - desktop mode where we can swap in another profile. similar to ?pid
+x - add a method to classify devices by their features into "families"
   - add tests for
      -- flash w/ version
      -- webp?
