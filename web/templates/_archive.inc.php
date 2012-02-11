@@ -1,7 +1,7 @@
 <?php
 	$i       = 0;
 	$include = '';
-	if ($uaListJSON = @file_get_contents(__DIR__."/../../lib/Detector/user-agents-core/ua.list.json")) {
+	if ($uaListJSON = @file_get_contents(__DIR__."/../../lib/Detector/user-agents/core/ua.list.json")) {
 		$uaList = (array) json_decode($uaListJSON);
 		asort($uaList);
 		foreach ($uaList as $key => $value) {

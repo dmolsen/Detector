@@ -5,7 +5,7 @@
 	<p>The following profiles were created by Detector when the first user with that particular browser visited the system:</p>
 	<ul>
 	<?php
-		if ($uaListJSON = @file_get_contents(__DIR__."/../../lib/Detector/user-agents-core/ua.list.json")) {
+		if ($uaListJSON = @file_get_contents(__DIR__."/../../lib/Detector/user-agents/core/ua.list.json")) {
 			$uaList = (array) json_decode($uaListJSON);
 			asort($uaList);
 			foreach ($uaList as $key => $value) {

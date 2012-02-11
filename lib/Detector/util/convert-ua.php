@@ -10,11 +10,11 @@
 // include the ua-parser-php library to rip apart user agent strings
 require(__DIR__."/../lib/ua-parser-php/UAParser.php");
 
-if ($uaListJSON = @file_get_contents(__DIR__."/../user-agents-core/ua.list.json")) {
+if ($uaListJSON = @file_get_contents(__DIR__."/../user-agents/core/ua.list.json")) {
 	$uaList = (array) json_decode($uaListJSON);
 	asort($uaList);
 	foreach ($uaList as $key => $value) {
-		$file = __DIR__."/../user-agents-core/ua.".$key.".json";	
+		$file = __DIR__."/../user-agents/core/ua.".$key.".json";	
 		if (!isset($ua->device)) {
 			$uaItemJSON  = @file_get_contents($file);
 			$uaJSON      = json_decode($uaItemJSON);
@@ -36,6 +36,5 @@ if ($uaListJSON = @file_get_contents(__DIR__."/../user-agents-core/ua.list.json"
 		}
 	}
 }
-
 
 ?>
