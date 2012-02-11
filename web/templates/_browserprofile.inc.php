@@ -67,13 +67,16 @@
 				<td><?=$ua->browserFull?></td>
 			</tr>
 		<? } ?>
-
 		<? if (isset($ua->device)) { ?>
 			<tr>
 				<th>Device:</th>
 				<td><?=$ua->deviceFull?></td>
 			</tr>
 		<? } ?>
+		<tr>
+			<th>Browser Family:</th>
+			<td><?=$ua->family?></td>
+		</tr>
 		<? if ($ua->browser == 'Mobile Safari') { ?>
 			<tr>
 				<th>Is UIWebview?</th>
