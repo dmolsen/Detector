@@ -33,30 +33,30 @@ x - update the browser detection lib
 x - add a method to classify devices by their features into "families"
   - add tests for
      -- flash w/ version
-     -- webp?
-     -- gamepad?
-     -- sharedworkers
-     -- lowbandwidth
-     -- event source
-     -- scriptdefer
-     -- contenteditable
-     -- webaudio
-     -- dataworkers
-     -- progressbar
-     -- meter
-     -- fullscreen
-     -- device motion
-     -- device orientation w/ values
-     -- microdata
-     -- adownload
-     -- notification
-     -- datauri
-     -- track
-     -- time
-     -- userselect
-     -- audiodata
-     -- filesystem
-     -- cssscrollbar
-     -- filereader
-     -- scriptasync
-     -- getusermedia
+     x -- webp?
+     x -- gamepad?
+     x -- sharedworkers
+     x -- lowbandwidth
+     x -- event source
+     x -- scriptdefer
+     x -- contenteditable
+     x -- webaudio
+     x -- dataworkers
+     x -- progressbar
+     x -- meter
+     x -- fullscreen
+     x -- device motion
+     x -- device orientation w/ values
+     x -- microdata
+     x -- adownload
+     x -- notification
+     x -- datauri
+     x -- track
+     x -- time
+     x -- userselect
+     x -- audiodata
+     x -- filesystem
+     x -- cssscrollbar
+     x -- filereader
+     x -- scriptasync
+     x -- getusermedia
