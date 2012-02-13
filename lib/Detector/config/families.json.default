@@ -1,8 +1,12 @@
 {
- "adv-ios": { 
-    "features": [ "cssanimations", "csstransforms||cssreflections" ]
- },
- "adv-misc": { 
-    "features": ["cssanimations", "csstransforms"] 
- }
+	"mobile-advanced": { 
+    "isMobile": true,
+    "features": [ "cssanimations" ]
+	},
+	"mobile-basic": { 
+    "isMobile": true
+	},
+	"desktop": {
+		"isComputer": true
+	}
 }
