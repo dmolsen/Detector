@@ -243,13 +243,14 @@ class Detector {
 				}
 			}
 			
-			// use the uaFeatures to classify the feature family for this browser
-			$jsonTemplateExtended->family = featureFamily::find($uaFeatures);
-
 			// merge the data for future requests
 			$mergedInfo = new stdClass();
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
 			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
+			
+			// use the uaFeatures to classify the feature family for this browser
+			$mergedInfo->family           = featureFamily::find($mergedInfo);
+			$jsonTemplateExtended->family = $mergedInfo->family;
 
 			// write out to disk for future requests that might have the same UA
 			$jsonTemplateCore = json_encode($jsonTemplateCore);
