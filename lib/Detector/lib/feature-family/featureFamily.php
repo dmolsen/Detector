@@ -120,7 +120,7 @@ class featureFamily {
 			//print "!(obj->".$key." = ".$value.") ".$testResult." <br />";
 		} else {
 			$testResult = ($currentObj->$key == $value) ? true : false;
-			//print "(obj->".$key." = ".$value.") ".$testResult." <br />";
+			//print "(obj->".$key." = ".$value.") ".$testResult." obj result: ".$currentObj->$key."<br />";
 		}
 		return $testResult;
 	}
