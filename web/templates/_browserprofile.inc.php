@@ -73,10 +73,6 @@
 				<td><?=$ua->deviceFull?></td>
 			</tr>
 		<? } ?>
-		<tr>
-			<th>Feature Family:</th>
-			<td><?=$ua->family?></td>
-		</tr>
 		<? if ($ua->browser == 'Mobile Safari') { ?>
 			<tr>
 				<th>Is UIWebview?</th>
