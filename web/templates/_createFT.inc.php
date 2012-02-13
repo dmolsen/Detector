@@ -9,8 +9,10 @@
 				</tr>
 			</thead>
 			<tbody>";
+		$check = 0;
 		foreach($ua as $key => $value) {
 			if (preg_match($match,$key)) {
+				$check = 1;
 				if (is_object($value)) {
 					foreach ($value as $vkey => $vvalue) {
 						print "<tr>";
@@ -53,6 +55,11 @@
 					print "</tr>";
 				}
 			}
+		}
+		if ($check == 0) {
+			print "<tr>";	
+			print "<td class=\"span9\" colspan=\"3\">This browser didn't support JavaScript so these features haven't been recorded.</td>";
+			print "</tr>";
 		}
 		print "</tbody>";
 		print "</table>";
