@@ -14,6 +14,11 @@
 			if (preg_match($match,$key)) {
 				$check = 1;
 				if (is_object($value)) {
+					
+					$value_a = (array) $value;
+					ksort($value_a);
+					$value = (object) $value_a;
+					
 					foreach ($value as $vkey => $vvalue) {
 						print "<tr>";
 						print "<th class=\"span7\">".$key."->".$vkey.":</th>";
