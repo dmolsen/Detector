@@ -38,7 +38,7 @@ class featureFamily {
 			$finalFamilyResult = true;
 			
 			foreach ($familyTests as $featureKey => $featureValue) {
-				if (is_string($featureValue)) {
+				if (is_string($featureValue) || is_bool($featureValue)) {
 					$familyResult = self::runTest($featureKey,$featureValue,$obj,true);
 				} else if (is_array($featureValue)) {
 					$familySubResultFinal = true;
