@@ -38,7 +38,7 @@
 				} else {
 					print "<tr>";	
 					print "<th class=\"span7\">".$key.":</th>";
-					if (Detector::$foundIn == "archive") {
+					if ((Detector::$foundIn == "archive") || ($key == "extendedVersion")) {
 						print "<td class=\"span1\"><span class='label'>N/A</span></td>";
 					} else {
 						print "<td class=\"span1\">
