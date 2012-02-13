@@ -333,7 +333,7 @@ class Detector {
 			} else {
 				
 				// merge the data
-				$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;
+				$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;	
 
 				// put the merged JSON info into session
 				if (isset($_SESSION)) {
