@@ -2,14 +2,16 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
-DET-v0.3 (IN PROGRESS)
+DET-v0.5 (IN PROGRESS)
  - ADD: a configuration file for configuring standard paths and variables for Detector
  - ADD: a debug flag
  - ADD: support for versioning of core & extended profiles
  - ADD: youtube demo that uses Detector
  - ADD: a browser family classification system that classifies browsers by ua info & features
+ - ADD: a number of extra feature tests
  - FIX: updated the browser detection library to use ua-parser-php
  - FIX: reorganized detector's file system layout so it's a little cleaner
+ - FIX: updated modernizr to 2.5.2
 
 DET-v0.2 (Jan. 18, 2012)
  - ADD: handles browsers or spiders that don't support javascript
