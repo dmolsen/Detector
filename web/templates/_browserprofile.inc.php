@@ -67,7 +67,7 @@
 				<td><?=$ua->browserFull?></td>
 			</tr>
 		<? } ?>
-		<? if (isset($ua->device)) { ?>
+		<? if ($ua->device != '') { ?>
 			<tr>
 				<th>Device:</th>
 				<td><?=$ua->deviceFull?></td>
