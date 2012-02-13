@@ -83,7 +83,7 @@ class Detector {
 		$uaFileExtended             = __DIR__."/".self::$uaDirExtended."ua.".self::$uaHash.".json";
 		
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
-		$uaTemplateExtended         = __DIR__."/".self::$uaDirCore."ua.template.json";
+		$uaTemplateExtended         = __DIR__."/".self::$uaDirExtended."ua.template.json";
 		
 		// offer the ability to review profiles saved in the system
 		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid']) && self::$debug) {
