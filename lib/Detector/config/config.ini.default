@@ -10,7 +10,7 @@ debug                = false
 
 // where to find the modernizr scripts
 uaFeaturesMaxJS      = "lib/modernizr/modernizr.2.5.2.min.custom.js"
-uaFeaturesMinJS      = "lib/modernizr/modernizr.2.5.2.no-tests.js"
+uaFeaturesMinJS      = "lib/modernizr/modernizr.2.5.2.min.no-tests.js"
 
 // where to find the tests that should be run against browsers
 uaFeaturesCore       = "tests/core/"
