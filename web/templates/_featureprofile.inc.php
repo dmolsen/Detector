@@ -43,6 +43,10 @@
 
 <?php 
 	
+	$ua_a = (array) $ua;
+	ksort($ua_a);
+	$ua = (object) ($ua_a);
+	
 	// organize what features show up in which section
 	$css3Features       = "/(fontface|backgroundsize|borderimage|borderradius|boxshadow|flexbox|flexbox-legacy|hsla|multiplebgs|opacity|rgba|textshadow|cssanimations|csscolumns|generatedcontent|cssgradients|cssreflections|csstransforms|csstransforms3d|csstransitions|overflowscrolling|bgrepeatround|bgrepeatspace|bgsizecover|boxsizing|cubicbezierrange|cssremunit|cssresize|cssscrollbar)/";
 	$html5Features      = "/(adownload|applicationcache|canvas|canvastext|draganddrop|hashchange|history|audio|video|indexeddb|input|inputtypes|localstorage|postmessage|sessionstorage|websockets|websqldatabase|webworkers|contenteditable|webaudio|audiodata|userselect|dataview|microdata|progressbar|meter|createelement-attrs|time|geolocation|devicemotion|deviceorientation|speechinput|filereader|filesystem|fullscreen|formvalidation|notification|performance|quotamanagement|scriptasync|scriptdefer|webintents|websocketsbinary|blobworkers|dataworkers|sharedworkers)/";
