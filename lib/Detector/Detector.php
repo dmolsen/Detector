@@ -242,6 +242,9 @@ class Detector {
 					}
 				}
 			}
+			
+			// use the uaFeatures to classify the feature family for this browser
+			$jsonTemplateExtended->family = featureFamily::find($uaFeatures);
 
 			// merge the data for future requests
 			$mergedInfo = new stdClass();
