@@ -1,9 +1,12 @@
 # Detector v0.5 #
 
-Detector is a simple, PHP- and JavaScript-based browser- and feature-detection library. Detector gives
-server-side developers information about what types of devices may be requesting their content as well as the HTML5 & CSS3 features a requesting browser may or may not support. With Detector a developer 
-can serve the appropriate markup, stylesheets, and JavaScript to a requesting browser without being completely dependent on a browser-detection library being up-to-date nor completely dependent on a front-end-only resource loader. The server-side portion of Detector is based upon [modernizr-server](https://github.com/jamesgpearce/modernizr-server) by James Pearce ([@jamespearce](http://twitter.com/#!/jamespearce)) and the browser-detection library [ua-parser-php](https://github.com/dmolsen/ua-parser-php). Detector utilizes [Modernizr](http://www.modernizr.com/) 
-for its client-side, feature-detection support.
+Detector is a simple, PHP- and JavaScript-based browser- and feature-detection library that can adapt to new devices & browsers on its own without the need to pull from a central database of browser information.
+	
+Detector dynamically creates profiles using a browser's _(mainly)_ unique user-agent string as a key. Using [Modernizr](http://modernizr.com/) it records the HTML5 & CSS3 features a requesting browser may or may not support. [ua-parser-php](https://github.com/dmolsen/ua-parser-php) is used to collect and record any useful information _(like OS or device name)_ the user-agent string may contain. 
+
+With Detector a developer can serve the appropriate markup, stylesheets, and JavaScript to a requesting browser without being completely dependent on a front-end-only resource loader nor a browser-detection library being up-to-date.
+
+The server-side portion of Detector is based upon [modernizr-server](https://github.com/jamesgpearce/modernizr-server) by James Pearce ([@jamespearce](http://twitter.com/#!/jamespearce)) and the browser-detection library [ua-parser-php](https://github.com/dmolsen/ua-parser-php). Detector utilizes [Modernizr](http://www.modernizr.com/) for its client-side, feature-detection support.
 
 ## Demo of Detector ##
 
@@ -29,6 +32,7 @@ The following features are as of v0.5 of Detector:
 * [Detector Test Tutorial](https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial)
 * [Detector Family Tutorial](https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial)
 * [Templating with Detector & Mustache Tutorial](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial)
+* [Why I Created Detector](http://www.dmolsen.com/mobile-in-higher-ed/2012/01/18/introducing-detector-combining-browser-feature-detection-for-your-web-app/)
 
 ## Credits ##
 
