@@ -38,8 +38,12 @@
 				?>
 			</td>
 		</tr>
+
 	</tbody>
 </table>
+<div class="featureNote span9">
+	<small><em>To learn more about families please <a href="https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial">review the family tutorial</a>.</em></small>
+</div>
 
 <?php 
 	
@@ -60,8 +64,8 @@
 	createFT($ua,$html5Features,"HTML5 Features");
 	createFT($ua,$miscFeatures,"Misc. Features","","While a device may be touch-based that doesn't not mean it supports <a href=\"http://www.w3.org/TR/touch-events/\">touch events</a> which is what I'm testing for here.");
 	createFT($ua,$mqFeatures,"Browser Class via Media Queries","core-","This feature needs some love as it's not always returning information correctly.");
-	createFT($ua,$extendedFeatures,"Detector Extended Test Features","extended-","To learn more about extended tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a>");
+	createFT($ua,$extendedFeatures,"Detector Extended Test Features","extended-","To learn more about extended tests and their purpose please <a href=\"https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial\">review the test tutorial.</a>");
 	if (Detector::$foundIn != 'archive') {
-		createFT($ua,$perRequestFeatures,"Detector Per Request Test Features","pr-","To learn more about per request tests and their purpose please <a href=\"https://github.com/dmolsen/Detector\">review the README.</a> If this section isn't populated hit \"refresh\". Attributes are captured via a cookie. Screen size will also be one request behind if you resize the window for the same reason.");	
+		createFT($ua,$perRequestFeatures,"Detector Per Request Test Features","pr-","To learn more about per request tests and their purpose please <a href=\"https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorialr\">review the test tutorial.</a> If this section isn't populated hit \"refresh\". Attributes are captured via a cookie. Screen size will also be one request behind if you resize the window for the same reason.");	
 	}
 ?>
