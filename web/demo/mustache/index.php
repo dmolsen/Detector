@@ -10,7 +10,7 @@ require_once "../../../lib/Detector/Detector.php";
 $template = file_get_contents("templates/index.mustache");
 $data = array(
 	'title'       => 'Hello, World!',
-	'description' => 'This extremely simple demo is meant to show how Detector & Mustache can be combined to create a Responsive Web Design + Server Side Component (RESS) System. Depending upon the requesting browser\'s Detector family classification a responsive template & partials are rendered via Mustache. Choose a different layout below to see how this page & the included images change.',
+	'description' => 'This extremely simple demo is meant to show how Detector & Mustache can be combined to create a Responsive Web Design + Server Side Component (RESS) System. By using the requesting browser\'s Detector family classification a responsive template & partials that match the browser\'s features are rendered server-side via Mustache. Choose a different layout below to see how this page & the included images change depending upon the browser family.',
 	'link'        => 'https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial',
 	'viewDesktop' => 'http://detector.dmolsen.com/demo/mustache/?pid=13ee8513d6fb7f97aef6635309b91f40',
 	'viewMA'      => 'http://detector.dmolsen.com/demo/mustache/?pid=e1bd58cc186d3a2156b6ebddb558fd41',
