@@ -2,11 +2,12 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
-DET-v0.5 (IN PROGRESS)
+DET-v0.5 (Feb. 18, 2012)
  - ADD: a configuration file for configuring standard paths and variables for Detector
  - ADD: a debug flag
  - ADD: support for versioning of core & extended profiles
  - ADD: youtube demo that uses Detector
+ - ADD: RESS demo showing how Detector can be used with Mustache for templating
  - ADD: a browser family classification system that classifies browsers by ua info & features
  - ADD: a number of extra feature tests
  - FIX: updated the browser detection library to use ua-parser-php
