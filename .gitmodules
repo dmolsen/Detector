@@ -1,6 +1,0 @@
-[submodule "lib/Detector/lib/ua-parser-php"]
-	path = lib/Detector/lib/ua-parser-php
-	url = git://github.com/dmolsen/ua-parser-php.git
-[submodule "web/demo/mustache/lib/mustache-php"]
-	path = web/demo/mustache/lib/mustache-php
-	url = git://github.com/dmolsen/mustache.php.git
