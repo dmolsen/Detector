@@ -23,12 +23,13 @@ The following features are as of v0.5.1 of Detector:
 * version your browser profiles so you can force them to be recreated after adding new tests
 * [easily organize browsers into families](https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial) based on a mix of supported features & device information
 * browsers & bots that don't support JavaScript can still use your site
-* use with a templating system like Mustache to [create a RESS system](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial).
+* push feature information to the browser via CSS classes and/or a JavaScript object a la Modernizr
+* use with a templating system like Mustache to [create a RESS system](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial)
 
 ## Tutorials ##
 
 * [Adding & Using Detector With Your Application](https://github.com/dmolsen/Detector/wiki/Adding-&-Using-Detector-With-Your-Application)
-* [Creating Detector Families](https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial)
+* [Creating Browser Groupings](https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial)
 * [Creating Feature Tests for Detector](https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial)
 * [Pushing Detector Data to the Browser](https://github.com/dmolsen/Detector/wiki/Pushing-Detector-Data-to-the-Browser-Tutorial)
 * [Templating with Detector & Mustache](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial)
