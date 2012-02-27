@@ -45,7 +45,7 @@ class Detector {
 	*
 	* @return {Object}       an object that contains all the properties for this particular user agent
 	*/
-	public function build() {
+	public static function build() {
 		
 		// set-up the configuration options for the system
 		if (!($config = @parse_ini_file(__DIR__."/config/config.ini"))) {
@@ -85,18 +85,20 @@ class Detector {
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
 		$uaTemplateExtended         = __DIR__."/".self::$uaDirExtended."ua.template.json";
 		
+		$pid                        = isset($_REQUEST['pid']) ? $_REQUEST['pid'] : '';
+		
 		// offer the ability to review profiles saved in the system
-		if (preg_match("/[a-z0-9]{32}/",$_REQUEST['pid']) && self::$debug) {
+		if (preg_match("/[a-z0-9]{32}/",$pid) && self::$debug) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "archive";
 			
 			// decode the core data
-			$uaJSONCore     = @file_get_contents(__DIR__."/".self::$uaDirCore."ua.".$_REQUEST['pid'].".json");
+			$uaJSONCore     = @file_get_contents(__DIR__."/".self::$uaDirCore."ua.".$pid.".json");
 			$uaJSONCore     = json_decode($uaJSONCore);
 			
 			// find and decode the extended data
-			$uaJSONExtended = @file_get_contents(__DIR__."/".self::$uaDirExtended."ua.".$_REQUEST['pid'].".json");
+			$uaJSONExtended = @file_get_contents(__DIR__."/".self::$uaDirExtended."ua.".$pid.".json");
 			$uaJSONExtended = json_decode($uaJSONExtended);
 			
 			// merge the data
@@ -110,36 +112,38 @@ class Detector {
 			// return to the script
 			return $mergedInfo;
 		
-		} else if (session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID])) {
+		} else if (@session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID])) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "session";
 			
 			// grab features out of the cookie that are being checked on every request. update the session as appropriate
-			$uaFeatures = self::_ang($_COOKIE[self::$cookieID."-pr"]);
-			$cookiePerRequest = new stdClass();
-			foreach($uaFeatures as $key => $value) {
-				$key = str_replace("pr-", "", $key);
-				if (is_object($value)) {
-					foreach ($value as $vkey => $vvalue) {
-						if ($vvalue == "probably") { // hack for modernizr
-							$value->$vkey = true;
-						} else if ($vvalue == "maybe") { // hack for modernizr
-							$value->$vkey = false;
-						} else if (($vvalue == 1) || ($vvalue == 0)) {
-							$value->$vkey = ($vvalue == 1) ? true : false;
-						} else {
-							$value->$vkey = $vvalue;
+			if (isset($_COOKIE[self::$cookieID."-pr"])) {
+				$uaFeatures = self::_ang($_COOKIE[self::$cookieID."-pr"]);
+				$cookiePerRequest = new stdClass();
+				foreach($uaFeatures as $key => $value) {
+					$key = str_replace("pr-", "", $key);
+					if (is_object($value)) {
+						foreach ($value as $vkey => $vvalue) {
+							if ($vvalue == "probably") { // hack for modernizr
+								$value->$vkey = true;
+							} else if ($vvalue == "maybe") { // hack for modernizr
+								$value->$vkey = false;
+							} else if (($vvalue == 1) || ($vvalue == 0)) {
+								$value->$vkey = ($vvalue == 1) ? true : false;
+							} else {
+								$value->$vkey = $vvalue;
+							}
 						}
+						$cookiePerRequest->$key = $value;
+					} else {
+						$cookiePerRequest->$key = ($value == 1) ? true : false;
 					}
-					$cookiePerRequest->$key = $value;
-				} else {
-					$cookiePerRequest->$key = ($value == 1) ? true : false;
 				}
 			}
 			
 			// merge the session info we already have and the info from the cookie
-			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $_SESSION[self::$sessionID], (array) $cookiePerRequest) : $_SESSION[self::$sessionID];
+			$mergedInfo = (isset($cookiePerRequest)) ? (object) array_merge((array) $_SESSION[self::$sessionID], (array) $cookiePerRequest) : $_SESSION[self::$sessionID];
 			
 			// save the new info to the session
 			$_SESSION[self::$sessionID] = $mergedInfo;
@@ -278,7 +282,7 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
-		} else if ($_REQUEST["nojs"] == "true") {
+		} else if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "nojs";
@@ -526,6 +530,7 @@ class Detector {
 		return $obj;
 	}
 	
+							}
 }
 
 $ua = Detector::build();

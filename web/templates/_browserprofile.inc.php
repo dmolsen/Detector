@@ -31,13 +31,13 @@
 	<thead>
 		<tr>
 			<th colspan="2">Browser Properties <span style="float: right; font-weight: normal; font-size: 12px;">
-			<? if ($previous != '') { ?>
+			<? if (isset($previous) && ($previous != '')) { ?>
 				<a href="/?pid=<?=$previous?>">Previous Profile</a>
 			<? } ?>
-			<? if (($next != '') && ($previous != '')) { ?>
+			<? if ((isset($next) && ($next != '')) && (isset($previous) && ($previous != ''))) { ?>
 				|
 			<? } ?>
-			<? if ($next != '') { ?>
+			<? if (isset($next) && ($next != '')) { ?>
 				<a href="/?pid=<?=$next?>">Next Profile</a>
 			<? } ?></span></th>
 		</tr>
@@ -48,7 +48,7 @@
 			<td><?=$ua->ua?></td>
 		</tr>
 		<?php
-			if ($ua->isMobile && (Detector::$foundIn != "archive")) {
+			if (isset($ua->isMobile) && $ua->isMobile && (Detector::$foundIn != "archive")) {
 				
 			} else { ?>
 				<tr>
@@ -61,43 +61,84 @@
 				<th class="span3">Browser/OS:</th>
 				<td><?=$ua->full?></td>
 			</tr>
-		<? } else { ?>
+		<? } else if (isset($ua->browserFull)) { ?>
 			<tr>
 				<th class="span3">Browser:</th>
 				<td><?=$ua->browserFull?></td>
 			</tr>
 		<? } ?>
-		<? if ($ua->device != '') { ?>
+		<? if (isset($ua->device) && ($ua->device != '')) { ?>
 			<tr>
 				<th>Device:</th>
 				<td><?=$ua->deviceFull?></td>
 			</tr>
 		<? } ?>
-		<? if ($ua->browser == 'Mobile Safari') { ?>
+		<? if (isset($ua->browser) && ($ua->browser == 'Mobile Safari')) { ?>
 			<tr>
 				<th>Is UIWebview?</th>
 				<td><?=convertTF($ua->isUIWebview)?></td>
 			</tr>
 		<? } ?>
-		<tr>
-			<th>Is Mobile?</th>
-			<td><?=convertTF($ua->isMobile)?></td>
-		</tr>
+		
+			<tr>
+				<th>Is Mobile?</th>
+				<td>
+					<? 
+						if (isset($ua->isMobile)) {
+							print convertTF($ua->isMobile);
+						} else {
+							print "<span class='label important'>false</span>";
+						}
+					?>
+				</td>
+			</tr>
 		<tr>
 			<th>Is Mobile Device?</th>
-			<td><?=convertTF($ua->isMobileDevice)?></td>
+			<td>
+				<? 
+					if (isset($ua->isMobileDevice)) {
+						print convertTF($ua->isMobileDevice);
+					} else {
+						print "<span class='label important'>false</span>";
+					}
+				?>
+			</td>
 		</tr>
 		<tr>
 			<th>Is Tablet?</th>
-			<td><?=convertTF($ua->isTablet)?></td>
+			<td>
+				<? 
+					if (isset($ua->isTablet)) {
+						print convertTF($ua->isTablet);
+					} else {
+						print "<span class='label important'>false</span>";
+					}
+				?>
+			</td>
 		</tr>
 		<tr>
 			<th>Is Computer?</th>
-			<td><?=convertTF($ua->isComputer)?></td>
+			<td>
+				<? 
+					if (isset($ua->isComputer)) {
+						print convertTF($ua->isComputer);
+					} else {
+						print "<span class='label important'>false</span>";
+					}
+				?>
+			</td>
 		</tr>
 		<tr>
 			<th>Is Spider?</th>
-			<td><?=convertTF($ua->isSpider)?></td>
+			<td>
+				<? 
+					if (isset($ua->isSpider)) {
+						print convertTF($ua->isSpider);
+					} else {
+						print "<span class='label important'>false</span>";
+					}
+				?>
+			</td>
 		</tr>
 	</tbody>
 </table>

@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 	<?php 
-		if ($ua->isMobile && (Detector::$foundIn != "archive")) {
+		if (isset($ua->isMobile) && $ua->isMobile && (Detector::$foundIn != "archive")) {
 			print "<meta name=\"viewport\" content=\"width=device-width\">";
 		}
 	?>
@@ -19,7 +19,7 @@
     <!-- Le styles -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 	<?php 
-		if ($ua->isMobile && (Detector::$foundIn != "archive")) {
+		if (isset($ua->isMobile) && $ua->isMobile && (Detector::$foundIn != "archive")) {
 			print "<link href=\"/css/mobile.css\" rel=\"stylesheet\">";
 		} else {
 			print "<link href=\"/css/desktop.css\" rel=\"stylesheet\">";
@@ -61,6 +61,6 @@
 
       <div class="content">
         <div class="page-header">
-          <h1><a href="/" style="color: black;">Detector</a> <span class='label notice beta' >beta</span> <?php if ($ua->isMobile && (Detector::$foundIn != "archive")) {} else { print "<small>combined browser- &amp; feature-detection for your app</small></h1>"; } ?>
+          <h1><a href="/" style="color: black;">Detector</a> <span class='label notice beta' >beta</span> <?php if (isset($ua->isMobile) && $ua->isMobile && (Detector::$foundIn != "archive")) {} else { print "<small>combined browser- &amp; feature-detection for your app</small></h1>"; } ?>
         </div>
         <div class="row">
