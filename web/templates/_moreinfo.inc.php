@@ -14,6 +14,7 @@
 	<li> <a href="https://github.com/dmolsen/Detector/wiki/Adding-&-Using-Detector-With-Your-Application">Adding &amp; Using Detector With Your Application</a></li>
 	<li> <a href="https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial">Creating Tests with Detector</a></li>
 	<li> <a href="https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial">Creating Browser Groupings with Families</a></li>
+	<li> <a href="https://github.com/dmolsen/Detector/wiki/Pushing-Detector-Data-to-the-Browser-Tutorial">Pushing Detector Data to the Browser</a></li>
 	<li> <a href="https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial">Templates with Detector &amp; Mustache</a></li>
 </ul>
 	
