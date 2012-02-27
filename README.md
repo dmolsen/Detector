@@ -25,14 +25,17 @@ The following features are as of v0.5.1 of Detector:
 * browsers & bots that don't support JavaScript can still use your site
 * use with a templating system like Mustache to [create a RESS system](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial).
 
+## Tutorials ##
+
+* [Adding & Using Detector With Your Application](https://github.com/dmolsen/Detector/wiki/Adding-&-Using-Detector-With-Your-Application)
+* [Creating Detector Families](https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial)
+* [Creating Feature Tests for Detector](https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial)
+* [Pushing Detector Data to the Browser](https://github.com/dmolsen/Detector/wiki/Pushing-Detector-Data-to-the-Browser-Tutorial)
+* [Templating with Detector & Mustache](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial)
+
 ## More Information ##
 
 * [How Detector Works](https://github.com/dmolsen/Detector/wiki/How-Detector-Works)
-* [Adding & Using Detector With Your Application](https://github.com/dmolsen/Detector/wiki/Adding-&-Using-Detector-With-Your-Application)
-* [Detector Test Tutorial](https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial)
-* [Detector Family Tutorial](https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial)
-* [Pushing Detector Data to the Browser Tutorial](https://github.com/dmolsen/Detector/wiki/Pushing-Detector-Data-to-the-Browser-Tutorial)
-* [Templating with Detector & Mustache Tutorial](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial)
 * [Why I Created Detector](http://www.dmolsen.com/mobile-in-higher-ed/2012/01/18/introducing-detector-combining-browser-feature-detection-for-your-web-app/)
 
 ## Credits ##
