@@ -22,6 +22,7 @@
 <ul>
 	<li> <a href="http://www.opendeviceknowledge.com/vision">Open Device Knowledge Collaborative</a></li>
 	<li> <a href="http://www.lukew.com/ff/entry.asp?1392">RESS: Responsive Design + Server Side Components</a></li>
+	<li> <a href="http://www.dmolsen.com/mobile-in-higher-ed/2012/02/21/ress-and-the-evolution-of-responsive-web-design/">RESS, Server-Side Feature-Detection and the Evolution of Responsive Web Design</a></li>
 	<li> <a href="http://www.dmolsen.com/mobile-in-higher-ed/?p=318">Why I Created Detector</a></li>
 	<li> <a href="http://twitter.com/dmolsen/">@dmolsen on Twitter</a></li>
 </ul>

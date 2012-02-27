@@ -37,6 +37,7 @@ The following features are as of v0.5.1 of Detector:
 ## More Information ##
 
 * [How Detector Works](https://github.com/dmolsen/Detector/wiki/How-Detector-Works)
+* [RESS, Server-Side Feature-Detection and the Evolution of Responsive Web Design](http://www.dmolsen.com/mobile-in-higher-ed/2012/02/21/ress-and-the-evolution-of-responsive-web-design/)
 * [Why I Created Detector](http://www.dmolsen.com/mobile-in-higher-ed/2012/01/18/introducing-detector-combining-browser-feature-detection-for-your-web-app/)
 
 ## Credits ##
