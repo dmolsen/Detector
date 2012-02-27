@@ -31,6 +31,8 @@ x - add a configuration option
 x - update the browser detection lib
   - desktop mode where we can swap in another profile. similar to ?pid
 x - add a method to classify devices by their features into "families"
+x - add a method to write css classes to the html tag a la modernizr
+x - add a method to pass the truthy values for select features for use in JS on the front-end
   - add tests for
      -- flash w/ version
      x -- webp?
