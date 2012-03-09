@@ -2,6 +2,21 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+UAP-v1.2.2
+ - The following were changes to user_agents_regex.yaml:
+ ---- ADD: support for UC Browser
+
+UAP-v1.2.1
+ - The following were changes to user_agents_regex.yaml:
+ ---- ADD: support for android 4 user agents that have a dash in them
+
+UAP-v1.2.0
+ - FIX: should be compatible with PHP 5.2
+ - FIX: addressed STRICT mode errors
+ - FIX: addressed NOTICE for a missing variable
+ - FIX: if isTablet is set to true then isMobile is set to false (mobile to me means phone)
+ - THX: Thanks to Mike Bond of WVU Libraries for pointing out the 5.2 incompatibility
+
 UAP-v1.1.0
  - FIX: a number of fixes from bryan shelton
  - The following were changes to user_agents_regex.yaml:

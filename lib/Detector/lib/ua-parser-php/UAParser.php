@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * ua-parser-php v1.0.0
+ * ua-parser-php v1.2.1
  *
  * Copyright (c) 2011-2012 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -17,8 +17,14 @@
  *
  */
 
+// address 5.2 compatibility
+if (!defined('__DIR__')) define('__DIR__', dirname(__FILE__));
+if (!function_exists('json_decode') || !function_exists('json_encode')) {
+	require_once(__DIR__."/lib/json/jsonwrapper.php");
+}
+
 // load spyc as a YAML loader
-require(__DIR__."/lib/spyc-0.5/spyc.php");
+require_once(__DIR__."/lib/spyc-0.5/spyc.php");
 
 class UA {
 	
@@ -33,7 +39,7 @@ class UA {
 	*
 	* @return {Object}       the result of the user agent parsing
 	*/
-	public function parse($ua = NULL) {
+	public static function parse($ua = NULL) {
 		
 		self::$ua      = $ua ? $ua : $_SERVER["HTTP_USER_AGENT"];
 		self::$accept  = $_SERVER["HTTP_ACCEPT"];
@@ -89,7 +95,7 @@ class UA {
 	*
 	* @return {Object}       the result of the user agent parsing
 	*/
-	private function uaParser($regex) {
+	private static function uaParser($regex) {
 		
 		// tests the supplied regex against the user agent
 		if (preg_match("/".str_replace("/","\/",$regex['regex'])."/",self::$ua,$matches)) {
@@ -138,7 +144,8 @@ class UA {
 			// check to see if this is a mobile browser
 			$mobileBrowsers = array("Firefox Mobile","Opera Mobile","Opera Mini","Mobile Safari","webOS","IE Mobile","Playstation Portable",
 			                        "Nokia","Blackberry","Palm","Silk","Android","Maemo","Obigo","Netfront","AvantGo","Teleca","SEMC-Browser",
-			                        "Bolt","Iris","UP.Browser","Symphony","Minimo","Bunjaloo","Jasmine","Dolfin","Polaris","BREW","Chrome Mobile");
+			                        "Bolt","Iris","UP.Browser","Symphony","Minimo","Bunjaloo","Jasmine","Dolfin","Polaris","BREW","Chrome Mobile",
+									"UC Browser");
 			foreach($mobileBrowsers as $mobileBrowser) {
 				if (stristr($obj->browser, $mobileBrowser)) {
 					$obj->isMobile = true;
@@ -171,6 +178,7 @@ class UA {
 			// if OS is Android check to see if this is a tablet. won't work on UA strings less than Android 3.0
 			if ((isset($obj->os) && $obj->os == 'Android') && !strstr(self::$ua, 'Mobile')) {
 				$obj->isTablet = true;
+				$obj->isMobile = false;
 			}
 			
 			// some select mobile OSs report a desktop browser. make sure we note they're mobile
@@ -183,6 +191,7 @@ class UA {
 			if (stristr(self::$ua,"tablet")) {
 				$obj->isTablet       = true;
 				$obj->isMobileDevice = true;
+				$obj->isMobile       = false;
 			}
 			
 			// record if this is a spider
@@ -203,7 +212,7 @@ class UA {
 	*
 	* @return {Object}       the result of the os parsing
 	*/
-	private function osParser() {
+	private static function osParser() {
 		
 		// build the obj that will be returned
 		$osObj = new stdClass();
@@ -249,7 +258,7 @@ class UA {
 	*
 	* @return {Object}       the result of the device parsing
 	*/
-	private function deviceParser() {
+	private static function deviceParser() {
 		
 		// build the obj that will be returned
 		$deviceObj = new stdClass();
@@ -267,7 +276,7 @@ class UA {
 				// basic properties
 				$deviceObj->deviceMajor  = isset($deviceRegex['device_v1_replacement']) ? $deviceRegex['device_v1_replacement'] : $matches[2];
 				$deviceObj->deviceMinor  = isset($deviceRegex['device_v2_replacement']) ? $deviceRegex['device_v2_replacement'] : $matches[3];
-				$deviceObj->device       = $deviceRegex['device_replacement'] ? str_replace("$1",$matches[1],$deviceRegex['device_replacement']) : str_replace("_"," ",$matches[1]);
+				$deviceObj->device       = isset($deviceRegex['device_replacement']) ? str_replace("$1",$matches[1],$deviceRegex['device_replacement']) : str_replace("_"," ",$matches[1]);
 				
 				// device version?
 				$deviceObj->deviceVersion = isset($deviceObj->deviceMajor) ? $deviceObj->deviceMajor : "";
@@ -307,7 +316,7 @@ class UA {
 	/**
 	* Logs the user agent info
 	*/
-	private function log($data) {
+	private static function log($data) {
 		if (!$data) {
 			$data = new stdClass();
 			$data->ua = self::$ua;
@@ -321,7 +330,7 @@ class UA {
 	/**
 	* Gets the latest user agent. Back-ups the old version first. it will fail silently if something is wrong...
 	*/
-	public function get() {
+	public static function get() {
 		if ($data = @file_get_contents("http://ua-parser.googlecode.com/svn/trunk/resources/user_agent_parser.yaml")) {
 			copy(__DIR__."/resources/user_agents_regex.yaml", __DIR__."/resources/user_agents_regex.".date("Ymdhis").".yaml");
 			$fp = fopen(__DIR__."/resources/user_agents_regex.yaml", "w");
