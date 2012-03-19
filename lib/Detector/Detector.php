@@ -7,6 +7,12 @@
  * Licensed under the MIT license
  */
 
+// address 5.2 compatibility
+if (!defined('__DIR__')) define('__DIR__', dirname(__FILE__));
+if (!function_exists('json_decode') || !function_exists('json_encode')) {
+	require_once(__DIR__."/lib/json/jsonwrapper.php");
+}
+
 // include the ua-parser-php library to rip apart user agent strings
 require(__DIR__."/lib/ua-parser-php/UAParser.php");
 
