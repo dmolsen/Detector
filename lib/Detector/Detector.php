@@ -14,10 +14,10 @@ if (!function_exists('json_decode') || !function_exists('json_encode')) {
 }
 
 // include the ua-parser-php library to rip apart user agent strings
-require(__DIR__."/lib/ua-parser-php/UAParser.php");
+require_once(__DIR__."/lib/ua-parser-php/UAParser.php");
 
 // include the browserFamily library to classify the browser by features
-require(__DIR__."/lib/feature-family/featureFamily.php");
+require_once(__DIR__."/lib/feature-family/featureFamily.php");
 
 class Detector {
 	
