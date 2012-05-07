@@ -1,12 +1,11 @@
-# ua-parser-php #
+# ua-parser PHP Library #
 
-`ua-parser-php` is a PHP-based pseudo-port of the [ua-parser](http://code.google.com/p/ua-parser/) project. `ua-parser-php`
-utilizes the user agents regex YAML file from ua-parser but otherwise creates its own set of attributes to describe a browser, OS, and device. `ua-parser-php`
-was created as a new browser-detection library for the browser- and feature-detection library [Detector](https://github.com/dmolsen/Detector).
+This is the PHP library for the [ua-parser](https://github.com/tobie/ua-parser) project. This library
+utilizes the user agents regex YAML file from ua-parser but otherwise creates its own set of attributes to describe a browser, OS, and device. The 
 
 ## Demo ##
 
-You can [test ua-parser-php](http://uaparser.dmolsen.com/) with your browser.
+You can [test the PHP library](http://uaparser.dmolsen.com/) with your browser.
 
 ## Usage ##
 
@@ -64,10 +63,10 @@ Straightforward:
         * Some other generic boolean options
         */
 
-	     print $result->isMobile;
+       print $result->isMobile;
        // -> (would return true if the browser met the criteria of a mobile browser based on the user agent information)
 
-	     print $result->isMobileDevice;
+       print $result->isMobileDevice;
        // -> (would return true if the device met the criteria of a mobile device based on the user agent information)
 
        print $result->isTablet;
@@ -79,22 +78,26 @@ Straightforward:
        print $result->isComputer;
        // -> (would return true if the device was a computer according to the user agent information)
 
-		   print $result->isUIWebview;
+       print $result->isUIWebview;
        // -> (would return true if the user agent was from a uiwebview in ios)
 
     ?>
 
-If you want to grab a copy of the YAML data from ua-parser each night you can use a cron job and point it at the following bit of code:
+## Getting the User-Agent Data ##
+
+To get the user-agent data for either the initial load of the project or each night as a cron job you can use the following on the command line:
+
+    %: cd /path/to/project/
+    %: php UAParser.php -get
+
+Alternatively, you can create a PHP script that includes the following:
 
     <?php
 
-       require("UAParser.php");
-       $result = UA::get();
-
+			require("/path/to/UAParser.php");
+			UA::get();
+			
     ?>
-
-**NOTE:** This will overwrite quite a few changes I've made to the `user_agents_regex.yaml` file included with the `ua-parser-php` distribution.
-
 
 ## Credits ##
 

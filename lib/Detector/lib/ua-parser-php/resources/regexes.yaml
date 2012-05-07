@@ -3,7 +3,7 @@
 ### Please review the CHANGELOG to see how this file differs from the original
 user_agent_parsers:
   #### SPECIAL CASES TOP ####
-  
+
   # must go before Opera
   - regex: '^(Opera)/(\d+)\.(\d+) \(Nintendo Wii'
     family_replacement: 'Wii'
@@ -62,7 +62,7 @@ user_agent_parsers:
 
   # Palm WebOS looks a lot like Safari.
   - regex: '(webOSBrowser)/(\d+)\.(\d+)'
-  - regex: '(webOS)/\d+\.\d+'
+  - regex: '(webOS)/(\d+)\.(\d+)'
     family_replacement: 'webOSBrowser'
   - regex: '(wOSBrowser).+TouchPad/(\d+)\.(\d+)'
     family_replacement: 'webOS TouchPad'
@@ -105,11 +105,11 @@ user_agent_parsers:
 
   # must go before NetFront below
   - regex: '(Kindle)/(\d+)\.(\d+)'
-  
+
   - regex: '(Symphony) (\d+).(\d+)'
-  
+
   - regex: 'Minimo'
-  
+
   # Chrome Mobile
   - regex: '(CrMo)/(\d+)\.(\d+)\.(\d+)\.(\d+)'
     family_replacement: 'Chrome Mobile'
@@ -131,27 +131,27 @@ user_agent_parsers:
   - regex: '(iRider|Crazy Browser|SkipStone|iCab|Lunascape|Sleipnir|Maemo Browser) (\d+)\.(\d+)\.(\d+)'
   # Browser major_version.minor_version (space instead of slash)
   - regex: '(iCab|Lunascape|Opera|Android|Jasmine|Polaris|BREW) (\d+)\.(\d+)\.?(\d+)?'
-  
+
   # weird android UAs
   - regex: '(Android) Donut'
     v1_replacement: '1'
     v2_replacement: '2'
-    
+
   - regex: '(Android) Eclair'
     v1_replacement: '2'
     v2_replacement: '1'
-    
+
   - regex: '(Android) Froyo'
     v1_replacement: '2'
     v2_replacement: '2'
-    
+
   - regex: '(Android) Gingerbread'
     v1_replacement: '2'
     v2_replacement: '3'
-    
+
   - regex: '(Android) Honeycomb'
     v1_replacement: '3'
-  
+
   # IE Mobile
   - regex: '(IEMobile)[ /](\d+)\.(\d+)'
     family_replacement: 'IE Mobile'
@@ -163,7 +163,7 @@ user_agent_parsers:
   # AFTER THE EDGE CASES ABOVE!
   - regex: '(Firefox)/(\d+)\.(\d+)\.(\d+)'
   - regex: '(Firefox)/(\d+)\.(\d+)(pre|[ab]\d+[a-z]*)?'
-  
+
   #### END MAIN CASES ####
 
   #### SPECIAL CASES ####
@@ -217,7 +217,7 @@ user_agent_parsers:
   # nokia browsers
   # based on: http://www.developer.nokia.com/Community/Wiki/User-Agent_headers_for_Nokia_devices
   - regex: '^(Nokia)'
-    family_replacement: 'Nokia Services (WAP) Browser' 
+    family_replacement: 'Nokia Services (WAP) Browser'
   - regex: '(NokiaBrowser)/(\d+)\.(\d+).(\d+)\.(\d+)'
   - regex: '(NokiaBrowser)/(\d+)\.(\d+).(\d+)'
   - regex: '(NokiaBrowser)/(\d+)\.(\d+)'
@@ -277,8 +277,8 @@ user_agent_parsers:
 
   - regex: '(MSIE) (\d+)\.(\d+)'
     family_replacement: 'IE'
-    
-os_parsers:    
+
+os_parsers:
   ##########
   # Windows
   # http://en.wikipedia.org/wiki/Windows_NT#Releases
@@ -288,109 +288,109 @@ os_parsers:
   # (very) roughly ordered in terms of frequency of occurence of regex (win xp currently most frequent, etc)
   ##########
   - regex: '(Windows Phone 6\.5)'
-  
+
   - regex: '(Windows (?:NT 5\.2|NT 5\.1))'
     os_replacement: 'Windows XP'
-    
-  # ie mobile des ktop mode  
+
+  # ie mobile des ktop mode
   # spoofs nt 6.1. must come before windows 7
   - regex: '(XBLWP7)'
     os_replacement: 'Windows Phone OS'
-    
+
   - regex: '(Windows NT 6\.1)'
     os_replacement: 'Windows 7'
-    
+
   - regex: '(Windows NT 6\.0)'
     os_replacement: 'Windows Vista'
-    
+
   - regex: '(Windows 98|Windows XP|Windows ME|Windows 95|Windows CE|Windows 7|Windows NT 4\.0|Windows Vista|Windows 2000)'
-  
+
   # is this a spoof or is nt 6.2 out and about in some capacity?
   - regex: '(Windows NT 6\.2)'
     os_replacement: 'Windows 8'
-    
+
   - regex: '(Windows NT 5\.0)'
     os_replacement: 'Windows 2000'
-    
+
   - regex: '(Windows Phone OS) (\d+)\.(\d+)'
-  
+
   - regex: '(Windows ?Mobile)'
     os_replacement: 'Windows Mobile'
-    
+
   - regex: '(WinNT4.0)'
     os_replacement: 'Windows NT 4.0'
-    
+
   - regex: '(Win98)'
     os_replacement: 'Windows 98'
-    
+
   ##########
   # Android
   # can actually detect rooted android os. do we care?
   ##########
   - regex: '(Android) (\d+)\.(\d+)(?:[.\-]([a-z0-9]+))?'
   - regex: '(Android)\-(\d+)\.(\d+)(?:[.\-]([a-z0-9]+))?'
-  
+
   - regex: '(Android) Donut'
     os_v1_replacement: '1'
     os_v2_replacement: '2'
-    
+
   - regex: '(Android) Eclair'
     os_v1_replacement: '2'
     os_v2_replacement: '1'
-    
+
   - regex: '(Android) Froyo'
     os_v1_replacement: '2'
     os_v2_replacement: '2'
-    
+
   - regex: '(Android) Gingerbread'
     os_v1_replacement: '2'
     os_v2_replacement: '3'
-    
+
   - regex: '(Android) Honeycomb'
     os_v1_replacement: '3'
-    
+
   ##########
   # Mac OS
   # http://en.wikipedia.org/wiki/Mac_OS_X#Versions
   ##########
   - regex: '(Mac OS X) (\d+)[_.](\d+)(?:[_.](\d+))?'
-    
+
   # builds before tiger don't seem to specify version?
-    
+
   # ios devices spoof (mac os x), so including intel/ppc prefixes
   - regex: '(?:PPC|Intel) (Mac OS X)'
-  
+
   ##########
   # iOS
   # http://en.wikipedia.org/wiki/IOS_version_history
   ##########
-  - regex: '(CPU OS|iPhone OS) (\d+)_(\d+)(?:_(\d+))?'  
+  - regex: '(CPU OS|iPhone OS) (\d+)_(\d+)(?:_(\d+))?'
     os_replacement: 'iOS'
-    
+
   # remaining cases are mostly only opera uas, so catch opera as to not catch iphone spoofs
   - regex: '(iPhone|iPad|iPod); Opera'
     os_replacement: 'iOS'
-    
+
   # few more stragglers
   - regex: '(iPhone|iPad|iPod).*Mac OS X.*Version/(\d+)\.(\d+)'
     os_replacement: 'iOS'
-    
+
   ##########
   # Chrome OS
-  # if version 0.0.0, probably this stuff: 
+  # if version 0.0.0, probably this stuff:
   # http://code.google.com/p/chromium-os/issues/detail?id=11573
   # http://code.google.com/p/chromium-os/issues/detail?id=13790
   ##########
   - regex: '(CrOS) [a-z0-9_]+ (\d+)\.(\d+)(?:\.(\d+))?'
     os_replacement: 'Chrome OS'
-    
+
   ##########
   # Linux distros
   ##########
   - regex: '(Debian)-(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?'
   - regex: '(Linux Mint)(?:/(\d+))?'
   - regex: '(Mandriva)(?: Linux)?/(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?'
-  
+
   ##########
   # Symbian + Symbian OS
   # http://en.wikipedia.org/wiki/History_of_Symbian
@@ -408,7 +408,7 @@ os_parsers:
   - regex: '(MeeGo)'
   - regex: 'Symbian [Oo][Ss]'
     os_replacement: 'Symbian OS'
-  
+
   ##########
   # BlackBerry devices
   ##########
@@ -425,23 +425,23 @@ os_parsers:
 
   ##########
   # Misc mobile
-  ##########          
+  ##########
   - regex: '(webOS|hpwOS)/(\d+)\.(\d+)(?:\.(\d+))?'
     os_replacement: 'webOS'
-  
+
   ##########
   # Generic patterns
   # since the majority of os cases are very specific, these go last
   ##########
   # first.second.third.fourth bits
   - regex: '(SUSE|Fedora|Red Hat|PCLinuxOS)/(\d+)\.(\d+)\.(\d+)\.(\d+)'
-  
+
   # first.second.third bits
   - regex: '(SUSE|Fedora|Red Hat|Puppy|PCLinuxOS|CentOS)/(\d+)\.(\d+)\.(\d+)'
-  
+
   # first.second bits
   - regex: '(Ubuntu|Kindle|Bada|Lubuntu|BackTrack|Red Hat|Slackware)/(\d+)\.(\d+)'
-  
+
   # just os
   - regex: '(Windows|OpenBSD|FreeBSD|NetBSD|Ubuntu|Kubuntu|Android|Arch Linux|CentOS|WeTab|Slackware)'
   - regex: '(Linux|BSD)'
@@ -484,13 +484,13 @@ device_parsers:
   - regex: '(ADR[A-z0-9]+)'
     device_replacement: 'HTC $1'
   - regex: '(HTC)'
-  
+
   #########
   # Ericsson - must come before nokia since they also use symbian
   #########
   - regex: 'SonyEricsson([A-z0-9]+)/'
     device_replacement: 'Ericsson $1'
-    
+
   #########
   # Android General Device Matching (far from perfect)
   #########
@@ -498,9 +498,9 @@ device_parsers:
   - regex: 'Android[\- ][\d]+\.[\d]+\.[\d]+; [A-z]{2}\-[A-z]{2}\; (.+) Build'
   - regex: 'Android[\- ][\d]+\.[\d]+\-update1\; [A-z]{2}\-[A-z]{2}\; (.+) Build'
   - regex: 'Android[\- ][\d]+\.[\d]+\; [A-z]{2}\-[A-z]{2}\; (.+) Build'
-    
+
   ##########
-  # NOKIA 
+  # NOKIA
   # nokia NokiaN8-00 comes before iphone. sometimes spoofs iphone
   ##########
   - regex: 'NokiaN([0-9]+)'
@@ -515,7 +515,7 @@ device_parsers:
     device_replacement: 'Lumia $1'
   - regex: 'Symbian'
     device_replacement: 'Nokia'
-    
+
   ##########
   # Blackberry
   # http://www.useragentstring.com/pages/BlackBerry/
@@ -544,7 +544,7 @@ device_parsers:
     device_replacement: 'Palm Treo $1'
   - regex: 'webOS.*(P160UNA)/(\d+).(\d+)'
     device_replacement: 'HP Veer'
-    
+
   ##########
   # incomplete!
   # Kindle
@@ -556,7 +556,7 @@ device_parsers:
 
   ##########
   # complete but probably catches spoofs
-  # iSTUFF 
+  # iSTUFF
   ##########
   # ipad and ipod must be parsed before iphone
   # cannot determine specific device type from ua string. (3g, 3gs, 4, etc)
@@ -565,7 +565,7 @@ device_parsers:
   - regex: '(iPod);'
   - regex: '(iPhone) Simulator;'
   - regex: '(iPhone);'
-  
+
   ##########
   # Acer
   ##########
@@ -599,13 +599,13 @@ device_parsers:
     device_replacement: 'Bird $1'
   - regex: 'BIRD ([A-z0-9]+)'
     device_replacement: 'Bird $1'
-    
+
   ##########
   # Dell
   ##########
   - regex: 'Dell ([A-z0-9]+)'
     device_replacement: 'Dell $1'
-    
+
   ##########
   # DoCoMo
   ##########
@@ -615,19 +615,19 @@ device_parsers:
     device_replacement: 'DoCoMo $1'
   - regex: '([A-z0-9]+)\;FOMA'
     device_replacement: 'DoCoMo $1'
-    
+
   ##########
   # Huawei Vodafone
   ##########
   - regex: 'vodafone([A-z0-9]+)'
     device_replacement: 'Huawei Vodafone $1'
-    
+
   ##########
   # i-mate
   ##########
   - regex: 'i\-mate ([A-z0-9]+)'
     device_replacement: 'i-mate $1'
-    
+
   ##########
   # kyocera
   ##########
@@ -635,7 +635,7 @@ device_parsers:
     device_replacement: 'Kyocera $1'
   - regex: 'KWC\-([A-z0-9]+)'
     device_replacement: 'Kyocera $1'
-    
+
   ##########
   # lenovo
   ##########
@@ -643,7 +643,7 @@ device_parsers:
     device_replacement: 'Lenovo $1'
   - regex: 'Lenovo\_([A-z0-9]+)'
     device_replacement: 'Lenovo $1'
-    
+
   ##########
   # lg
   ##########
@@ -665,7 +665,7 @@ device_parsers:
     device_replacement: 'LG $1'
   - regex: 'LG([A-z0-9]+)'
     device_replacement: 'LG $1'
-    
+
   ##########
   # kin
   ##########
@@ -682,7 +682,7 @@ device_parsers:
     device_replacement: 'Motorola $1'
   - regex: 'MOT\-([A-z0-9]+)'
     device_replacement: 'Motorola $1'
-    
+
   ##########
   # philips
   ##########
@@ -690,7 +690,7 @@ device_parsers:
     device_replacement: 'Philips $1'
   - regex: 'Philips ([A-z0-9]+)'
     device_replacement: 'Philips $1'
-    
+
   ##########
   # Samsung
   ##########
@@ -698,7 +698,7 @@ device_parsers:
     device_replacement: 'Samsung $1'
   - regex: 'SAMSUNG\; ([A-z0-9\-]+)'
     device_replacement: 'Samsung $1'
-    
+
   ##########
   # Softbank
   ##########
@@ -706,25 +706,25 @@ device_parsers:
     device_replacement: 'Softbank $1'
   - regex: 'Softbank/2\.0/([A-z0-9]+)'
     device_replacement: 'Softbank $1'
-  
+
   ##########
   # Generic Smart Phone
   ##########
   - regex: '(hiptop|avantgo|plucker|xiino|blazer|elaine|up.browser|up.link|mmp|smartphone|midp|wap|vodafone|o2|pocket|mobile|pda)'
     device_replacement: "Generic Smartphone"
-    
+
   ##########
   # Generic Feature Phone
   ##########
   - regex: '^(1207|3gso|4thp|501i|502i|503i|504i|505i|506i|6310|6590|770s|802s|a wa|acer|acs\-|airn|alav|asus|attw|au\-m|aur |aus |abac|acoo|aiko|alco|alca|amoi|anex|anny|anyw|aptu|arch|argo|bell|bird|bw\-n|bw\-u|beck|benq|bilb|blac|c55/|cdm\-|chtm|capi|comp|cond|craw|dall|dbte|dc\-s|dica|ds\-d|ds12|dait|devi|dmob|doco|dopo|el49|erk0|esl8|ez40|ez60|ez70|ezos|ezze|elai|emul|eric|ezwa|fake|fly\-|fly\_|g\-mo|g1 u|g560|gf\-5|grun|gene|go.w|good|grad|hcit|hd\-m|hd\-p|hd\-t|hei\-|hp i|hpip|hs\-c|htc |htc\-|htca|htcg)'
-    device_replacement: 'Generic Feature Phone'    
+    device_replacement: 'Generic Feature Phone'
   - regex: '^(htcp|htcs|htct|htc\_|haie|hita|huaw|hutc|i\-20|i\-go|i\-ma|i230|iac|iac\-|iac/|ig01|im1k|inno|iris|jata|java|kddi|kgt|kgt/|kpt |kwc\-|klon|lexi|lg g|lg\-a|lg\-b|lg\-c|lg\-d|lg\-f|lg\-g|lg\-k|lg\-l|lg\-m|lg\-o|lg\-p|lg\-s|lg\-t|lg\-u|lg\-w|lg/k|lg/l|lg/u|lg50|lg54|lge\-|lge/|lynx|leno|m1\-w|m3ga|m50/|maui|mc01|mc21|mcca|medi|meri|mio8|mioa|mo01|mo02|mode|modo|mot |mot\-|mt50|mtp1|mtv |mate|maxo|merc|mits|mobi|motv|mozz|n100|n101|n102|n202|n203|n300|n302|n500|n502|n505|n700|n701|n710|nec\-|nem\-|newg|neon)'
-    device_replacement: 'Generic Feature Phone'   
+    device_replacement: 'Generic Feature Phone'
   - regex: '^(netf|noki|nzph|o2 x|o2\-x|opwv|owg1|opti|oran|ot\-s|p800|pand|pg\-1|pg\-2|pg\-3|pg\-6|pg\-8|pg\-c|pg13|phil|pn\-2|pt\-g|palm|pana|pire|pock|pose|psio|qa\-a|qc\-2|qc\-3|qc\-5|qc\-7|qc07|qc12|qc21|qc32|qc60|qci\-|qwap|qtek|r380|r600|raks|rim9|rove|s55/|sage|sams|sc01|sch\-|scp\-|sdk/|se47|sec\-|sec0|sec1|semc|sgh\-|shar|sie\-|sk\-0|sl45|slid|smb3|smt5|sp01|sph\-|spv |spv\-|sy01|samm|sany|sava|scoo|send|siem|smar|smit|soft|sony|t\-mo|t218|t250|t600|t610|t618|tcl\-|tdg\-|telm|tim\-|ts70|tsm\-|tsm3|tsm5|tx\-9|tagt)'
-    device_replacement: 'Generic Feature Phone'   
+    device_replacement: 'Generic Feature Phone'
   - regex: '^(talk|teli|topl|tosh|up.b|upg1|utst|v400|v750|veri|vk\-v|vk40|vk50|vk52|vk53|vm40|vx98|virg|vite|voda|vulc|w3c |w3c\-|wapj|wapp|wapu|wapm|wig |wapi|wapr|wapv|wapy|wapa|waps|wapt|winc|winw|wonu|x700|xda2|xdag|yas\-|your|zte\-|zeto|aste|audi|avan|blaz|brew|brvw|bumb|ccwa|cell|cldc|cmd\-|dang|eml2|fetc|hipt|http|ibro|idea|ikom|ipaq|jbro|jemu|jigs|keji|kyoc|kyok|libw|m\-cr|midp|mmef|moto|mwbp|mywa|newt|nok6|o2im|pant|pdxg|play|pluc|port|prox|rozo|sama|seri|smal|symb|treo|upsi|vx52|vx53|vx60|vx61|vx70|vx80|vx81|vx83|vx85|wap\-|webc|whit|wmlb|xda\-|xda\_)'
     device_replacement: 'Generic Feature Phone'
-    
+
   ##########
   # Spiders (this is hack...)
   ##########
