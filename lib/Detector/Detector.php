@@ -178,6 +178,10 @@ class Detector {
 			// open the JSON template extended file that will be populated & start populating its object
 			if ($uaJSONTemplateExtended = @file_get_contents($uaTemplateExtended)) {
 				$jsonTemplateExtended = json_decode($uaJSONTemplateExtended);
+			} 
+			
+			if (!isset($jsonTemplateExtended)) {
+				$jsonTemplateExtended = new stdClass();
 			}
 			
 			$jsonTemplateExtended->ua              = self::$ua;
@@ -522,6 +526,7 @@ class Detector {
 	private static function createUAProperties($obj) {
 		
 		// include the basic properties of the UA
+		$obj                = new stdClass();
 		$obj->ua            = self::$ua;
 		$obj->uaHash        = self::$uaHash;
 		
