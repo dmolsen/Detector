@@ -9,7 +9,7 @@
 			$uaList = (array) json_decode($uaListJSON);
 			asort($uaList);
 			foreach ($uaList as $key => $value) {
-				print "<li> <a href=\"/?pid=".$key."\">".$value."</a></li>";
+				print "<li> <a href=\"/?pid=".$key."\">".strip_tags($value)."</a></li>";
 			}
 		}
 	?>

@@ -5,7 +5,7 @@
 		$uaList = (array) json_decode($uaListJSON);
 		asort($uaList);
 		foreach ($uaList as $key => $value) {
-			$include .= "<li> <a href=\"/?pid=".$key."\">".trim(substr($value, 0, 28))."...</a></li>";
+			$include .= "<li> <a href=\"/?pid=".$key."\">".trim(substr(strip_tags($value), 0, 28))."...</a></li>";
 			$i++;
 		}
 	}
