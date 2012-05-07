@@ -79,8 +79,8 @@ class Detector {
 		$extendedVersion            = $config['extendedVersion'];
 		
 		// populate some standard variables based on the user agent string
-		self::$ua                   = $_SERVER["HTTP_USER_AGENT"];
-		self::$accept               = $_SERVER["HTTP_ACCEPT"];
+		self::$ua                   = strip_tags($_SERVER["HTTP_USER_AGENT"]);
+		self::$accept               = strip_tags($_SERVER["HTTP_ACCEPT"]);
 		self::$uaHash               = md5(self::$ua);
 		self::$sessionID            = md5(self::$ua."-session-".$coreVersion."-".$extendedVersion);
 		self::$cookieID             = md5(self::$ua."-cookie-".$coreVersion."-".$extendedVersion);
