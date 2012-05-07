@@ -2,6 +2,11 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+DET-v0.5.2 (May 7, 2012)
+ - FIX: added some sanity checks on user agent strings
+ - FIX: fixed two strict checks on object creation
+ - FIX: updated UAParser to the latest edition
+
 DET-v0.5.1 (Feb. 27, 2012)
  - ADD: can add tag soup a la modernizr to the <html> tag if you want
  - ADD: can push detector values to a JavaScript file if you want
