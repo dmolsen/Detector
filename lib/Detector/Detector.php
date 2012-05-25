@@ -304,14 +304,6 @@ class Detector {
 	*/
 	public static function perrequest() {
 		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
-		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesPerRequest)) {
-		    while (false !== ($entry = readdir($handle))) {
-		        if ($entry != "." && $entry != "..") {
-		            readfile(__DIR__ . '/' . self::$uaFeaturesPerRequest . $entry);
-		        }
-		    }
-		    closedir($handle);
-		}
 		self::readDirFiles(self::$uaFeaturesPerRequest);
 		print self::_mer(false,'-pr');
 	}
@@ -332,30 +324,6 @@ class Detector {
 		// gather info by sending Modernizr & custom tests
 		print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
 		readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
-		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesCore)) {
-		    while (false !== ($entry = readdir($handle))) {
-		        if ($entry != "." && $entry != ".." && $entry != "README") {
-		            readfile(__DIR__ .'/'. self::$uaFeaturesCore . $entry);
-		        }
-		    }
-		    closedir($handle);
-		}
-		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesExtended)) {
-		    while (false !== ($entry = readdir($handle))) {
-		        if ($entry != "." && $entry != "..") {
-		            readfile(__DIR__ .'/'. self::$uaFeaturesExtended . $entry);
-		        }
-		    }
-		    closedir($handle);
-		}
-		if ($handle = opendir(__DIR__ .'/'. self::$uaFeaturesPerRequest)) {
-		    while (false !== ($entry = readdir($handle))) {
-		        if ($entry != "." && $entry != "..") {
-		            readfile(__DIR__ .'/'. self::$uaFeaturesPerRequest . $entry);
-		        }
-		    }
-		    closedir($handle);
-		}
 		self::readDirFiles(self::$uaFeaturesCore);
 		self::readDirFiles(self::$uaFeaturesExtended);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
