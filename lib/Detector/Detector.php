@@ -312,6 +312,7 @@ class Detector {
 		
 		// gather info by sending Modernizr & custom tests
 		print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
+		readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
 		readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
 		self::readDirFiles(self::$uaFeaturesCore);
 		self::readDirFiles(self::$uaFeaturesExtended);
