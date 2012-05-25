@@ -127,30 +127,9 @@ class Detector {
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "session";
 			
-			// grab features out of the cookie that are being checked on every request. update the session as appropriate
-			if (isset($_COOKIE[self::$cookieID."-pr"])) {
-				$uaFeatures = self::_ang($_COOKIE[self::$cookieID."-pr"]);
-				$cookiePerRequest = new stdClass();
-				foreach($uaFeatures as $key => $value) {
-					$key = str_replace("pr-", "", $key);
-					if (is_object($value)) {
-						foreach ($value as $vkey => $vvalue) {
-							if ($vvalue == "probably") { // hack for modernizr
-								$value->$vkey = true;
-							} else if ($vvalue == "maybe") { // hack for modernizr
-								$value->$vkey = false;
-							} else if (($vvalue == 1) || ($vvalue == 0)) {
-								$value->$vkey = ($vvalue == 1) ? true : false;
-							} else {
-								$value->$vkey = $vvalue;
-							}
-						}
-						$cookiePerRequest->$key = $value;
-					} else {
-						$cookiePerRequest->$key = ($value == 1) ? true : false;
-					}
-				}
-			}
+			// parse the per request cookie
+			$cookiePerRequest = new stdClass();
+			$cookiePerRequest = self::parseCookie("pr",$cookiePerRequest);
 			
 			// merge the session info we already have and the info from the cookie
 			$mergedInfo = (isset($cookiePerRequest)) ? (object) array_merge((array) $_SESSION[self::$sessionID], (array) $cookiePerRequest) : $_SESSION[self::$sessionID];
@@ -195,72 +174,12 @@ class Detector {
 			// create an object to hold any of the per request data. it shouldn't be saved to file but it should be added to the session
 			$cookiePerRequest = new stdClass();
 			
-			// grab the features from the cookie and create an object with them (self::_ang)
-			$uaFeatures = self::_ang($_COOKIE[self::$cookieID]);
-			
 			// push features into the same level as the general device information
 			// change 1/0 to true/false. why? 'cause that's what i like to read ;)
-			// this section is all sorts of redundant but i don't feel like DRYing it right now
-			foreach($uaFeatures as $key => $value) {
-				$pos1 = strpos($key,"extended-");
-				$pos2 = strpos($key,"pr-");
-				if ($pos1 !== false) {
-					$key = str_replace("extended-", "", $key);
-					if (is_object($value)) {
-						foreach ($value as $vkey => $vvalue) {
-							if ($vvalue == "probably") { // hack for modernizr
-								$value->$vkey = true;
-							} else if ($vvalue == "maybe") { // hack for modernizr
-								$value->$vkey = false;
-							} else if (($vvalue == 1) || ($vvalue == 0)) {
-								$value->$vkey = ($vvalue == 1) ? true : false;
-							} else {
-								$value->$vkey = $vvalue;
-							}
-						}
-						$jsonTemplateExtended->$key = $value;
-					} else {
-						$jsonTemplateExtended->$key = ($value == 1) ? true : false;
-					}
-				} else if ($pos2 !== false) {
-					$key = str_replace("pr-", "", $key);
-					if (is_object($value)) {
-						foreach ($value as $vkey => $vvalue) {
-							if ($vvalue == "probably") { // hack for modernizr
-								$value->$vkey = true;
-							} else if ($vvalue == "maybe") { // hack for modernizr
-								$value->$vkey = false;
-							} else if (($vvalue == 1) || ($vvalue == 0)) {
-								$value->$vkey = ($vvalue == 1) ? true : false;
-							} else {
-								$value->$vkey = $vvalue;
-							}
-						}
-						$cookiePerRequest->$key = $value;
-					} else {
-						$cookiePerRequest->$key = ($value == 1) ? true : false;
-					}
-				} else {
-					$key = str_replace("core-", "", $key);
-					if (is_object($value)) {
-						foreach ($value as $vkey => $vvalue) {
-							if ($vvalue == "probably") { // hack for modernizr
-								$value->$vkey = true;
-							} else if ($vvalue == "maybe") { // hack for modernizr
-								$value->$vkey = false;
-							} else if (($vvalue == 1) || ($vvalue == 0)) {
-								$value->$vkey = ($vvalue == 1) ? true : false;
-							} else {
-								$value->$vkey = $vvalue;
-							}
-						}
-						$jsonTemplateCore->$key = $value;
-					} else {
-						$jsonTemplateCore->$key = ($value == 1) ? true : false;
-					}
-				}
-			}
-			
+			$jsonTemplateCore     = self::parseCookie("core",$jsonTemplateCore,true);
+			$jsonTemplateExtended = self::parseCookie("extended",$jsonTemplateExtended,true);
+			$cookiePerRequest     = self::parseCookie("pr",$cookiePerRequest,true);
+
 			// merge the data for future requests
 			$mergedInfo = new stdClass();
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
@@ -609,6 +528,12 @@ class Detector {
 	* Adds a JavaScript object to the page so features collected on the server can be used client-side
 	* @param  {Object}        the user agent features
 	* @param  {String}        list of browser features to include in the css, bad idea to leave features blank...
+	* Parses the cookie for a list of features
+	* @param  {String}        file path
+	* @param  {Object}        the object to be modified/added too
+	* @param  {Boolean}       if this is the main cookie ingest of info
+	*
+	* @return {Object}        values from the cookie for that cookieExtension
 	*/
 	public static function createJavaScriptObj($obj,$features = null) {
 			print "<script type=\"text/javascript\">";
@@ -629,8 +554,24 @@ class Detector {
 							$vkey = str_replace("-","",$vkey);
 							if ($vvalue) {
 								print "Detector.".$key.".".$vkey."=true;\n";
+	private static function parseCookie($cookieExtension,$obj,$default = false) {
+		$cookieName = $default ? self::$cookieID : self::$cookieID."-".$cookieExtension;
+		if (isset($_COOKIE[$cookieName])) {
+			$uaFeatures = self::_ang($_COOKIE[$cookieName]);
+			foreach($uaFeatures as $key => $value) {
+				if ((strpos($key,$cookieExtension."-") !== false) || (($cookieExtension == 'core') && (strpos($key,"extended-") === false) && (strpos($key,"pr-") === false))) {
+					$key = str_replace($cookieExtension."-", "", $key);
+					if (is_object($value)) {
+						foreach ($value as $vkey => $vvalue) {
+							if ($vvalue == "probably") { // hack for modernizr
+								$value->$vkey = true;
+							} else if ($vvalue == "maybe") { // hack for modernizr
+								$value->$vkey = false;
+							} else if (($vvalue == 1) || ($vvalue == 0)) {
+								$value->$vkey = ($vvalue == 1) ? true : false;
 							} else {
 								print "Detector.".$key.".".$vkey."=false;\n";
+								$value->$vkey = $vvalue;
 							}
 							
 						}
@@ -645,10 +586,16 @@ class Detector {
 						} else {
 							print "Detector.".$key."='".$value."';\n";
 						}
+						$obj->$key = $value;
+					} else {
+						$obj->$key = ($value == 1) ? true : false;
 					}
 				}
 			}
 			print "</script>";
+			return $obj;
+		}
+	}
 	}
 	
 }
