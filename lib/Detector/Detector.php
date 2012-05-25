@@ -428,43 +428,12 @@ class Detector {
 			print "couldn't open the JSON file at ".$uaFilePath." for some reason. permissions? bad path? bombing now...";
 			exit;
 		}
-		
-		return $obj;
 	}
 	
 	/**
-	* Adds classes to the HTML tag if necessary
-	* @param  {Object}        the user agent features
-	* @param  {String}        list of browser features to include in the css, bad idea to leave features blank...
 	* reads out all the files in a directory
 	* @param  {String}        file path
 	*/
-	public static function createHTMLList($obj,$features = null,$printUAProps = false) {
-		if ($features != null) {
-			$features_a = explode(",",$features);
-			array_walk($features_a,create_function('&$val', '$val = trim($val);'));
-		}
-		foreach($obj as $key=>$value) {
-			if (is_object($value)) {
-				foreach ($value as $vkey => $vvalue) {
-					$vkey = $key."-".$vkey;
-					if (!$features || in_array($vkey,$features_a)) {
-						$result = ($vvalue) ? $vkey : 'no-'.$vkey;
-						print $result.' ';
-					}
-				}
-			} else {
-				if (!$features || in_array($key,$features_a)) {
-					$result = ($value) ? $key : 'no-'.$key;
-					print $result.' ';
-				}
-			}
-		}
-		if ($printUAProps) {
-			$uaProps = array("os","osFull","browserFull","device","deviceFull");
-			foreach($uaProps as $uaProp) {
-				print str_replace(" ","-", strtolower($obj->$uaProp)).' ';
-			}
 	private static function readDirFiles($dir) {
 		if ($handle = opendir(__DIR__ .'/'. $dir)) {
 		    while (false !== ($entry = readdir($handle))) {
@@ -477,9 +446,6 @@ class Detector {
 	}
 	
 	/**
-	* Adds a JavaScript object to the page so features collected on the server can be used client-side
-	* @param  {Object}        the user agent features
-	* @param  {String}        list of browser features to include in the css, bad idea to leave features blank...
 	* Parses the cookie for a list of features
 	* @param  {String}        file path
 	* @param  {Object}        the object to be modified/added too
@@ -487,25 +453,6 @@ class Detector {
 	*
 	* @return {Object}        values from the cookie for that cookieExtension
 	*/
-	public static function createJavaScriptObj($obj,$features = null) {
-			print "<script type=\"text/javascript\">";
-			print "Detector=new Object();";
-			if ($features) {
-				$features_a = explode(",",$features);
-				array_walk($features_a,create_function('&$val', '$val = trim($val);'));
-			}
-			foreach($obj as $key=>$value) {
-				if (is_object($value)) {
-					$i = 0;
-					foreach ($value as $vkey => $vvalue) {
-						if (!$features || in_array($key."-".$vkey,$features_a)) {
-							if ($i == 0) {
-								print "Detector.".$key."=new Object();\n";
-								$i++;
-							}
-							$vkey = str_replace("-","",$vkey);
-							if ($vvalue) {
-								print "Detector.".$key.".".$vkey."=true;\n";
 	private static function parseCookie($cookieExtension,$obj,$default = false) {
 		$cookieName = $default ? self::$cookieID : self::$cookieID."-".$cookieExtension;
 		if (isset($_COOKIE[$cookieName])) {
@@ -522,21 +469,8 @@ class Detector {
 							} else if (($vvalue == 1) || ($vvalue == 0)) {
 								$value->$vkey = ($vvalue == 1) ? true : false;
 							} else {
-								print "Detector.".$key.".".$vkey."=false;\n";
 								$value->$vkey = $vvalue;
 							}
-							
-						}
-					}
-				} else {
-					if (!$features || in_array($key,$features_a)) {
-						$key = str_replace("-","",$key);
-						if ($value === true) {
-							print "Detector.".$key."=true;\n";
-						} else if ($value == false) {
-							print "Detector.".$key."=false;\n";
-						} else {
-							print "Detector.".$key."='".$value."';\n";
 						}
 						$obj->$key = $value;
 					} else {
@@ -544,7 +478,6 @@ class Detector {
 					}
 				}
 			}
-			print "</script>";
 			return $obj;
 		}
 	}
