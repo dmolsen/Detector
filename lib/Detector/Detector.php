@@ -78,6 +78,10 @@ class Detector {
 		$coreVersion                = $config['coreVersion'];
 		$extendedVersion            = $config['extendedVersion'];
 		
+		$noJSFamilySupport			= $config['noJSFamilySupport'];
+		$noJSSearchFamily			= $config['noJSSearchFamily'];
+		$noJSDefaultFamily			= $config['noJSDefaultFamily'];
+		
 		// populate some standard variables based on the user agent string
 		self::$ua                   = strip_tags($_SERVER["HTTP_USER_AGENT"]);
 		self::$accept               = strip_tags($_SERVER["HTTP_ACCEPT"]);
@@ -284,15 +288,12 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
-		} else if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
-			
+		} else if ((isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (($userAgent = UA::parse()) && isset($userAgent->spider) && ($userAgent->spider === true))) {
+
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "nojs";
-			
-			// classify the user agent string so we can learn more what device this really is. more for readability than anything
-			self::classifyUA();
-			
-			// open the JSON template core file that will be populated
+
+			// open the JSON template core file that will be populated & start populating its object
 			if ($uaJSONTemplateCore = @file_get_contents($uaTemplateCore)) {
 				$jsonTemplateCore = json_decode($uaJSONTemplateCore);
 			} 
@@ -300,9 +301,34 @@ class Detector {
 			// use ua-parser-php to set-up the basic properties for this UA
 			$jsonTemplateCore = self::createUAProperties($jsonTemplateCore);
 			
-			$mergedInfo = $jsonTemplateCore;
+			// note the current core format version
+			$jsonTemplateCore->coreVersion = $coreVersion;
 			
+			// open the JSON template extended file that will be populated & start populating its object
+			if ($uaJSONTemplateExtended = @file_get_contents($uaTemplateExtended)) {
+				$jsonTemplateExtended = json_decode($uaJSONTemplateExtended);
+			} 
 			
+			if (!isset($jsonTemplateExtended)) {
+				$jsonTemplateExtended = new stdClass();
+			}
+			
+			$jsonTemplateExtended->ua              = self::$ua;
+			$jsonTemplateExtended->uaHash          = self::$uaHash;
+			$jsonTemplateExtended->extendedVersion = $extendedVersion;
+
+			$mergedInfo = new stdClass();
+			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
+			
+			// use the uaFeatures to classify the feature family for this browser
+			if ($noJSFamilySupport) {
+				$mergedInfo->family			  = (isset($userAgent->spider) && ($userAgent->spider === true)) ? $noJSSearchFamily : $noJSDefaultFamily;
+				$jsonTemplateExtended->family = (isset($userAgent->spider) && ($userAgent->spider === true)) ? $noJSSearchFamily : $noJSDefaultFamily;
+			} else {
+				$mergedInfo->family           = featureFamily::find($mergedInfo);
+				$jsonTemplateExtended->family = $mergedInfo->family;
+			}
+
 			// write out to disk for future requests that might have the same UA
 			writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
 			writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
@@ -311,13 +337,13 @@ class Detector {
 			if (isset($_SESSION)) {
 				$_SESSION[self::$sessionID] = $mergedInfo;
 			}
-			
+
 			// add the user agent & hash to a list of already saved user agents
 			self::addToUAList();
-			
+
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
-			
+
 		} else if (($uaJSONCore = @file_get_contents($uaFileCore)) && ($uaJSONExtended = @file_get_contents($uaFileExtended))) {
 			
 			// where did we find this info to display... probably only need this for the demo
