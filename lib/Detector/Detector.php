@@ -147,10 +147,9 @@ class Detector {
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "cookie";
 			
-			// open the JSON template core file that will be populated & start populating its object
-			if ($uaJSONTemplateCore = @file_get_contents($uaTemplateCore)) {
-				$jsonTemplateCore = json_decode($uaJSONTemplateCore);
-			} 
+			// open the JSON template core & extended files that will be populated
+			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
+			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
 			
 			// use ua-parser-php to set-up the basic properties for this UA
 			$jsonTemplateCore = self::createUAProperties($jsonTemplateCore);
@@ -158,10 +157,6 @@ class Detector {
 			// note the current core format version
 			$jsonTemplateCore->coreVersion = $coreVersion;
 			
-			// open the JSON template extended file that will be populated & start populating its object
-			if ($uaJSONTemplateExtended = @file_get_contents($uaTemplateExtended)) {
-				$jsonTemplateExtended = json_decode($uaJSONTemplateExtended);
-			} 
 			
 			if (!isset($jsonTemplateExtended)) {
 				$jsonTemplateExtended = new stdClass();
@@ -212,21 +207,15 @@ class Detector {
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "nojs";
 
-			// open the JSON template core file that will be populated & start populating its object
-			if ($uaJSONTemplateCore = @file_get_contents($uaTemplateCore)) {
-				$jsonTemplateCore = json_decode($uaJSONTemplateCore);
-			} 
 			
 			// use ua-parser-php to set-up the basic properties for this UA
 			$jsonTemplateCore = self::createUAProperties($jsonTemplateCore);
 			
-			// note the current core format version
+			// open the JSON template core & extended files that will be populated
+			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
+			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
 			$jsonTemplateCore->coreVersion = $coreVersion;
 			
-			// open the JSON template extended file that will be populated & start populating its object
-			if ($uaJSONTemplateExtended = @file_get_contents($uaTemplateExtended)) {
-				$jsonTemplateExtended = json_decode($uaJSONTemplateExtended);
-			} 
 			
 			if (!isset($jsonTemplateExtended)) {
 				$jsonTemplateExtended = new stdClass();
@@ -475,6 +464,8 @@ class Detector {
 	* @param  {Object}        the core template object
 	*
 	* @return {Object}        the core template object "filled out" from ua-parser-php
+	* Opens the UA file at the specificed location
+	* @param  {String}        file path
 	*/
 	private static function createUAProperties($obj) {
 		
@@ -489,6 +480,14 @@ class Detector {
 		// save properties from ua-parser-php
 		foreach ($userAgent as $key => $value) {
 			$obj->$key = $value;
+	private static function openUAFile($uaFilePath) {
+		// open the JSON template extended file that will be populated & start populating its object
+		if ($uaJSONTemplate = @file_get_contents($uaFilePath)) {
+			$uaJSONTemplate = json_decode($uaJSONTemplate);
+			return $uaJSONTemplate;
+		} else {
+			print "couldn't open the JSON file at ".$uaFilePath." for some reason. permissions? bad path? bombing now...";
+			exit;
 		}
 		
 		return $obj;
