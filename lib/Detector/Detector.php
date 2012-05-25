@@ -461,26 +461,9 @@ class Detector {
 	}
 	
 	/**
-	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
-	* @param  {Object}        the core template object
-	*
-	* @return {Object}        the core template object "filled out" from ua-parser-php
 	* Opens the UA file at the specificed location
 	* @param  {String}        file path
 	*/
-	private static function createUAProperties($obj) {
-		
-		// include the basic properties of the UA
-		$obj                = new stdClass();
-		$obj->ua            = self::$ua;
-		$obj->uaHash        = self::$uaHash;
-		
-		// classify the user agent string so we can learn more what device this really is. more for readability than anything
-		$userAgent = UA::parse();
-		
-		// save properties from ua-parser-php
-		foreach ($userAgent as $key => $value) {
-			$obj->$key = $value;
 	private static function openUAFile($uaFilePath) {
 		// open the JSON template extended file that will be populated & start populating its object
 		if ($uaJSONTemplate = @file_get_contents($uaFilePath)) {
@@ -610,6 +593,24 @@ class Detector {
 			return $obj;
 		}
 	}
+	
+	/**
+	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
+	* @param  {Object}        the core template object
+	*
+	* @return {Object}        the core template object "filled out" from ua-parser-php
+	*/
+	private static function createUAProperties($obj) {
+		
+		// classify the user agent string so we can learn more what device this really is. more for readability than anything
+		$userAgent = UA::parse();
+		
+		// save properties from ua-parser-php
+		foreach ($userAgent as $key => $value) {
+			$obj->$key = $value;
+		}
+		
+		return $obj;
 	}
 	
 }
