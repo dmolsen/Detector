@@ -22,5 +22,5 @@ uaDirCore            = "user-agents/core/"
 uaDirExtended        = "user-agents/extended/"
 
 // version number so that core and extended profiles can be rebuilt if necessary
-coreVersion          = "0.9";
-extendedVersion      = "1.0";
+coreVersion          = "0.9"
+extendedVersion      = "1.0"
