@@ -185,8 +185,9 @@ class Detector {
 			$jsonTemplateExtended->family = $mergedInfo->family;
 
 			// write out to disk for future requests that might have the same UA
-			writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
-			writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
+			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
+			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
+			
 			
 			// unset the cookie that held the vast amount of test data
 			setcookie(self::$cookieID,"");
@@ -236,10 +237,6 @@ class Detector {
 				$mergedInfo->family           = featureFamily::find($mergedInfo);
 				$jsonTemplateExtended->family = $mergedInfo->family;
 			}
-
-			// write out to disk for future requests that might have the same UA
-			writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
-			writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
 
 			// add our collected data to the session for use in future requests, also add the per request data
 			if (isset($_SESSION)) {
@@ -452,8 +449,6 @@ class Detector {
 	* @param  {String}        file path
 	*/
 	private static function writeUAFile($jsonEncoded,$uaFilePath) {
-		// write out to disk for future requests that might have the same UA
-		$jsonTemplateExtended = json_encode($jsonTemplateExtended);
 		$fp = fopen($uaFilePath, "w");
 		fwrite($fp, $jsonEncoded);
 		fclose($fp);
