@@ -257,8 +257,7 @@ class Detector {
 			
 			// double-check that the already created profile matches the current version of the core & extended templates
 			if (($uaJSONCore->coreVersion != $coreVersion) || ($uaJSONExtended->extendedVersion != $extendedVersion)) {
-				
-				// versions don't match so build the test page to get new data
+
 				self::buildTestPage();
 				
 			} else {
@@ -300,8 +299,7 @@ class Detector {
 	/**
 	* Builds the browser test page
 	*/
-	public static function buildTestPage() {
-		
+	public static function buildTestPage() {		
 		// build the noscript link just in case
 		$noscriptLink = $_SERVER["REQUEST_URI"];
 		if (isset($_SERVER["QUERY_STRING"]) && ($_SERVER["QUERY_STRING"] != "")) {
@@ -390,7 +388,6 @@ class Detector {
 	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
 	*/
 	private static function addToUAList() {
-		
 		// open user agent list and decode the JSON
 		if ($uaListJSON = @file_get_contents(__DIR__."/".self::$uaDirCore."ua.list.json")) {
 			$uaList = json_decode($uaListJSON);
