@@ -91,10 +91,10 @@ class Detector {
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
 		$uaTemplateExtended         = __DIR__."/".self::$uaDirExtended."ua.template.json";
 		
-		$pid                        = isset($_REQUEST['pid']) ? $_REQUEST['pid'] : '';
+		$pid                        = (isset($_REQUEST['pid']) && preg_match("/[a-z0-9]{32}/",$_REQUEST['pid'])) ? $_REQUEST['pid'] : false;
 		
 		// offer the ability to review profiles saved in the system
-		if (preg_match("/[a-z0-9]{32}/",$pid) && self::$debug) {
+		if ($pid && self::$debug) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "archive";
