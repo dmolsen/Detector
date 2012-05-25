@@ -158,11 +158,8 @@ class Detector {
 			$jsonTemplateCore->coreVersion = $coreVersion;
 			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
 			
-			
-			if (!isset($jsonTemplateExtended)) {
-				$jsonTemplateExtended = new stdClass();
-			}
-			
+			// populate extended properties
+			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
 			$jsonTemplateExtended->ua              = self::$ua;
 			$jsonTemplateExtended->uaHash          = self::$uaHash;
 			$jsonTemplateExtended->extendedVersion = $extendedVersion;
