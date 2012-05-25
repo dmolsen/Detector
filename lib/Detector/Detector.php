@@ -254,16 +254,10 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 
-		} else if (($uaJSONCore = @file_get_contents($uaFileCore)) && ($uaJSONExtended = @file_get_contents($uaFileExtended))) {
+		} else if (($uaJSONCore = json_decode(@file_get_contents($uaFileCore))) && ($uaJSONExtended = json_decode(@file_get_contents($uaFileExtended)))) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "file";
-			
-			// decode the core data
-			$uaJSONCore     = json_decode($uaJSONCore);
-			
-			// decode the extended data
-			$uaJSONExtended = json_decode($uaJSONExtended);
 			
 			// double-check that the already created profile matches the current version of the core & extended templates
 			if (($uaJSONCore->coreVersion != $coreVersion) || ($uaJSONExtended->extendedVersion != $extendedVersion)) {
