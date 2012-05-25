@@ -356,10 +356,10 @@ class Detector {
 		    }
 		    closedir($handle);
 		}
-		print self::_mer() . "</script></head><body><noscript>This version of the page you requested requires JavaScript. Please <a href=\"".$noscriptLink."\">view a version optimized for your browser</a>.</noscript></body></html>";
 		self::readDirFiles(self::$uaFeaturesCore);
 		self::readDirFiles(self::$uaFeaturesExtended);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
+		print self::_mer() . "</script></head><body onload='checkCookieSupport();'><noscript><meta http-equiv='refresh' content='0; url=".$noscriptLink."'></noscript></body></html>";
 		exit;
 		
 	}
