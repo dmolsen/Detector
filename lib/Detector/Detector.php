@@ -21,7 +21,7 @@ require_once(__DIR__."/lib/feature-family/featureFamily.php");
 
 class Detector {
 	
-	private static $debug               = false;
+	private static $debug               = false; // gets overwritten by the config so changing this won't do anything for you...
 	
 	public static  $ua;
 	public static  $accept;
