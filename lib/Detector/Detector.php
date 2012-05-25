@@ -320,6 +320,7 @@ class Detector {
 		    }
 		    closedir($handle);
 		}
+		self::readDirFiles(self::$uaFeaturesPerRequest);
 		print self::_mer(false,'-pr');
 	}
 	
@@ -364,6 +365,9 @@ class Detector {
 		    closedir($handle);
 		}
 		print self::_mer() . "</script></head><body><noscript>This version of the page you requested requires JavaScript. Please <a href=\"".$noscriptLink."\">view a version optimized for your browser</a>.</noscript></body></html>";
+		self::readDirFiles(self::$uaFeaturesCore);
+		self::readDirFiles(self::$uaFeaturesExtended);
+		self::readDirFiles(self::$uaFeaturesPerRequest);
 		exit;
 		
 	}
@@ -494,6 +498,8 @@ class Detector {
 	* Adds classes to the HTML tag if necessary
 	* @param  {Object}        the user agent features
 	* @param  {String}        list of browser features to include in the css, bad idea to leave features blank...
+	* reads out all the files in a directory
+	* @param  {String}        file path
 	*/
 	public static function createHTMLList($obj,$features = null,$printUAProps = false) {
 		if ($features != null) {
@@ -521,6 +527,14 @@ class Detector {
 			foreach($uaProps as $uaProp) {
 				print str_replace(" ","-", strtolower($obj->$uaProp)).' ';
 			}
+	private static function readDirFiles($dir) {
+		if ($handle = opendir(__DIR__ .'/'. $dir)) {
+		    while (false !== ($entry = readdir($handle))) {
+		        if ($entry != "." && $entry != ".." && $entry != "README") {
+		            readfile(__DIR__ .'/'. $dir . $entry);
+		        }
+		    }
+		    closedir($handle);
 		}
 	}
 	
