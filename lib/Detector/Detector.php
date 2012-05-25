@@ -151,11 +151,11 @@ class Detector {
 			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
 			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
 			
-			// use ua-parser-php to set-up the basic properties for this UA
-			$jsonTemplateCore = self::createUAProperties($jsonTemplateCore);
-			
-			// note the current core format version
+			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
+			$jsonTemplateCore->ua          = self::$ua;
+			$jsonTemplateCore->uaHash      = self::$uaHash;
 			$jsonTemplateCore->coreVersion = $coreVersion;
+			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
 			
 			
 			if (!isset($jsonTemplateExtended)) {
@@ -221,6 +221,12 @@ class Detector {
 			if (!isset($jsonTemplateExtended)) {
 				$jsonTemplateExtended = new stdClass();
 			}
+			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
+			// include the basic properties of the UA
+			$jsonTemplateCore->ua          = self::$ua;
+			$jsonTemplateCore->uaHash      = self::$uaHash;
+			$jsonTemplateCore->coreVersion = $coreVersion;
+			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
 			
 			$jsonTemplateExtended->ua              = self::$ua;
 			$jsonTemplateExtended->uaHash          = self::$uaHash;
