@@ -42,12 +42,14 @@ class Detector {
 	
 	/**
 	* Tests to see if:
-	*     - a session has already been opened for the request browser, if so send the info back, else
+	*     - see if this is a debug request with appropriately formed pid, else
+	*     - see if a session has already been opened for the request browser, if so send the info back, else
 	*     - see if the cookie has been set so we can build the profile, if so build the profile & send the info back, else
+	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
 	*     - see if detector can find an already created profile for the browser, if so send the info back, else
 	*     - start the process for building a profile for this unknown browser
 	*
-	* Based heavily on modernizr-server
+	* Logic is based heavily on modernizr-server
 	*
 	* @return {Object}       an object that contains all the properties for this particular user agent
 	*/
