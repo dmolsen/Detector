@@ -106,12 +106,10 @@ class Detector {
 			self::$foundIn = "archive";
 			
 			// decode the core data
-			$uaJSONCore     = @file_get_contents(__DIR__."/".self::$uaDirCore."ua.".$pid.".json");
-			$uaJSONCore     = json_decode($uaJSONCore);
+			$uaJSONCore     = json_decode(@file_get_contents(__DIR__."/".self::$uaDirCore."ua.".$pid.".json"));
 			
 			// find and decode the extended data
-			$uaJSONExtended = @file_get_contents(__DIR__."/".self::$uaDirExtended."ua.".$pid.".json");
-			$uaJSONExtended = json_decode($uaJSONExtended);
+			$uaJSONExtended = json_decode(@file_get_contents(__DIR__."/".self::$uaDirExtended."ua.".$pid.".json"));
 			
 			// merge the data
 			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;
