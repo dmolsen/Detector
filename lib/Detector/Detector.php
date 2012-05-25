@@ -80,9 +80,10 @@ class Detector {
 		$coreVersion                = $config['coreVersion'];
 		$extendedVersion            = $config['extendedVersion'];
 		
-		$noJSFamilySupport			= $config['noJSFamilySupport'];
+		$noJSCookieFamilySupport	= $config['noJSCookieFamilySupport'];
 		$noJSSearchFamily			= $config['noJSSearchFamily'];
 		$noJSDefaultFamily			= $config['noJSDefaultFamily'];
+		$noCookieFamily				= $config['noCookieFamily'];
 		
 		// populate some standard variables based on the user agent string
 		self::$ua                   = strip_tags($_SERVER["HTTP_USER_AGENT"]);
@@ -203,24 +204,15 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
-		} else if ((isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (($userAgent = UA::parse()) && isset($userAgent->spider) && ($userAgent->spider === true))) {
-
+		} else if ((($userAgent = UA::parse()) && isset($userAgent->spider) && ($userAgent->spider === true)) || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
+			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "nojs";
 
-			
-			// use ua-parser-php to set-up the basic properties for this UA
-			$jsonTemplateCore = self::createUAProperties($jsonTemplateCore);
-			
 			// open the JSON template core & extended files that will be populated
 			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
 			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
-			$jsonTemplateCore->coreVersion = $coreVersion;
 			
-			
-			if (!isset($jsonTemplateExtended)) {
-				$jsonTemplateExtended = new stdClass();
-			}
 			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
 			// include the basic properties of the UA
 			$jsonTemplateCore->ua          = self::$ua;
@@ -228,6 +220,8 @@ class Detector {
 			$jsonTemplateCore->coreVersion = $coreVersion;
 			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
 			
+			// populate extended properties
+			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
 			$jsonTemplateExtended->ua              = self::$ua;
 			$jsonTemplateExtended->uaHash          = self::$uaHash;
 			$jsonTemplateExtended->extendedVersion = $extendedVersion;
@@ -236,22 +230,27 @@ class Detector {
 			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
 			
 			// use the uaFeatures to classify the feature family for this browser
-			if ($noJSFamilySupport) {
-				$mergedInfo->family			  = (isset($userAgent->spider) && ($userAgent->spider === true)) ? $noJSSearchFamily : $noJSDefaultFamily;
-				$jsonTemplateExtended->family = (isset($userAgent->spider) && ($userAgent->spider === true)) ? $noJSSearchFamily : $noJSDefaultFamily;
+			if ($noJSCookieFamilySupport) {
+				if (isset($userAgent->spider) && ($userAgent->spider === true)) {
+					$mergedInfo->family			  = $noJSSearchFamily;
+					$jsonTemplateExtended->family = $noJSSearchFamily;
+				} else if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
+					$mergedInfo->family			  = $noJSDefaultFamily;
+					$jsonTemplateExtended->family = $noJSDefaultFamily;
+				} else if (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) {
+					$mergedInfo->family			  = $noCookieFamily;
+					$jsonTemplateExtended->family = $noCookieFamily;
+				} 
 			} else {
 				$mergedInfo->family           = featureFamily::find($mergedInfo);
 				$jsonTemplateExtended->family = $mergedInfo->family;
 			}
 
-			// add our collected data to the session for use in future requests, also add the per request data
-			if (isset($_SESSION)) {
+			// try setting the session unless cookies are actively not supported
+			if (!(isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) && isset($_SESSION)) {
 				$_SESSION[self::$sessionID] = $mergedInfo;
 			}
-
-			// add the user agent & hash to a list of already saved user agents
-			self::addToUAList();
-
+			
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 
