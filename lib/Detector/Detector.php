@@ -509,6 +509,19 @@ class Detector {
 	}
 	
 	/**
+	* Writes out the UA file to the specified location
+	* @param  {String}        encoded JSON
+	* @param  {String}        file path
+	*/
+	private static function writeUAFile($jsonEncoded,$uaFilePath) {
+		// write out to disk for future requests that might have the same UA
+		$jsonTemplateExtended = json_encode($jsonTemplateExtended);
+		$fp = fopen($uaFilePath, "w");
+		fwrite($fp, $jsonEncoded);
+		fclose($fp);
+	}
+	
+	/**
 	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
 	* @param  {Object}        the core template object
 	*
