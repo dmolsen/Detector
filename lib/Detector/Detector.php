@@ -186,6 +186,8 @@ class Detector {
 			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
 			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
 			
+			// add the user agent & hash to a list of already saved user agents
+			self::addToUAList();
 			
 			// unset the cookie that held the vast amount of test data
 			setcookie(self::$cookieID,"");
@@ -194,9 +196,6 @@ class Detector {
 			if (isset($_SESSION)) {
 				$_SESSION[self::$sessionID] = $mergedInfo;
 			}
-			
-			// add the user agent & hash to a list of already saved user agents
-			self::addToUAList();
 			
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
