@@ -1,1 +1,0 @@
-The core directory holds user agent & feature information for browsers that Detector has classified. Feature information comes come the tests run from "tests/core".
