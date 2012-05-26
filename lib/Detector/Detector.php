@@ -16,9 +16,6 @@ if (!function_exists('json_decode') || !function_exists('json_encode')) {
 // include the ua-parser-php library to rip apart user agent strings
 require_once(__DIR__."/lib/ua-parser-php/UAParser.php");
 
-// include the browserFamily library to classify the browser by features
-require_once(__DIR__."/lib/feature-family/featureFamily.php");
-
 class Detector {
 	
 	private static $debug               = false; // gets overwritten by the config so changing this won't do anything for you...
@@ -504,5 +501,10 @@ class Detector {
 }
 
 $ua = Detector::build();
+
+// include the browserFamily library to classify the browser by features
+require_once(__DIR__."/lib/feature-family/featureFamily.php");
+
+$ua->family = featureFamily::find($ua);
 
 ?>
