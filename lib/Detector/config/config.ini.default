@@ -8,6 +8,10 @@
 // w/ other Detector profiles
 debug                   = false
 
+// version number so that core and extended profiles can be rebuilt if necessary
+coreVersion             = "0.9"
+extendedVersion         = "1.0"
+
 // where to find the modernizr scripts
 uaFeaturesMaxJS         = "lib/modernizr/modernizr.2.5.2.min.custom.js"
 uaFeaturesMinJS         = "lib/modernizr/modernizr.2.5.2.min.no-tests.js"
@@ -21,12 +25,11 @@ uaFeaturesPerRequest    = "tests/perrequest/"
 uaDirCore               = "user-agents/core/"
 uaDirExtended           = "user-agents/extended/"
 
+// what is the default family name
+defaultFamily           = "mobile-basic"
+
 // do we show a default family for those browsers that don't support JavaScript, by default NO
 noJSCookieFamilySupport = false
 noJSSearchFamily        = "desktop"
 noJSDefaultFamily       = "mobile-basic"
 noCookieFamily          = "desktop"
-
-// version number so that core and extended profiles can be rebuilt if necessary
-coreVersion             = "0.9"
-extendedVersion         = "1.0"
