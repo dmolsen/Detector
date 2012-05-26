@@ -37,6 +37,12 @@ class Detector {
 	private static $uaDirCore;
 	private static $uaDirExtended;
 	
+	public static $defaultFamily;
+	public static $noJSCookieFamilySupport;
+	public static $noJSSearchFamily;
+	public static $noJSDefaultFamily;
+	public static $noCookieFamily;
+	
 	/**
 	* Tests to see if:
 	*     - see if this is a debug request with appropriately formed pid, else
@@ -64,23 +70,25 @@ class Detector {
 		}
 		
 		// populate some standard variables out of the config
-		self::$debug                = $config['debug'];
-		self::$uaFeaturesMaxJS      = $config['uaFeaturesMaxJS'];
-		self::$uaFeaturesMinJS      = $config['uaFeaturesMinJS']; 
-		self::$uaFeaturesCore       = $config['uaFeaturesCore']; 
-		self::$uaFeaturesExtended   = $config['uaFeaturesExtended'];
-		self::$uaFeaturesPerRequest = $config['uaFeaturesPerRequest'];
+		self::$debug                   = $config['debug'];
 		
-		self::$uaDirCore            = $config['uaDirCore'];
-		self::$uaDirExtended        = $config['uaDirExtended'];
+		$coreVersion                   = $config['coreVersion'];
+		$extendedVersion               = $config['extendedVersion'];
 		
-		$coreVersion                = $config['coreVersion'];
-		$extendedVersion            = $config['extendedVersion'];
+		self::$uaFeaturesMaxJS         = $config['uaFeaturesMaxJS'];
+		self::$uaFeaturesMinJS         = $config['uaFeaturesMinJS']; 
+		self::$uaFeaturesCore          = $config['uaFeaturesCore']; 
+		self::$uaFeaturesExtended      = $config['uaFeaturesExtended'];
+		self::$uaFeaturesPerRequest    = $config['uaFeaturesPerRequest'];
 		
-		$noJSCookieFamilySupport	= $config['noJSCookieFamilySupport'];
-		$noJSSearchFamily			= $config['noJSSearchFamily'];
-		$noJSDefaultFamily			= $config['noJSDefaultFamily'];
-		$noCookieFamily				= $config['noCookieFamily'];
+		self::$uaDirCore               = $config['uaDirCore'];
+		self::$uaDirExtended           = $config['uaDirExtended'];
+		
+		self::$defaultFamily           = $config['defaultFamily'];
+		self::$noJSCookieFamilySupport = $config['noJSCookieFamilySupport'];
+		self::$noJSSearchFamily        = $config['noJSSearchFamily'];
+		self::$noJSDefaultFamily       = $config['noJSDefaultFamily'];
+		self::$noCookieFamily          = $config['noCookieFamily'];
 		
 		// populate some standard variables based on the user agent string
 		self::$ua                   = strip_tags($_SERVER["HTTP_USER_AGENT"]);
