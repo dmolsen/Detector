@@ -222,22 +222,12 @@ class Detector {
 			$mergedInfo = new stdClass();
 			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
 			
-			// use the uaFeatures to classify the feature family for this browser
-			if ($noJSCookieFamilySupport) {
-				if (isset($userAgent->spider) && ($userAgent->spider === true)) {
-					$mergedInfo->family			  = $noJSSearchFamily;
-					$jsonTemplateExtended->family = $noJSSearchFamily;
-				} else if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
-					$mergedInfo->family			  = $noJSDefaultFamily;
-					$jsonTemplateExtended->family = $noJSDefaultFamily;
-				} else if (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) {
-					$mergedInfo->family			  = $noCookieFamily;
-					$jsonTemplateExtended->family = $noCookieFamily;
-				} 
-			} else {
-				$mergedInfo->family           = featureFamily::find($mergedInfo);
-				$jsonTemplateExtended->family = $mergedInfo->family;
-			}
+			// add an attribute to the object in case no js or no cookies was sent
+			if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
+				$mergedInfo->nojs      = true;
+			} else if (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) {
+				$mergedInfo->nocookies = true;
+			} 
 
 			// try setting the session unless cookies are actively not supported
 			if (!(isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) && isset($_SESSION)) {
