@@ -17,13 +17,13 @@ class featureFamily {
 	* @return {String}        the name of the family that this user agent matches. might just be the default.
 	*/
 	public static function find($obj) {
-					
+		
 		// first review to see if the ua matches any of the following options: spider, no js support, or no cookie support
-		if (Detector::$noJSCookieFamilySupport && isset($obj->spider) && ($obj->spider === true)) {
+		if (Detector::$noJSCookieFamilySupport && isset($obj->isSpider) && ($obj->isSpider == true)) {
 			return Detector::$noJSSearchFamily;
-		} else if (Detector::$noJSCookieFamilySupport && isset($obj->nojs) && ($obj->nojs === true)) {
+		} else if (Detector::$noJSCookieFamilySupport && isset($obj->nojs) && ($obj->nojs == true)) {
 			return Detector::$noJSDefaultFamily;
-		} else if (Detector::$noJSCookieFamilySupport && isset($obj->nocookies) && ($obj->nocookies === true)) {
+		} else if (Detector::$noJSCookieFamilySupport && isset($obj->nocookies) && ($obj->nocookies == true)) {
 			return Detector::$noCookieFamily;
 		}
 		
@@ -39,7 +39,7 @@ class featureFamily {
 		}		
 		$familiesJSON = json_decode($familiesJSON);
 		
-		// check to see if a family has been supplied with this request to override system created family
+		// check to see if a family has been supplied with this request to override system created dfamily
 		if (Detector::$switchFamily && isset($_REQUEST['family']) && array_key_exists($_REQUEST['family'], $familiesJSON)) {
 			return $_REQUEST['family'];
 		}
