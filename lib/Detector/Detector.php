@@ -305,7 +305,7 @@ class Detector {
 		self::readDirFiles(self::$uaFeaturesCore);
 		self::readDirFiles(self::$uaFeaturesExtended);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
-		print self::_mer() . "</script></head><body onload='checkCookieSupport();'><noscript><meta http-equiv='refresh' content='0; url=".$noscriptLink."'></noscript></body></html>";
+		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".$noscriptLink."'></noscript></body></html>";
 		exit;
 		
 	}
@@ -338,10 +338,14 @@ class Detector {
 		  "}".
 		  "c+=';path=/';".
 		  "try{".
-		    "document.cookie=c;";
+		    "if (getCookie() != 'testData') {".
+				"window.location = cookieRedirect; ".
+		    "} else {".
+				"document.cookie=c;";
 		if ($reload) {
 			$output .= "document.location.reload();";
 		}
+		$output .= "}";
 		$output .= "}catch(e){}"."";
 		return $output;
 	}
