@@ -13,9 +13,6 @@ if (!function_exists('json_decode') || !function_exists('json_encode')) {
 	require_once(__DIR__."/lib/json/jsonwrapper.php");
 }
 
-// include the ua-parser-php library to rip apart user agent strings
-require_once(__DIR__."/lib/ua-parser-php/UAParser.php");
-
 class Detector {
 	
 	private static $debug               = false; // gets overwritten by the config so changing this won't do anything for you...
@@ -487,6 +484,9 @@ class Detector {
 	* @return {Object}        the core template object "filled out" from ua-parser-php
 	*/
 	private static function createUAProperties($obj) {
+		
+		// include the ua-parser-php library to rip apart user agent strings
+		require_once(__DIR__."/lib/ua-parser-php/UAParser.php");
 		
 		// classify the user agent string so we can learn more what device this really is. more for readability than anything
 		$userAgent = UA::parse();
