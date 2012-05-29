@@ -38,6 +38,7 @@ class Detector {
 	private static $uaDirExtended;
 	
 	public static $defaultFamily;
+	public static $switchFamily;
 	public static $noJSCookieFamilySupport;
 	public static $noJSSearchFamily;
 	public static $noJSDefaultFamily;
@@ -85,6 +86,7 @@ class Detector {
 		self::$uaDirExtended           = $config['uaDirExtended'];
 		
 		self::$defaultFamily           = $config['defaultFamily'];
+		self::$switchFamily            = $config['switchFamily'];
 		self::$noJSCookieFamilySupport = $config['noJSCookieFamilySupport'];
 		self::$noJSSearchFamily        = $config['noJSSearchFamily'];
 		self::$noJSDefaultFamily       = $config['noJSDefaultFamily'];
@@ -495,6 +497,8 @@ class Detector {
 }
 
 $ua = Detector::build();
+
+// just pop in the info regarding the family switcher here.
 
 // include the browserFamily library to classify the browser by features
 require_once(__DIR__."/lib/feature-family/featureFamily.php");

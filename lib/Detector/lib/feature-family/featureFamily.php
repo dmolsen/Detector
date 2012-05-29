@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * featureFamily v0.1
+ * featureFamily v0.2
  * a helper library for Detector that classifies browsers based on features
  *
  * Copyright (c) 2011-2012 Dave Olsen, http://dmolsen.com
@@ -38,6 +38,11 @@ class featureFamily {
 			}
 		}		
 		$familiesJSON = json_decode($familiesJSON);
+		
+		// check to see if a family has been supplied with this request to override system created family
+		if (Detector::$switchFamily && isset($_REQUEST['family']) && array_key_exists($_REQUEST['family'], $familiesJSON)) {
+			return $_REQUEST['family'];
+		}
 		
 		foreach ($familiesJSON as $familyName => $familyTests) {
 						

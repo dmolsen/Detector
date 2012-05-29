@@ -28,6 +28,9 @@ uaDirExtended           = "user-agents/extended/"
 // what is the default family name
 defaultFamily           = "mobile-basic"
 
+// allow family switching via ?family=[familyname]
+switchFamily            = false
+
 // do we show a default family for those browsers that don't support JavaScript, by default NO
 noJSCookieFamilySupport = false
 noJSSearchFamily        = "desktop"
