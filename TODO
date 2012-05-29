@@ -1,5 +1,12 @@
 Things to Implement for Detector
+  - offer an api into the data
+  - BUG: media query core tests not working properly (works locally but not on iOS 5?)
+  - add an onwindowresize event to capture certain attributes like size? seems overkill...
+  - debug methods/log
+  - can i has support? would only be for the latest browsers but it's a decent way to double-check me
+  - desktop mode where we can swap in another profile. similar to ?pid
 
+Implemented
 x - separating core tests from user-supplied tests, and saving that data separately...
 x - how to version the data?
 x - how to have "core" feature detection that updates server-side but gets run every time (e.g. DPI which doesn't track w/ UA string)  - sampling the data so that we can update properties just in case
@@ -7,9 +14,7 @@ x - how do we version control the data and share across sites? i assume a separa
 x - need a good README
 x - document the code
 x - need a good demo
-  - offer an api into the data
 x - BUG: issue with cookies and sessions dying
-  - BUG: media query core tests not working properly (works locally but not on iOS 5?)
 x - add support for an archive feature so others can view the already saved profiles
 x - update the wording for the headers for features. also add a background color.
 x - add noscript tag to the default to capture spiders & devices that don't support js
@@ -18,18 +23,14 @@ x - add check if user-agents-extended has been created and build if necessary.
 x - a way to skip ahead in browser profiles or someway to search across profiles/organize
 x - figure out a way to check if it's an ios app?
 x - write the introductory blog post
-  - revise the README
+x - revise the README
 x - support for objects from Modernizr, add example tests for that (screenSize?)
 x - add a google analytics include
-  - add an onwindowresize event to capture certain attributes like size? seems overkill...
 x - add a true archive page so some can see the full user agent string...
 x - add a method to store the user agents in a flat file so they can be pulled out for the archive page & side bar. { uahash => ua }?
 x - social media buttons
-  - debug methods/log
-  - can i has support? would only be for the latest browsers but it's a decent way to double-check me
 x - add a configuration option
 x - update the browser detection lib
-  - desktop mode where we can swap in another profile. similar to ?pid
 x - add a method to classify devices by their features into "families"
 x - add a method to write css classes to the html tag a la modernizr
 x - add a method to pass the truthy values for select features for use in JS on the front-end
