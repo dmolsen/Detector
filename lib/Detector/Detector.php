@@ -503,11 +503,8 @@ class Detector {
 
 $ua = Detector::build();
 
-// just pop in the info regarding the family switcher here.
-
 // include the browserFamily library to classify the browser by features
 require_once(__DIR__."/lib/feature-family/featureFamily.php");
-
 $ua->family = featureFamily::find($ua);
 
 ?>
