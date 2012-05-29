@@ -181,7 +181,7 @@ class Detector {
 			$mergedInfo = new stdClass();
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
 			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
-
+			
 			// write out to disk for future requests that might have the same UA
 			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
 			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
