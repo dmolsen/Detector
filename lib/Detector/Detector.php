@@ -203,7 +203,7 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
-		} else if ((($userAgent = UA::parse()) && isset($userAgent->spider) && ($userAgent->spider === true)) || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
+		} else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "nojs";
@@ -473,6 +473,11 @@ class Detector {
 			}
 			return $obj;
 		}
+	}
+	
+	private static function checkSpider() {
+		$botRegex = '(bot|borg|google(^tv)|yahoo|slurp|msnbot|msrbot|openbot|archiver|netresearch|lycos|scooter|altavista|teoma|gigabot|baiduspider|blitzbot|oegp|charlotte|furlbot|http%20client|polybot|htdig|ichiro|mogimogi|larbin|pompos|scrubby|searchsight|seekbot|semanticdiscovery|silk|snappy|speedy|spider|voila|vortex|voyager|zao|zeal|fast\-webcrawler|converacrawler|dataparksearch|findlinks)';
+		return preg_match("/".$botRegex."/i",self::$ua);
 	}
 	
 	/**
