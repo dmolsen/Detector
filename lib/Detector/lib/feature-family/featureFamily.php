@@ -41,7 +41,10 @@ class featureFamily {
 		
 		// check to see if a family has been supplied with this request to override system created dfamily
 		if (Detector::$switchFamily && isset($_REQUEST['family']) && array_key_exists($_REQUEST['family'], $familiesJSON)) {
+			$_SESSION['detectorFamily'] = $_REQUEST['family'];
 			return $_REQUEST['family'];
+		} else if (isset($_SESSION['detectorFamily'])) {
+			return $_SESSION['detectorFamily'];
 		}
 		
 		foreach ($familiesJSON as $familyName => $familyTests) {
