@@ -517,10 +517,13 @@ class Detector {
 	
 }
 
-$ua = Detector::build();
-
-// include the browserFamily library to classify the browser by features
-require_once(__DIR__."/lib/feature-family/featureFamily.php");
-$ua->family = featureFamily::find($ua);
+// if this is a request from features.js.php don't run the build function
+if (!isset($p)) {
+	$ua = Detector::build();
+	
+	// include the browserFamily library to classify the browser by features
+	require_once(__DIR__."/lib/feature-family/featureFamily.php");
+	$ua->family = featureFamily::find($ua);
+}
 
 ?>
