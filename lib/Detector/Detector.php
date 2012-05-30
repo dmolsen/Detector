@@ -203,7 +203,7 @@ class Detector {
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
-		} else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) || (isset($_REQUEST["perrequest"]) && ($_REQUEST["perrequest"] == "true"))) {
+		} else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "nojs";
