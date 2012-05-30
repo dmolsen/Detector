@@ -45,19 +45,11 @@ class Detector {
 	public static $noCookieFamily;
 	
 	/**
-	* Tests to see if:
-	*     - see if this is a debug request with appropriately formed pid, else
-	*     - see if a session has already been opened for the request browser, if so send the info back, else
-	*     - see if the cookie has been set so we can build the profile, if so build the profile & send the info back, else
-	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
-	*     - see if detector can find an already created profile for the browser, if so send the info back, else
-	*     - start the process for building a profile for this unknown browser
+	* Configures the shared variables in Detector so that they can be used in functions that might not need to run Detector::build();
 	*
-	* Logic is based heavily on modernizr-server
-	*
-	* @return {Object}       an object that contains all the properties for this particular user agent
+	* @return {Boolean}       the result of checking the current user agent string against a list of bots
 	*/
-	public static function build() {
+	private static function configure() {
 		
 		// set-up the configuration options for the system
 		if (!($config = @parse_ini_file(__DIR__."/config/config.ini"))) {
@@ -73,8 +65,8 @@ class Detector {
 		// populate some standard variables out of the config
 		self::$debug                   = $config['debug'];
 		
-		$coreVersion                   = $config['coreVersion'];
-		$extendedVersion               = $config['extendedVersion'];
+		self::$coreVersion             = $config['coreVersion'];
+		self::$extendedVersion         = $config['extendedVersion'];
 		
 		self::$uaFeaturesMaxJS         = $config['uaFeaturesMaxJS'];
 		self::$uaFeaturesMinJS         = $config['uaFeaturesMinJS']; 
@@ -96,9 +88,30 @@ class Detector {
 		self::$ua                   = strip_tags($_SERVER["HTTP_USER_AGENT"]);
 		self::$accept               = strip_tags($_SERVER["HTTP_ACCEPT"]);
 		self::$uaHash               = md5(self::$ua);
-		self::$sessionID            = md5(self::$ua."-session-".$coreVersion."-".$extendedVersion);
-		self::$cookieID             = md5(self::$ua."-cookie-".$coreVersion."-".$extendedVersion);
+		self::$sessionID            = md5(self::$ua."-session-".self::$coreVersion."-".self::$extendedVersion);
+		self::$cookieID             = md5(self::$ua."-cookie-".self::$coreVersion."-".self::$extendedVersion);
 		
+	}
+	
+	/**
+	* Tests to see if:
+	*     - see if this is a debug request with appropriately formed pid, else
+	*     - see if a session has already been opened for the request browser, if so send the info back, else
+	*     - see if the cookie has been set so we can build the profile, if so build the profile & send the info back, else
+	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
+	*     - see if detector can find an already created profile for the browser, if so send the info back, else
+	*     - start the process for building a profile for this unknown browser
+	*
+	* Logic is based heavily on modernizr-server
+	*
+	* @return {Object}       an object that contains all the properties for this particular user agent
+	*/
+	public static function build() {
+		
+		// configure detector from config.ini
+		self::configure();
+		
+		// populate some variables specific to build()
 		$uaFileCore                 = __DIR__."/".self::$uaDirCore."ua.".self::$uaHash.".json";
 		$uaFileExtended             = __DIR__."/".self::$uaDirExtended."ua.".self::$uaHash.".json";
 		
@@ -284,6 +297,7 @@ class Detector {
 	* @return {String}       the HTML & JavaScript that tracks the per request test
 	*/
 	public static function perrequest() {
+		self::configure();
 		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
 		print self::_mer(false,'-pr');
