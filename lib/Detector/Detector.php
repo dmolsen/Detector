@@ -20,6 +20,9 @@ class Detector {
 	public static  $ua;
 	public static  $accept;
 	
+	private static $coreVersion;
+	private static $extendedVersion;
+	
 	public static  $foundIn;             // this is just for the demo. won't ever really be needed i don't think
 	
 	private static $uaHash;
@@ -159,14 +162,14 @@ class Detector {
 			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
 			$jsonTemplateCore->ua          = self::$ua;
 			$jsonTemplateCore->uaHash      = self::$uaHash;
-			$jsonTemplateCore->coreVersion = $coreVersion;
+			$jsonTemplateCore->coreVersion = self::$coreVersion;
 			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
 			
 			// populate extended properties
 			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
 			$jsonTemplateExtended->ua              = self::$ua;
 			$jsonTemplateExtended->uaHash          = self::$uaHash;
-			$jsonTemplateExtended->extendedVersion = $extendedVersion;
+			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
 			
 			// create an object to hold any of the per request data. it shouldn't be saved to file but it should be added to the session
 			$cookiePerRequest = new stdClass();
@@ -213,14 +216,14 @@ class Detector {
 			// include the basic properties of the UA
 			$jsonTemplateCore->ua          = self::$ua;
 			$jsonTemplateCore->uaHash      = self::$uaHash;
-			$jsonTemplateCore->coreVersion = $coreVersion;
+			$jsonTemplateCore->coreVersion = self::$coreVersion;
 			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
 			
 			// populate extended properties
 			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
 			$jsonTemplateExtended->ua              = self::$ua;
 			$jsonTemplateExtended->uaHash          = self::$uaHash;
-			$jsonTemplateExtended->extendedVersion = $extendedVersion;
+			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
 
 			$mergedInfo = new stdClass();
 			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
@@ -246,7 +249,7 @@ class Detector {
 			self::$foundIn = "file";
 			
 			// double-check that the already created profile matches the current version of the core & extended templates
-			if (($uaJSONCore->coreVersion != $coreVersion) || ($uaJSONExtended->extendedVersion != $extendedVersion)) {
+			if (($uaJSONCore->coreVersion != self::$coreVersion) || ($uaJSONExtended->extendedVersion != self::$extendedVersion)) {
 
 				self::buildTestPage();
 				
