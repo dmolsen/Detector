@@ -63,26 +63,9 @@ class Detector {
 		}
 		
 		// populate some standard variables out of the config
-		self::$debug                   = $config['debug'];
-		
-		self::$coreVersion             = $config['coreVersion'];
-		self::$extendedVersion         = $config['extendedVersion'];
-		
-		self::$uaFeaturesMaxJS         = $config['uaFeaturesMaxJS'];
-		self::$uaFeaturesMinJS         = $config['uaFeaturesMinJS']; 
-		self::$uaFeaturesCore          = $config['uaFeaturesCore']; 
-		self::$uaFeaturesExtended      = $config['uaFeaturesExtended'];
-		self::$uaFeaturesPerRequest    = $config['uaFeaturesPerRequest'];
-		
-		self::$uaDirCore               = $config['uaDirCore'];
-		self::$uaDirExtended           = $config['uaDirExtended'];
-		
-		self::$defaultFamily           = $config['defaultFamily'];
-		self::$switchFamily            = $config['switchFamily'];
-		self::$noJSCookieFamilySupport = $config['noJSCookieFamilySupport'];
-		self::$noJSSearchFamily        = $config['noJSSearchFamily'];
-		self::$noJSDefaultFamily       = $config['noJSDefaultFamily'];
-		self::$noCookieFamily          = $config['noCookieFamily'];
+		foreach ($config as $key => $value) {
+			self::$$key = $value;
+		}
 		
 		// populate some standard variables based on the user agent string
 		self::$ua                   = strip_tags($_SERVER["HTTP_USER_AGENT"]);
