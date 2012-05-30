@@ -2,6 +2,13 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+DET-v0.7.1 (May 30, 2012)
+ - FIX: can now skip Detector::build() when loading up the Detector library
+ - FIX: per-request javascript include doesn't need the request var hack
+ - FIX: better docs for some functions
+ - FIX: config variables are now defined via a foreach loop
+ - ADD: all configuration now happens in its own function
+ 
 DET-v0.7.0 (May 29, 2012)
  - FIX: family attribute creation occurs with every request
  - FIX: no javascript support
