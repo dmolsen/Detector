@@ -412,6 +412,8 @@ class Detector {
 	/**
 	* Opens the UA file at the specificed location
 	* @param  {String}        file path
+	*
+	* @return {Object}        object containing the results of opening a file & parsing the JSON in the UA file
 	*/
 	private static function openUAFile($uaFilePath) {
 		// open the JSON template extended file that will be populated & start populating its object
@@ -427,6 +429,8 @@ class Detector {
 	/**
 	* reads out all the files in a directory
 	* @param  {String}        file path
+	*
+	* @return {String}        contents of the file that was opened and read in the target directory
 	*/
 	private static function readDirFiles($dir) {
 		if ($handle = opendir(__DIR__ .'/'. $dir)) {
@@ -476,6 +480,11 @@ class Detector {
 		}
 	}
 	
+	/**
+	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
+	*
+	* @return {Boolean}       the result of checking the current user agent string against a list of bots
+	*/
 	private static function checkSpider() {
 		$botRegex = '(bot|borg|google(^tv)|yahoo|slurp|msnbot|msrbot|openbot|archiver|netresearch|lycos|scooter|altavista|teoma|gigabot|baiduspider|blitzbot|oegp|charlotte|furlbot|http%20client|polybot|htdig|ichiro|mogimogi|larbin|pompos|scrubby|searchsight|seekbot|semanticdiscovery|silk|snappy|speedy|spider|voila|vortex|voyager|zao|zeal|fast\-webcrawler|converacrawler|dataparksearch|findlinks)';
 		return preg_match("/".$botRegex."/i",self::$ua);
