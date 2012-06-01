@@ -435,7 +435,7 @@ class Detector {
 	private static function readDirFiles($dir) {
 		if ($handle = opendir(__DIR__ .'/'. $dir)) {
 		    while (false !== ($entry = readdir($handle))) {
-		        if ($entry != "." && $entry != ".." && $entry != "README") {
+		        if ($entry != "." && $entry != ".." && ($entry != "README") && (strpos($entry,"_") !== 0)) {
 		            readfile(__DIR__ .'/'. $dir . $entry);
 		        }
 		    }
