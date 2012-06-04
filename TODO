@@ -4,7 +4,10 @@ Things to Implement for Detector
   - add an onwindowresize event to capture certain attributes like size? seems overkill...
   - debug methods/log
   - can i has support? would only be for the latest browsers but it's a decent way to double-check me
-  - desktop mode where we can swap in another profile. similar to ?pid
+x - ability to "turn off" feature tests not in modernizr by using underscore in filename
+x - per user test support
+  - better media query grouping support
+x - if peruser or perrequest dirs are "empty" don't send data
 
 Implemented
 x - separating core tests from user-supplied tests, and saving that data separately...
@@ -33,6 +36,7 @@ x - add a configuration option
 x - update the browser detection lib
 x - add a method to classify devices by their features into "families"
 x - add a method to write css classes to the html tag a la modernizr
+x - desktop mode where we can swap in another profile. similar to ?pid
 x - add a method to pass the truthy values for select features for use in JS on the front-end
   - add tests for
      -- flash w/ version
