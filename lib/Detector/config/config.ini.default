@@ -26,6 +26,9 @@ uaFeaturesPerRequest    = "tests/perrequest/"
 uaDirCore               = "user-agents/core/"
 uaDirExtended           = "user-agents/extended/"
 
+// where to find the features.js.php file from the web
+featuresScriptWebPath   = "/js/";
+
 // what is the default family name
 defaultFamily           = "mobile-basic"
 
