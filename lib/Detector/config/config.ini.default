@@ -19,6 +19,7 @@ uaFeaturesMinJS         = "lib/modernizr/modernizr.2.5.2.min.no-tests.js"
 // where to find the tests that should be run against browsers
 uaFeaturesCore          = "tests/core/"
 uaFeaturesExtended      = "tests/extended/"
+uaFeaturesPerSession    = "tests/persession/"
 uaFeaturesPerRequest    = "tests/perrequest/"
 
 // where to find the user agent profiles

@@ -32,6 +32,7 @@ class Detector {
 	private static $uaFeaturesMinJS;     // NO default tests except media queries, meant to run those in the perrequest folder
 	private static $uaFeaturesCore; 
 	private static $uaFeaturesExtended;
+	private static $uaFeaturesPerSession;
 	private static $uaFeaturesPerRequest;
 	
 	private static $uaDirCore;
@@ -79,8 +80,9 @@ class Detector {
 	/**
 	* Tests to see if:
 	*     - see if this is a debug request with appropriately formed pid, else
+	*     - see if the cookie for the per user test has been set so we can record the results and add to the session
 	*     - see if a session has already been opened for the request browser, if so send the info back, else
-	*     - see if the cookie has been set so we can build the profile, if so build the profile & send the info back, else
+	*     - see if the cookie for the full test has been set so we can build the profile, if so build the profile & send the info back, else
 	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
 	*     - see if detector can find an already created profile for the browser, if so send the info back, else
 	*     - start the process for building a profile for this unknown browser
@@ -130,6 +132,35 @@ class Detector {
 			// return to the script
 			return $mergedInfo;
 		
+		} else if (@session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID]) && isset($_COOKIE) && isset($_COOKIE[self::$cookieID."-ps"])) {
+
+			// where did we find this info to display... probably only need this for the demo
+			self::$foundIn = "persession";
+
+			// parse the per request cookie
+			$cookiePerSession = new stdClass();
+			$cookiePerSession = self::parseCookie("ps",$cookiePerSession,true);
+
+			// parse the per request cookie
+			$cookiePerRequest = new stdClass();
+			$cookiePerRequest = self::parseCookie("pr",$cookiePerRequest,true);
+
+			// merge the session info we already have and the info from the cookie
+			$mergedInfo = (isset($cookiePerSession)) ? (object) array_merge((array) $_SESSION[self::$sessionID], (array) $cookiePerSession) : $_SESSION[self::$sessionID];
+			$mergedInfo = (isset($cookiePerRequest)) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
+
+			// unset the cookies
+			setcookie(self::$cookieID,"");
+			setcookie(self::$cookieID."-pu","");
+
+			// put the merged JSON info into session
+			if (isset($_SESSION)) {
+				$_SESSION[self::$sessionID] = $mergedInfo;
+			}
+			
+			// send the data back to the script to be used
+			return $mergedInfo;
+
 		} else if (@session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID])) {
 			
 			// where did we find this info to display... probably only need this for the demo
@@ -142,8 +173,10 @@ class Detector {
 			// merge the session info we already have and the info from the cookie
 			$mergedInfo = (isset($cookiePerRequest)) ? (object) array_merge((array) $_SESSION[self::$sessionID], (array) $cookiePerRequest) : $_SESSION[self::$sessionID];
 			
-			// save the new info to the session
-			$_SESSION[self::$sessionID] = $mergedInfo;
+			// put the merged JSON info into session
+			if (isset($_SESSION)) {
+				$_SESSION[self::$sessionID] = $mergedInfo;
+			}
 
 			// send the data back to the script to be used
 			return $mergedInfo;
@@ -171,18 +204,21 @@ class Detector {
 			$jsonTemplateExtended->uaHash          = self::$uaHash;
 			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
 			
-			// create an object to hold any of the per request data. it shouldn't be saved to file but it should be added to the session
+			// create objects to hold any of the per user or per request data. it shouldn't be saved to file but it should be added to the session
+			$cookiePerSession = new stdClass();
 			$cookiePerRequest = new stdClass();
 			
 			// push features into the same level as the general device information
 			// change 1/0 to true/false. why? 'cause that's what i like to read ;)
 			$jsonTemplateCore     = self::parseCookie("core",$jsonTemplateCore,true);
 			$jsonTemplateExtended = self::parseCookie("extended",$jsonTemplateExtended,true);
+			$cookiePerSession     = self::parseCookie("ps",$cookiePerSession,true);
 			$cookiePerRequest     = self::parseCookie("pr",$cookiePerRequest,true);
 
 			// merge the data for future requests
 			$mergedInfo = new stdClass();
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
+			$mergedInfo = ($cookiePerSession) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerSession) : $mergedInfo;
 			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
 			
 			// some general properties
@@ -258,27 +294,29 @@ class Detector {
 			
 			// double-check that the already created profile matches the current version of the core & extended templates
 			if (($uaJSONCore->coreVersion != self::$coreVersion) || ($uaJSONExtended->extendedVersion != self::$extendedVersion)) {
-
-				self::buildTestPage();
+				self::buildTestPage();	
+			}
 				
-			} else {
-				
-				// merge the data
-				$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;	
+			// merge the data
+			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;	
 
-				// put the merged JSON info into session
-				if (isset($_SESSION)) {
-					$_SESSION[self::$sessionID] = $mergedInfo;
-				}
 			// some general properties
 			$mergedInfo->nojs      = false;
 			$mergedInfo->nocookies = false;
-
-				// return to the script
-				return $mergedInfo;
-				
-			}
 			
+			// put the merged JSON info into session
+			if (isset($_SESSION)) {
+				$_SESSION[self::$sessionID] = $mergedInfo;
+			}
+
+			// need to build the tests for the per user
+			if (self::readDirFiles(self::$uaFeaturesPerSession, true)) {		
+				self::persession();
+			}
+				
+			// return to the script
+			return $mergedInfo;
+
 		} else {
 			
 			// didn't recognize that the user had been here before nor the UA string.
@@ -296,31 +334,44 @@ class Detector {
 	*/
 	public static function perrequest() {
 		self::configure();
+		readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
 		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
 		print self::_mer(false,'-pr');
 	}
 	
 	/**
+	* Reads in the per session & per request feature tests and sends them to the function that builds out the JS & cookie. forces a reload
+	*
+	* from modernizr-server
+	*
+	* @return {String}       the HTML & JavaScript that tracks the per user & per request test
+	*/
+	public static function persession() {
+		// gather info by sending Modernizr & custom tests
+		print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
+		print "document.cookie='".self::$cookieID."-ps=foo;path=/';"; // hack around how the cookies get handled in general
+		readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
+		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
+		self::readDirFiles(self::$uaFeaturesPerSession);
+		self::readDirFiles(self::$uaFeaturesPerRequest);
+		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".self::buildNoscriptLink()."'></noscript></body></html>";
+		exit;
+	}
+	
+	/**
 	* Builds the browser test page
 	*/
 	public static function buildTestPage() {		
-		// build the noscript link just in case
-		$noscriptLink = $_SERVER["REQUEST_URI"];
-		if (isset($_SERVER["QUERY_STRING"]) && ($_SERVER["QUERY_STRING"] != "")) {
-			$noscriptLink .= "?".$_SERVER["QUERY_STRING"]."&nojs=true";
-		} else {
-			$noscriptLink .= "?nojs=true";
-		}
-		
 		// gather info by sending Modernizr & custom tests
 		print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
 		readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
 		readfile(__DIR__ . '/' . self::$uaFeaturesMaxJS);
 		self::readDirFiles(self::$uaFeaturesCore);
 		self::readDirFiles(self::$uaFeaturesExtended);
+		self::readDirFiles(self::$uaFeaturesPerSession);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
-		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".$noscriptLink."'></noscript></body></html>";
+		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".self::buildNoscriptLink()."'></noscript></body></html>";
 		exit;
 		
 	}
@@ -336,27 +387,36 @@ class Detector {
 	*/
 	private static function _mer($reload = true, $cookieExtra = '') {
 		$output = "".
-		  "var m=Modernizr;c='';".
+		  "var m=Modernizr;c='';k='';".
 		  "for(var f in m){".
+		    "var j='';".
 		    "if(f[0]=='_'){continue;}".
 		    "var t=typeof m[f];".
 		    "if(t=='function'){continue;}".
 		    "c+=(c?'|':'".self::$cookieID.$cookieExtra."=')+f+':';".
+		    "kt=(f.slice(0,3)=='pr-')?true:false;".
+		    "if(kt){k+=(k?'|':'".self::$cookieID."-pr=')+f+':';}".
 		    "if(t=='object'){".
 		      "for(var s in m[f]){".
-				"if (typeof m[f][s]=='boolean') { c+='/'+s+':'+(m[f][s]?1:0); }".
-		        "else { c+='/'+s+':'+m[f][s]; }".
+				"if (typeof m[f][s]=='boolean') { j+='/'+s+':'+(m[f][s]?1:0); }".
+		        "else { j+='/'+s+':'+m[f][s]; }".
 		      "}".
+			  "c+=j;".
+		      "k+=kt?j:'';".
 		    "}else{".
-		      "c+=m[f]?'1':'0';".
+		      "j=m[f]?'1':'0';".
+		      "c+=j;".
+		      "k+=kt?j:'';".
 		    "}".
 		  "}".
 		  "c+=';path=/';".
+		  "if(k){k+=';path=/';}".
 		  "try{".
 		    "if (getCookie() != 'testData') {".
 				"window.location = cookieRedirect; ".
 		    "} else {".
-				"document.cookie=c;";
+				"document.cookie=c;".
+				"if(k){document.cookie=k;}";
 		if ($reload) {
 			$output .= "document.location.reload();";
 		}
@@ -393,6 +453,22 @@ class Detector {
 		return $uaFeatures;
 	}
 
+	/**
+	* Builds a noscript link so the page will reload
+	*
+	* @return {String}       string that is the URL for the noscriptlink
+	*/
+	private static function buildNoscriptLink() {
+		// build the noscript link just in case
+		$noscriptLink = $_SERVER["REQUEST_URI"];
+		if (isset($_SERVER["QUERY_STRING"]) && ($_SERVER["QUERY_STRING"] != "")) {
+			$noscriptLink .= "?".$_SERVER["QUERY_STRING"]."&nojs=true";
+		} else {
+			$noscriptLink .= "?nojs=true";
+		}
+		return $noscriptLink;
+	}
+	
 	/**
 	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
 	*/
@@ -444,17 +520,23 @@ class Detector {
 	/**
 	* reads out all the files in a directory
 	* @param  {String}        file path
+	* @param  {Boolean}       should a boolean value that shows if files are in the directory be returned
 	*
-	* @return {String}        contents of the file that was opened and read in the target directory
+	* @return {Boolean}       assuming it's requested the boolean value of if the dir has files will be returned
 	*/
-	private static function readDirFiles($dir) {
-		if ($handle = opendir(__DIR__ .'/'. $dir)) {
-		    while (false !== ($entry = readdir($handle))) {
-		        if ($entry != "." && $entry != ".." && ($entry != "README") && (strpos($entry,"_") !== 0)) {
-		            readfile(__DIR__ .'/'. $dir . $entry);
-		        }
-		    }
-		    closedir($handle);
+	private static function readDirFiles($dir, $returnBool = false) {
+		$dirHasFiles = false;
+		$entries = scandir(__DIR__ .'/'. $dir);
+		foreach($entries as $entry) {
+			if (($entry != ".") && ($entry != "..") && ($entry != "README") && (strpos($entry,"_") !== 0)) {
+	            if (!$returnBool) {
+					readfile(__DIR__ .'/'. $dir . $entry);
+				}
+				$dirHasFiles = true;
+	        }
+		}
+		if ($returnBool) {
+			return $dirHasFiles;
 		}
 	}
 	
@@ -471,7 +553,7 @@ class Detector {
 		if (isset($_COOKIE[$cookieName])) {
 			$uaFeatures = self::_ang($_COOKIE[$cookieName]);
 			foreach($uaFeatures as $key => $value) {
-				if ((strpos($key,$cookieExtension."-") !== false) || (($cookieExtension == 'core') && (strpos($key,"extended-") === false) && (strpos($key,"pr-") === false))) {
+				if ((strpos($key,$cookieExtension."-") !== false) || (($cookieExtension == 'core') && (strpos($key,"extended-") === false) && (strpos($key,"pr-") === false) && (strpos($key,"ps-") === false))) {
 					$key = str_replace($cookieExtension."-", "", $key);
 					if (is_object($value)) {
 						foreach ($value as $vkey => $vvalue) {
