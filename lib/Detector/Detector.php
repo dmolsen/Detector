@@ -118,6 +118,10 @@ class Detector {
 			// merge the data
 			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;
 			
+			// some general properties
+			$mergedInfo->nojs      = false;
+			$mergedInfo->nocookies = false;
+			
 			// put the merged JSON info into session
 			if (isset($_SESSION)) {
 				$_SESSION[self::$sessionID] = $mergedInfo;
@@ -181,6 +185,10 @@ class Detector {
 			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
 			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
 			
+			// some general properties
+			$mergedInfo->nojs      = false;
+			$mergedInfo->nocookies = false;
+			
 			// write out to disk for future requests that might have the same UA
 			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
 			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
@@ -224,6 +232,10 @@ class Detector {
 			$mergedInfo = new stdClass();
 			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
 			
+			// some general properties
+			$mergedInfo->nojs      = false;
+			$mergedInfo->nocookies = false;
+			
 			// add an attribute to the object in case no js or no cookies was sent
 			if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
 				$mergedInfo->nojs      = true;
@@ -258,6 +270,9 @@ class Detector {
 				if (isset($_SESSION)) {
 					$_SESSION[self::$sessionID] = $mergedInfo;
 				}
+			// some general properties
+			$mergedInfo->nojs      = false;
+			$mergedInfo->nocookies = false;
 
 				// return to the script
 				return $mergedInfo;
