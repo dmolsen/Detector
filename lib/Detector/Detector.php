@@ -38,6 +38,8 @@ class Detector {
 	private static $uaDirCore;
 	private static $uaDirExtended;
 	
+	private static $featuresScriptWebPath;
+	
 	public static $defaultFamily;
 	public static $switchFamily;
 	public static $noJSCookieFamilySupport;
@@ -319,6 +321,7 @@ class Detector {
 
 		} else {
 			
+			
 			// didn't recognize that the user had been here before nor the UA string.
 			self::buildTestPage();
 
@@ -334,7 +337,9 @@ class Detector {
 	*/
 	public static function perrequest() {
 		self::configure();
-		readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
+		if ((isset($_REQUEST['dynamic']) && ($_REQUEST['dynamic'] == "true")) && !(isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
+			readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
+		}
 		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
 		print self::_mer(false,'-pr');
@@ -467,6 +472,16 @@ class Detector {
 			$noscriptLink .= "?nojs=true";
 		}
 		return $noscriptLink;
+	}
+	
+	/**
+	* Builds a link to the features.js.php file that addresses if cookies are supported or not
+	*
+	* @return {String}       string that is the URL for the noscriptlink
+	*/
+	public static function buildFeaturesScriptLink() {
+		$nocookies = (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) ? "&nocookies=true" : ""; 
+		print "<script type=\"text/javascript\" src=\"".self::$featuresScriptWebPath."features.js.php?dynamic=true".$nocookies."\"></script>";
 	}
 	
 	/**
