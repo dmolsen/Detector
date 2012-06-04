@@ -50,7 +50,7 @@
 	</style>
 
 	<!-- My Scripts -->
-	<script type="text/javascript" src="/js/features.js.php"></script>
+	<?php Detector::buildFeaturesScriptLink(); ?>
 	<script type="text/javascript" src="/js/modernizr.2.5.2.min.custom.js"></script>
 	<script type="text/javascript" src="/js/tests.demo.js"></script>
   </head>
