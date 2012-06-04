@@ -151,7 +151,7 @@ class Detector {
 
 			// unset the cookies
 			setcookie(self::$cookieID,"");
-			setcookie(self::$cookieID."-pu","");
+			setcookie(self::$cookieID."-ps","");
 
 			// put the merged JSON info into session
 			if (isset($_SESSION)) {
