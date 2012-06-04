@@ -69,7 +69,7 @@
 		}
 		if ($check == 0) {
 			print "<tr>";	
-			print "<td class=\"span9\" colspan=\"3\">This browser didn't support JavaScript so these features haven't been recorded.</td>";
+			print "<td class=\"span9\" colspan=\"3\">Detector wasn't able to capture these features because they rely on a cookie that was set after the PHP script ran.</td>";
 			print "</tr>";
 		}
 		print "</tbody>";
