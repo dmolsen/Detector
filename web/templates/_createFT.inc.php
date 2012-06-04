@@ -48,9 +48,15 @@
 					} else {
 						print "<td class=\"span1\">
 								<script type=\"text/javascript\">
-									if (Modernizr['".$prefix.$key."']) { 
-										document.write(\"<span class='label success'>\"+Modernizr['".$prefix.$key."']+\"</span>\"); 
-									} else { 
+									";
+						if (($prefix == "core-") && ($key == "mediaqueries")) {
+								print "		if (Modernizr['mediaqueries']) { 
+												document.write(\"<span class='label success'>\"+Modernizr['mediaqueries']+\"</span>\");";	
+						} else {
+								print "		if (Modernizr['".$prefix.$key."']) { 
+												document.write(\"<span class='label success'>\"+Modernizr['".$prefix.$key."']+\"</span>\");";
+						}	
+						print "		} else { 
 										document.write(\"<span class='label important'>false</span>\"); 
 									}
 								</script>
