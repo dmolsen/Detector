@@ -2,6 +2,13 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+DET-v0.8.0 ()
+ - FIX: mediaqueries argument in the demo
+ - ADD: "comment out" feature detection tests by adding an underscore to the beginning of their filename
+ - ADD: per session tests (e.g. tests that produce results unique to a client but only need to be run once per session)
+ - ADD: nojs attribute to the final ua variable so it can be used as a flag
+ - ADD: nocookies attribute to the final ua variable so it can be used as a flag
+
 DET-v0.7.1 (May 30, 2012)
  - FIX: can now skip Detector::build() when loading up the Detector library
  - FIX: per-request javascript include doesn't need the request var hack

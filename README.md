@@ -1,4 +1,4 @@
-# Detector v0.7.1 #
+# Detector v0.8.0 #
 
 Detector is a simple, PHP- and JavaScript-based browser- and feature-detection library that can adapt to new devices & browsers on its own without the need to pull from a central database of browser information.
 	
@@ -14,12 +14,13 @@ A very [simple demo of Detector](http://detector.dmolsen.com/) is available for 
 
 ## Features ##
 
-The following features are as of v0.7.1 of Detector:
+The following features are as of v0.8.0 of Detector:
 
 * stores features detected with [Modernizr 2.5.2](http://www.modernizr.com/) ([list](http://detector.dmolsen.com/demo/modernizr-listing/)) and browser & device information detected with [ua-parser-php](https://github.com/tobie/ua-parser/tree/master/php) (based on [ua-parser](http://code.google.com/p/ua-parser/)) on the server as part of a browser profile for easy retrieval
 * uses the user agent string as a unique key for looking up information (e.g. one profile per user agent)
-* tests are run only once per unique user agent string so only one user is ever tested & redirected
+* majority of tests are run only once per unique user agent string so only one user is ever tested & redirected
 * [add your own feature tests](https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial) and store the results using Modernizr's addTest() API
+* tests can be created that run once per user agent, once per session, or on every request
 * version your browser profiles so you can force them to be recreated after adding new tests
 * [easily organize browsers into families](https://github.com/dmolsen/Detector/wiki/Detector-Family-Tutorial) based on a mix of supported features & device information
 * browser & bots that don't use JavaScript or cookies can still use your site using a default browser profile

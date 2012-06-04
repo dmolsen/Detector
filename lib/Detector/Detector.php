@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Detector v0.7.0
+ * Detector v0.8.0
  *
  * Copyright (c) 2011-2012 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
