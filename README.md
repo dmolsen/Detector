@@ -1,4 +1,4 @@
-# Detector v0.8.0 #
+# Detector v0.8.1 #
 
 Detector is a simple, PHP- and JavaScript-based browser- and feature-detection library that can adapt to new devices & browsers on its own without the need to pull from a central database of browser information.
 	

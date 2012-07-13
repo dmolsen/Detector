@@ -2,6 +2,9 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+DET-v0.8.1 (Jul. 13, 2012)
+ - ADD: somehow i forgot to include the json lib for sub-5.2 compatibility
+
 DET-v0.8.0 (Jun. 4, 2012)
  - FIX: javascript mediaqueries argument in the demo
  - ADD: "comment out" feature detection tests by adding an underscore to the beginning of their filename
