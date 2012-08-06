@@ -1,7 +1,10 @@
 {
+	"tablet": {
+		"isTablet": true
+	},
 	"mobile-advanced": { 
     "isMobile": true,
-    "features": [ "cssanimations" ]
+    "features": [ "csstranforms" ]
 	},
 	"mobile-basic": { 
     "isMobile": true
