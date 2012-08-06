@@ -2,6 +2,10 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+DET-v0.8.2 (Aug. 6, 2012)
+ - FIX: cookie bug where an empty cookie was found causing the building of an empty profile
+ - FIX: updated the families.default.json to reflect the lessons learned on www.wvu.edu regarding device support
+
 DET-v0.8.1 (Jul. 13, 2012)
  - ADD: somehow i forgot to include the json lib for sub-5.2 compatibility
 
