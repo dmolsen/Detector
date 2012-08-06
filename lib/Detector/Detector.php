@@ -183,69 +183,37 @@ class Detector {
 			// send the data back to the script to be used
 			return $mergedInfo;
 			
-		} else if (isset($_COOKIE) && isset($_COOKIE[self::$cookieID])) {
-			
-			// to be clear, this section means that a UA was unknown, was profiled with modernizr & now we're saving that data to build a new profile
+		} else if (($uaJSONCore = json_decode(@file_get_contents($uaFileCore))) && ($uaJSONExtended = json_decode(@file_get_contents($uaFileExtended)))) {
 			
 			// where did we find this info to display... probably only need this for the demo
-			self::$foundIn = "cookie";
+			self::$foundIn = "file";
 			
-			// open the JSON template core & extended files that will be populated
-			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
-			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
-			
-			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
-			$jsonTemplateCore->ua          = self::$ua;
-			$jsonTemplateCore->uaHash      = self::$uaHash;
-			$jsonTemplateCore->coreVersion = self::$coreVersion;
-			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
-			
-			// populate extended properties
-			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
-			$jsonTemplateExtended->ua              = self::$ua;
-			$jsonTemplateExtended->uaHash          = self::$uaHash;
-			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
-			
-			// create objects to hold any of the per user or per request data. it shouldn't be saved to file but it should be added to the session
-			$cookiePerSession = new stdClass();
-			$cookiePerRequest = new stdClass();
-			
-			// push features into the same level as the general device information
-			// change 1/0 to true/false. why? 'cause that's what i like to read ;)
-			$jsonTemplateCore     = self::parseCookie("core",$jsonTemplateCore,true);
-			$jsonTemplateExtended = self::parseCookie("extended",$jsonTemplateExtended,true);
-			$cookiePerSession     = self::parseCookie("ps",$cookiePerSession,true);
-			$cookiePerRequest     = self::parseCookie("pr",$cookiePerRequest,true);
+			// double-check that the already created profile matches the current version of the core & extended templates
+			if (($uaJSONCore->coreVersion != self::$coreVersion) || ($uaJSONExtended->extendedVersion != self::$extendedVersion)) {
+				self::buildTestPage();	
+			}
+				
+			// merge the data
+			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;	
 
-			// merge the data for future requests
-			$mergedInfo = new stdClass();
-			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
-			$mergedInfo = ($cookiePerSession) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerSession) : $mergedInfo;
-			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
-			
 			// some general properties
 			$mergedInfo->nojs      = false;
 			$mergedInfo->nocookies = false;
 			
-			// write out to disk for future requests that might have the same UA
-			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
-			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
-			
-			// add the user agent & hash to a list of already saved user agents
-			self::addToUAList();
-			
-			// unset the cookie that held the vast amount of test data
-			setcookie(self::$cookieID,"");
-			
-			// add our collected data to the session for use in future requests, also add the per request data
+			// put the merged JSON info into session
 			if (isset($_SESSION)) {
 				$_SESSION[self::$sessionID] = $mergedInfo;
 			}
-			
-			// return the collected data to the script for use in this go around
+
+			// need to build the tests for the per user
+			if (self::readDirFiles(self::$uaFeaturesPerSession, true)) {		
+				self::persession();
+			}
+				
+			// return to the script
 			return $mergedInfo;
 		
-		} else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
+		}  else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "nojs";
@@ -288,39 +256,70 @@ class Detector {
 			
 			// return the collected data to the script for use in this go around
 			return $mergedInfo;
+		
+		} else if (isset($_COOKIE) && isset($_COOKIE[self::$cookieID])) {
 
-		} else if (($uaJSONCore = json_decode(@file_get_contents($uaFileCore))) && ($uaJSONExtended = json_decode(@file_get_contents($uaFileExtended)))) {
-			
+			// to be clear, this section means that a UA was unknown, was profiled with modernizr & now we're saving that data to build a new profile
+
 			// where did we find this info to display... probably only need this for the demo
-			self::$foundIn = "file";
-			
-			// double-check that the already created profile matches the current version of the core & extended templates
-			if (($uaJSONCore->coreVersion != self::$coreVersion) || ($uaJSONExtended->extendedVersion != self::$extendedVersion)) {
-				self::buildTestPage();	
-			}
-				
-			// merge the data
-			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;	
+			self::$foundIn = "cookie";
+
+			// open the JSON template core & extended files that will be populated
+			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
+			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
+
+			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
+			$jsonTemplateCore->ua          = self::$ua;
+			$jsonTemplateCore->uaHash      = self::$uaHash;
+			$jsonTemplateCore->coreVersion = self::$coreVersion;
+			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
+
+			// populate extended properties
+			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
+			$jsonTemplateExtended->ua              = self::$ua;
+			$jsonTemplateExtended->uaHash          = self::$uaHash;
+			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
+
+			// create objects to hold any of the per user or per request data. it shouldn't be saved to file but it should be added to the session
+			$cookiePerSession = new stdClass();
+			$cookiePerRequest = new stdClass();
+
+			// push features into the same level as the general device information
+			// change 1/0 to true/false. why? 'cause that's what i like to read ;)
+			$jsonTemplateCore     = self::parseCookie("core",$jsonTemplateCore,true);
+			$jsonTemplateExtended = self::parseCookie("extended",$jsonTemplateExtended,true);
+			$cookiePerSession     = self::parseCookie("ps",$cookiePerSession,true);
+			$cookiePerRequest     = self::parseCookie("pr",$cookiePerRequest,true);
+
+			// merge the data for future requests
+			$mergedInfo = new stdClass();
+			$mergedInfo = ($jsonTemplateExtended) ? (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended) : $jsonTemplateCore;
+			$mergedInfo = ($cookiePerSession) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerSession) : $mergedInfo;
+			$mergedInfo = ($cookiePerRequest) ? (object) array_merge((array) $mergedInfo, (array) $cookiePerRequest) : $mergedInfo;
 
 			// some general properties
 			$mergedInfo->nojs      = false;
 			$mergedInfo->nocookies = false;
-			
-			// put the merged JSON info into session
+
+			// write out to disk for future requests that might have the same UA
+			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
+			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
+
+			// add the user agent & hash to a list of already saved user agents
+			self::addToUAList();
+
+			// unset the cookie that held the vast amount of test data
+			setcookie(self::$cookieID,"");
+
+			// add our collected data to the session for use in future requests, also add the per request data
 			if (isset($_SESSION)) {
 				$_SESSION[self::$sessionID] = $mergedInfo;
 			}
 
-			// need to build the tests for the per user
-			if (self::readDirFiles(self::$uaFeaturesPerSession, true)) {		
-				self::persession();
-			}
-				
-			// return to the script
+			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 
 		} else {
-			
 			
 			// didn't recognize that the user had been here before nor the UA string.
 			self::buildTestPage();
@@ -392,17 +391,18 @@ class Detector {
 	*/
 	private static function _mer($reload = true, $cookieExtra = '') {
 		$output = "".
-		  "var m=Modernizr;c='';k='';".
-		  "for(var f in m){".
+		  "var m=Modernizr;var c='';var k=''; var f;".
+		  "for(f in m){".
 		    "var j='';".
 		    "if(f[0]=='_'){continue;}".
 		    "var t=typeof m[f];".
 		    "if(t=='function'){continue;}".
 		    "c+=(c?'|':'".self::$cookieID.$cookieExtra."=')+f+':';".
-		    "kt=(f.slice(0,3)=='pr-')?true:false;".
+		    "var kt=(f.slice(0,3)=='pr-')?true:false;".
 		    "if(kt){k+=(k?'|':'".self::$cookieID."-pr=')+f+':';}".
 		    "if(t=='object'){".
-		      "for(var s in m[f]){".
+			  "var s;".
+		      "for(s in m[f]){".
 				"if (typeof m[f][s]=='boolean') { j+='/'+s+':'+(m[f][s]?1:0); }".
 		        "else { j+='/'+s+':'+m[f][s]; }".
 		      "}".
