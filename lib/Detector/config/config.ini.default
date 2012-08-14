@@ -35,6 +35,9 @@ defaultFamily           = "mobile-basic"
 // allow family switching via request variable
 switchFamily            = false
 
+// allow splits in family names for partial fallback
+splitFamily             = false
+
 // do we show a default family for those browsers that don't support JavaScript, by default NO
 noJSCookieFamilySupport = false
 noJSSearchFamily        = "desktop"
