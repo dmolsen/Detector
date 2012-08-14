@@ -307,7 +307,8 @@ class Detector {
 			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
 
 			// add the user agent & hash to a list of already saved user agents
-			self::addToUAList();
+			// not needed. a performance hit. really only necessary for detector.dmolsen.com
+			// self::addToUAList();
 
 			// unset the cookie that held the vast amount of test data
 			setcookie(self::$cookieID,"");
@@ -487,6 +488,7 @@ class Detector {
 	
 	/**
 	* Adds the user agent hash and user agent to a list for retrieval in the demo (or for any reason i guess)
+	* Important: This is a performance hit so enable with caution. I only had this for detector.dmolsen.com
 	*/
 	private static function addToUAList() {
 		// open user agent list and decode the JSON
