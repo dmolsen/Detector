@@ -43,6 +43,8 @@ class featureFamily {
 		if (Detector::$switchFamily && isset($_REQUEST['family']) && array_key_exists($_REQUEST['family'], $familiesJSON)) {
 			$_SESSION['detectorFamily'] = $_REQUEST['family'];
 			return $_REQUEST['family'];
+		} else if (Detector::$switchFamily && isset($_REQUEST['family']) && ($_REQUEST['family'] == 'clear-family')) {
+			unset($_SESSION['detectorFamily']);
 		} else if (isset($_SESSION['detectorFamily'])) {
 			return $_SESSION['detectorFamily'];
 		}
