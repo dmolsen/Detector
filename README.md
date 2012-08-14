@@ -1,4 +1,4 @@
-# Detector v0.8.2 #
+# Detector v0.8.5 #
 
 Detector is a simple, PHP- and JavaScript-based browser- and feature-detection library that can adapt to new devices & browsers on its own without the need to pull from a central database of browser information.
 	
@@ -14,7 +14,7 @@ A very [simple demo of Detector](http://detector.dmolsen.com/) is available for 
 
 ## Features ##
 
-The following features are as of v0.8.2 of Detector:
+The following features are as of v0.8.5 of Detector:
 
 * stores features detected with [Modernizr 2.5.2](http://www.modernizr.com/) ([list](http://detector.dmolsen.com/demo/modernizr-listing/)) and browser & device information detected with [ua-parser-php](https://github.com/tobie/ua-parser/tree/master/php) (based on [ua-parser](http://code.google.com/p/ua-parser/)) on the server as part of a browser profile for easy retrieval
 * uses the user agent string as a unique key for looking up information (e.g. one profile per user agent)
