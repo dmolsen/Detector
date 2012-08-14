@@ -100,8 +100,8 @@ class Detector {
 		self::configure();
 		
 		// populate some variables specific to build()
-		$uaFileCore                 = __DIR__."/".self::$uaDirCore."ua.".self::$uaHash.".json";
-		$uaFileExtended             = __DIR__."/".self::$uaDirExtended."ua.".self::$uaHash.".json";
+		$uaFileCore                 = __DIR__."/".self::$uaDirCore.self::uaDir()."ua.".self::$uaHash.".json";
+		$uaFileExtended             = __DIR__."/".self::$uaDirExtended.self::uaDir()."ua.".self::$uaHash.".json";
 		
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
 		$uaTemplateExtended         = __DIR__."/".self::$uaDirExtended."ua.template.json";
@@ -115,10 +115,10 @@ class Detector {
 			self::$foundIn = "archive";
 			
 			// decode the core data
-			$uaJSONCore     = json_decode(@file_get_contents(__DIR__."/".self::$uaDirCore."ua.".$pid.".json"));
+			$uaJSONCore     = json_decode(@file_get_contents(__DIR__."/".self::$uaDirCore.self::uaDir($pid)."ua.".$pid.".json"));
 			
 			// find and decode the extended data
-			$uaJSONExtended = json_decode(@file_get_contents(__DIR__."/".self::$uaDirExtended."ua.".$pid.".json"));
+			$uaJSONExtended = json_decode(@file_get_contents(__DIR__."/".self::$uaDirExtended.self::uaDir($pid)."ua.".$pid.".json"));
 			
 			// merge the data
 			$mergedInfo = ($uaJSONExtended) ? (object) array_merge((array) $uaJSONCore, (array) $uaJSONExtended) : $uaJSONCore;
@@ -506,14 +506,34 @@ class Detector {
 	}
 	
 	/**
+	* Returns the first twp characters of the uaHash so Detector can build out directories
+	* @param  {String}        uaHash to be substringed
+	*
+	* @return {String}        the first five characters of the hash
+	*/
+	private static function uaDir($uaHash = false) {
+		$uaHash = $uaHash ? $uaHash : self::$uaHash; 
+		return substr($uaHash,0,2)."/";
+	}
+	
+	/**
 	* Writes out the UA file to the specified location
 	* @param  {String}        encoded JSON
 	* @param  {String}        file path
 	*/
 	private static function writeUAFile($jsonEncoded,$uaFilePath) {
+		$dir = self::uaDir();
+		if (!is_dir(__DIR__."/".self::$uaDirCore.$dir)) {
+			// create the files and then change permissions
+			mkdir(__DIR__."/".self::$uaDirCore.$dir);
+			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
+			mkdir(__DIR__."/".self::$uaDirExtended.$dir);
+			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
+		}
 		$fp = fopen($uaFilePath, "w");
 		fwrite($fp, $jsonEncoded);
 		fclose($fp);
+		chmod($uaFilePath,0664);
 	}
 	
 	/**
