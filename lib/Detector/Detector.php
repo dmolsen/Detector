@@ -42,6 +42,7 @@ class Detector {
 	
 	public static $defaultFamily;
 	public static $switchFamily;
+	public static $splitFamily;
 	public static $noJSCookieFamilySupport;
 	public static $noJSSearchFamily;
 	public static $noJSDefaultFamily;
