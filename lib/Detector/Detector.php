@@ -393,8 +393,7 @@ class Detector {
 		self::readDirFiles(self::$uaFeaturesPerRequest);
 		readfile(__DIR__. '/lib/modernizr/onload.js');
 		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".self::buildNoscriptLink()."'></noscript></body></html>";
-		exit;
-		
+		exit;	
 	}
 	
 	/**
