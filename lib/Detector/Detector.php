@@ -605,7 +605,7 @@ class Detector {
 			foreach($uaFeatures as $key => $value) {
 				if ((strpos($key,$cookieExtension."-") !== false) || (($cookieExtension == 'core') && (strpos($key,"extended-") === false) && (strpos($key,"pr-") === false) && (strpos($key,"ps-") === false))) {
 					$key = str_replace($cookieExtension."-", "", $key);
-					if (is_object($value)) {
+					if (is_object($value) && (strpos($key,"_") !== 0)) {
 						foreach ($value as $vkey => $vvalue) {
 							if ($vvalue == "probably") { // hack for modernizr
 								$value->$vkey = true;
