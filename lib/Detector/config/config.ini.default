@@ -1,30 +1,15 @@
 /*
- * Configuration options for Detector
- * If config.ini doesn't exist Detector will attempt to read in config.ini.copy
- * and write out config.ini.
+ * Configuration Options for Detector
+ * If config.ini doesn't exist Detector will attempt to read in config.ini.default
+ * and write out the config.ini file.
  */
 
 // if we should run in debug mode. only useful if we want to view the site populated
 // w/ other Detector profiles
 debug                   = false
 
-// version number so that core and extended profiles can be rebuilt if necessary
-coreVersion             = "0.9"
+// version number so that extended profiles can be rebuilt if necessary
 extendedVersion         = "1.0"
-
-// where to find the modernizr scripts
-uaFeaturesMaxJS         = "lib/modernizr/modernizr.2.5.2.min.custom.js"
-uaFeaturesMinJS         = "lib/modernizr/modernizr.2.5.2.min.no-tests.js"
-
-// where to find the tests that should be run against browsers
-uaFeaturesCore          = "tests/core/"
-uaFeaturesExtended      = "tests/extended/"
-uaFeaturesPerSession    = "tests/persession/"
-uaFeaturesPerRequest    = "tests/perrequest/"
-
-// where to find the user agent profiles
-uaDirCore               = "user-agents/core/"
-uaDirExtended           = "user-agents/extended/"
 
 // where to find the features.js.php file from the web
 featuresScriptWebPath   = "/js/";
