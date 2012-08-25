@@ -546,9 +546,7 @@ class Detector {
 			mkdir(__DIR__."/".self::$uaDirExtended.$dir);
 			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
 		}
-		$fp = fopen($uaFilePath, "w");
-		fwrite($fp, $jsonEncoded);
-		fclose($fp);
+		file_put_contents($uaFilePath,$jsonEncoded);
 		chmod($uaFilePath,0664);
 	}
 	
