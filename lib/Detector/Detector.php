@@ -15,28 +15,33 @@ if (!function_exists('json_decode') || !function_exists('json_encode')) {
 
 class Detector {
 	
-	private static $debug               = false; // gets overwritten by the config so changing this won't do anything for you...
+	private static $debug               	= false; // gets overwritten by the config so changing this won't do anything for you...
 	
 	public static  $ua;
 	public static  $accept;
-	
-	private static $coreVersion;
-	private static $extendedVersion;
-	
-	public static  $foundIn;             // this is just for the demo. won't ever really be needed i don't think
-	
+
 	private static $uaHash;
 	private static $sessionID;
 	private static $cookieID;
-	private static $uaFeaturesMaxJS;     // all the default Modernizr Tests
-	private static $uaFeaturesMinJS;     // NO default tests except media queries, meant to run those in the perrequest folder
-	private static $uaFeaturesCore; 
-	private static $uaFeaturesExtended;
-	private static $uaFeaturesPerSession;
-	private static $uaFeaturesPerRequest;
+		
+	// version number so that profiles can be rebuilt if necessary
+	private static $coreVersion				= "0.95";
+	private static $extendedVersion;
 	
-	private static $uaDirCore;
-	private static $uaDirExtended;
+	// where to find the modernizr scripts
+	private static $uaFeaturesMaxJS			= "lib/modernizr/modernizr.full.js"; // all the default Modernizr Tests
+	private static $uaFeaturesMinJS			= "lib/modernizr/modernizr.slim.js"; // NO default tests except media queries, meant to run those in the perrequest folder
+	
+	// where to find the tests that should be run against browsers
+	private static $uaFeaturesCore			= "tests/core/";
+	private static $uaFeaturesExtended		= "tests/extended/";
+	private static $uaFeaturesPerSession	= "tests/persession/";
+	private static $uaFeaturesPerRequest	= "tests/perrequest/";
+	
+	// where to find the user agent profiles
+	private static $uaDirCore				= "user-agents/core/";
+	private static $uaDirExtended			= "user-agents/extended/";
+	
 	
 	private static $featuresScriptWebPath;
 	
@@ -47,6 +52,8 @@ class Detector {
 	public static $noJSSearchFamily;
 	public static $noJSDefaultFamily;
 	public static $noCookieFamily;
+	
+	public static  $foundIn;             	// this is just for the demo. won't ever really be needed i don't think
 	
 	/**
 	* Configures the shared variables in Detector so that they can be used in functions that might not need to run Detector::build();
