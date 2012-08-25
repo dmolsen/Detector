@@ -319,6 +319,12 @@ class Detector {
 
 			// unset the cookie that held the vast amount of test data
 			setcookie(self::$cookieID,"");
+			setcookie(self::$cookieID,"",time()-3600);
+			
+			unset($jsonTemplateCore);
+			unset($jsonTemplateExtended);
+			unset($cookiePerSession);
+			unset($cookiePerRequest);
 
 			// add our collected data to the session for use in future requests, also add the per request data
 			if (isset($_SESSION)) {
