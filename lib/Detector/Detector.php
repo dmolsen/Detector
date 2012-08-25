@@ -361,6 +361,7 @@ class Detector {
 		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
 		self::readDirFiles(self::$uaFeaturesPerSession);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
+		readfile(__DIR__. '/lib/modernizr/onload.js');
 		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".self::buildNoscriptLink()."'></noscript></body></html>";
 		exit;
 	}
@@ -377,6 +378,7 @@ class Detector {
 		self::readDirFiles(self::$uaFeaturesExtended);
 		self::readDirFiles(self::$uaFeaturesPerSession);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
+		readfile(__DIR__. '/lib/modernizr/onload.js');
 		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".self::buildNoscriptLink()."'></noscript></body></html>";
 		exit;
 		
@@ -392,7 +394,7 @@ class Detector {
 	* @return {String}       the HTML & JavaScript that tracks the per request test
 	*/
 	private static function _mer($reload = true, $cookieExtra = '') {
-		$output = "".
+		$output = "function cm() {".
 		  "var m=Modernizr;var c='';var k=''; var f;".
 		  "for(f in m){".
 		    "var j='';".
@@ -428,7 +430,7 @@ class Detector {
 			$output .= "document.location.reload();";
 		}
 		$output .= "}";
-		$output .= "}catch(e){}"."";
+		$output .= "}catch(e){}"."}";
 		return $output;
 	}
 
