@@ -2,6 +2,7 @@
 
 // require detector to get the family, autoloads the $ua var
 require_once "../../../lib/Detector/Detector.php";
+require_once "../../../lib/Detector/lib/helpers/detectorHelper.php";
 
 ?>
 
@@ -10,7 +11,7 @@ require_once "../../../lib/Detector/Detector.php";
   <head>
     <meta charset="utf-8">
     <title>JavaScript Listing</title>
-	<?=Detector::createJavaScriptObj($ua,"browserFull,isMobile,geolocation,cssanimations,cssgradients,indexeddb")?>
+	<?=DetectorHelpers::createJavaScriptObj($ua,"browserFull,isMobile,geolocation,cssanimations,cssgradients,indexeddb")?>
   </head>
 
   <body>
