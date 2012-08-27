@@ -15,28 +15,33 @@ if (!function_exists('json_decode') || !function_exists('json_encode')) {
 
 class Detector {
 	
-	private static $debug               = false; // gets overwritten by the config so changing this won't do anything for you...
+	private static $debug               	= false; // gets overwritten by the config so changing this won't do anything for you...
 	
 	public static  $ua;
 	public static  $accept;
-	
-	private static $coreVersion;
-	private static $extendedVersion;
-	
-	public static  $foundIn;             // this is just for the demo. won't ever really be needed i don't think
-	
+
 	private static $uaHash;
 	private static $sessionID;
 	private static $cookieID;
-	private static $uaFeaturesMaxJS;     // all the default Modernizr Tests
-	private static $uaFeaturesMinJS;     // NO default tests except media queries, meant to run those in the perrequest folder
-	private static $uaFeaturesCore; 
-	private static $uaFeaturesExtended;
-	private static $uaFeaturesPerSession;
-	private static $uaFeaturesPerRequest;
+		
+	// version number so that profiles can be rebuilt if necessary
+	private static $coreVersion				= "0.95";
+	private static $extendedVersion;
 	
-	private static $uaDirCore;
-	private static $uaDirExtended;
+	// where to find the modernizr scripts
+	private static $uaFeaturesMaxJS			= "lib/modernizr/modernizr.full.js"; // all the default Modernizr Tests
+	private static $uaFeaturesMinJS			= "lib/modernizr/modernizr.slim.js"; // NO default tests except media queries, meant to run those in the perrequest folder
+	
+	// where to find the tests that should be run against browsers
+	private static $uaFeaturesCore			= "tests/core/";
+	private static $uaFeaturesExtended		= "tests/extended/";
+	private static $uaFeaturesPerSession	= "tests/persession/";
+	private static $uaFeaturesPerRequest	= "tests/perrequest/";
+	
+	// where to find the user agent profiles
+	private static $uaDirCore				= "user-agents/core/";
+	private static $uaDirExtended			= "user-agents/extended/";
+	
 	
 	private static $featuresScriptWebPath;
 	
@@ -47,6 +52,8 @@ class Detector {
 	public static $noJSSearchFamily;
 	public static $noJSDefaultFamily;
 	public static $noCookieFamily;
+	
+	public static  $foundIn;             	// this is just for the demo. won't ever really be needed i don't think
 	
 	/**
 	* Configures the shared variables in Detector so that they can be used in functions that might not need to run Detector::build();
@@ -312,6 +319,12 @@ class Detector {
 
 			// unset the cookie that held the vast amount of test data
 			setcookie(self::$cookieID,"");
+			setcookie(self::$cookieID,"",time()-3600);
+			
+			unset($jsonTemplateCore);
+			unset($jsonTemplateExtended);
+			unset($cookiePerSession);
+			unset($cookiePerRequest);
 
 			// add our collected data to the session for use in future requests, also add the per request data
 			if (isset($_SESSION)) {
@@ -361,6 +374,7 @@ class Detector {
 		readfile(__DIR__ . '/' . self::$uaFeaturesMinJS);
 		self::readDirFiles(self::$uaFeaturesPerSession);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
+		readfile(__DIR__. '/lib/modernizr/onload.js');
 		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".self::buildNoscriptLink()."'></noscript></body></html>";
 		exit;
 	}
@@ -377,9 +391,9 @@ class Detector {
 		self::readDirFiles(self::$uaFeaturesExtended);
 		self::readDirFiles(self::$uaFeaturesPerSession);
 		self::readDirFiles(self::$uaFeaturesPerRequest);
+		readfile(__DIR__. '/lib/modernizr/onload.js');
 		print self::_mer() . "</script></head><body><noscript><meta http-equiv='refresh' content='0; url=".self::buildNoscriptLink()."'></noscript></body></html>";
-		exit;
-		
+		exit;	
 	}
 	
 	/**
@@ -392,7 +406,7 @@ class Detector {
 	* @return {String}       the HTML & JavaScript that tracks the per request test
 	*/
 	private static function _mer($reload = true, $cookieExtra = '') {
-		$output = "".
+		$output = "function cm() {".
 		  "var m=Modernizr;var c='';var k=''; var f;".
 		  "for(f in m){".
 		    "var j='';".
@@ -428,7 +442,7 @@ class Detector {
 			$output .= "document.location.reload();";
 		}
 		$output .= "}";
-		$output .= "}catch(e){}"."";
+		$output .= "}catch(e){}"."}";
 		return $output;
 	}
 
@@ -532,9 +546,7 @@ class Detector {
 			mkdir(__DIR__."/".self::$uaDirExtended.$dir);
 			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
 		}
-		$fp = fopen($uaFilePath, "w");
-		fwrite($fp, $jsonEncoded);
-		fclose($fp);
+		file_put_contents($uaFilePath,$jsonEncoded);
 		chmod($uaFilePath,0664);
 	}
 	
@@ -593,7 +605,7 @@ class Detector {
 			foreach($uaFeatures as $key => $value) {
 				if ((strpos($key,$cookieExtension."-") !== false) || (($cookieExtension == 'core') && (strpos($key,"extended-") === false) && (strpos($key,"pr-") === false) && (strpos($key,"ps-") === false))) {
 					$key = str_replace($cookieExtension."-", "", $key);
-					if (is_object($value)) {
+					if (is_object($value) && (strpos($key,"_") !== 0)) {
 						foreach ($value as $vkey => $vvalue) {
 							if ($vvalue == "probably") { // hack for modernizr
 								$value->$vkey = true;

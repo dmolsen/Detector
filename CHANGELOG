@@ -2,6 +2,12 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+DET-v0.9.0 (Aug. 24, 2012)
+ - FIX: updated Modernizr to 2.6.1
+ - FIX: trimmed down the config
+ - FIX: the test build page now waits for the onload event before building the cookie & redirecting. should address race conditions with a few tests.
+ - ADD: added per-session tests that existed in Modernizr feature-detects that I wanted for v1.0 of Detector (see http://bit.ly/O14wcZ for full list)
+
 DET-v0.8.5 (Aug. 14, 2012) 
  - FIX: commmented out call to addToUAList() to increase performance
  - ADD: now throwing profiles into directories based on the first two characters of the hash. performance tweak because IE 7+8 create profiles an amazing number of profiles
