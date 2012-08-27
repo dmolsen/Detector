@@ -314,11 +314,10 @@ class Detector {
 			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
 
 			// add the user agent & hash to a list of already saved user agents
-			// not needed. a performance hit. really only necessary for detector.dmolsen.com
+			// this isn't really useful for anything beyond detector.dmolsen.com
 			// self::addToUAList();
 
 			// unset the cookie that held the vast amount of test data
-			setcookie(self::$cookieID,"");
 			setcookie(self::$cookieID,"",time()-3600);
 			
 			unset($jsonTemplateCore);
