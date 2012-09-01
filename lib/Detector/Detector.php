@@ -543,7 +543,7 @@ class Detector {
 			mkdir(__DIR__."/".self::$uaDirCore.$dir);
 			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
 			mkdir(__DIR__."/".self::$uaDirExtended.$dir);
-			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
+			chmod(__DIR__."/".self::$uaDirExtended.$dir,0775);
 		}
 		file_put_contents($uaFilePath,$jsonEncoded);
 		chmod($uaFilePath,0664);
