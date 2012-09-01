@@ -142,6 +142,50 @@ class Detector {
 			// return to the script
 			return $mergedInfo;
 		
+		} else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
+			
+			// where did we find this info to display... probably only need this for the demo
+			self::$foundIn = "nojs";
+
+			// open the JSON template core & extended files that will be populated
+			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
+			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
+			
+			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
+			// include the basic properties of the UA
+			$jsonTemplateCore->ua          = self::$ua;
+			$jsonTemplateCore->uaHash      = self::$uaHash;
+			$jsonTemplateCore->coreVersion = self::$coreVersion;
+			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
+			
+			// populate extended properties
+			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
+			$jsonTemplateExtended->ua              = self::$ua;
+			$jsonTemplateExtended->uaHash          = self::$uaHash;
+			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
+
+			$mergedInfo = new stdClass();
+			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
+			
+			// some general properties
+			$mergedInfo->nojs      = false;
+			$mergedInfo->nocookies = false;
+			
+			// add an attribute to the object in case no js or no cookies was sent
+			if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
+				$mergedInfo->nojs      = true;
+			} else if (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) {
+				$mergedInfo->nocookies = true;
+			} 
+
+			// try setting the session unless cookies are actively not supported
+			if (!(isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) && isset($_SESSION)) {
+				$_SESSION[self::$sessionID] = $mergedInfo;
+			}
+			
+			// return the collected data to the script for use in this go around
+			return $mergedInfo;
+		
 		} else if (@session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID]) && isset($_COOKIE) && isset($_COOKIE[self::$cookieID."-ps"])) {
 
 			// where did we find this info to display... probably only need this for the demo
@@ -219,50 +263,6 @@ class Detector {
 			}
 				
 			// return to the script
-			return $mergedInfo;
-		
-		}  else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
-			
-			// where did we find this info to display... probably only need this for the demo
-			self::$foundIn = "nojs";
-
-			// open the JSON template core & extended files that will be populated
-			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
-			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
-			
-			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
-			// include the basic properties of the UA
-			$jsonTemplateCore->ua          = self::$ua;
-			$jsonTemplateCore->uaHash      = self::$uaHash;
-			$jsonTemplateCore->coreVersion = self::$coreVersion;
-			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
-			
-			// populate extended properties
-			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
-			$jsonTemplateExtended->ua              = self::$ua;
-			$jsonTemplateExtended->uaHash          = self::$uaHash;
-			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
-
-			$mergedInfo = new stdClass();
-			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
-			
-			// some general properties
-			$mergedInfo->nojs      = false;
-			$mergedInfo->nocookies = false;
-			
-			// add an attribute to the object in case no js or no cookies was sent
-			if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
-				$mergedInfo->nojs      = true;
-			} else if (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) {
-				$mergedInfo->nocookies = true;
-			} 
-
-			// try setting the session unless cookies are actively not supported
-			if (!(isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) && isset($_SESSION)) {
-				$_SESSION[self::$sessionID] = $mergedInfo;
-			}
-			
-			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
 		} else if (isset($_COOKIE) && isset($_COOKIE[self::$cookieID])) {
