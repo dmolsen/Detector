@@ -92,11 +92,11 @@ class Detector {
 	/**
 	* Tests to see if:
 	*     - see if this is a debug request with appropriately formed pid, else
+	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
 	*     - see if the cookie for the per user test has been set so we can record the results and add to the session
 	*     - see if a session has already been opened for the request browser, if so send the info back, else
-	*     - see if the cookie for the full test has been set so we can build the profile, if so build the profile & send the info back, else
-	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
 	*     - see if detector can find an already created profile for the browser, if so send the info back, else
+	*     - see if the cookie for the full test has been set so we can build the profile, if so build the profile & send the info back, else
 	*     - start the process for building a profile for this unknown browser
 	*
 	* Logic is based heavily on modernizr-server
