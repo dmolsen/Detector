@@ -1,4 +1,4 @@
-# Detector v0.8.5 #
+# Detector v0.9.5 #
 
 Detector is a simple, PHP- and JavaScript-based browser- and feature-detection library that can adapt to new devices & browsers on its own without the need to pull from a central database of browser information.
 	
@@ -16,7 +16,7 @@ A very [simple demo of Detector](http://detector.dmolsen.com/) is available for 
 
 The following features are as of v0.8.5 of Detector:
 
-* stores features detected with [Modernizr 2.5.2](http://www.modernizr.com/) ([list](http://detector.dmolsen.com/demo/modernizr-listing/)) and browser & device information detected with [ua-parser-php](https://github.com/tobie/ua-parser/tree/master/php) (based on [ua-parser](http://code.google.com/p/ua-parser/)) on the server as part of a browser profile for easy retrieval
+* stores features detected with [Modernizr 2.6.1](http://www.modernizr.com/) ([list](http://detector.dmolsen.com/demo/modernizr-listing/)) and browser & device information detected with [ua-parser-php](https://github.com/tobie/ua-parser/tree/master/php) (based on [ua-parser](http://code.google.com/p/ua-parser/)) on the server as part of a browser profile for easy retrieval
 * uses the user agent string as a unique key for looking up information (e.g. one profile per user agent)
 * majority of tests are run only once per unique user agent string so only one user is ever tested & redirected
 * [add your own feature tests](https://github.com/dmolsen/Detector/wiki/Detector-Test-Tutorial) and store the results using Modernizr's addTest() API
@@ -28,6 +28,7 @@ The following features are as of v0.8.5 of Detector:
 * give your mobile users a "desktop" view via family switching (assuming you use a templating system)
 * push feature information to the browser via CSS classes and/or a JavaScript object a la Modernizr
 * use with a templating system like Mustache to [create a RESS system](https://github.com/dmolsen/Detector/wiki/Templating-with-Detector-&-Mustache-Tutorial)
+* confidence checks that help determine if data collected on a per UA basis is correct
 
 ## Tutorials ##
 
