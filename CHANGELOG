@@ -2,6 +2,12 @@ THIS CHANGELOG IS AN ATTEMPT TO DOCUMENT CHANGES TO THIS PROJECT.
 SUPER MINOR REVISION NUMBERS WON'T SHOW UP IN GITHUB BUT IT'LL HELP
 ME ORGANIZE WHEN I MADE A SET OF FIXES
 
+DET-v0.9.5 (Sep. 2, 2012)
+ - FIX: the extended directories created by detector are now chmod'ed 775
+ - FIX: the search, nojs, nocookies check now occurs before all other checks to eliminate a redirect loop
+ - FIX: modernizr listing demo now points at the new modernizr file
+ - ADD: a confidence check mechanism so that UAs can be re-tested to see if detector's data is correct
+
 DET-v0.9.0 (Aug. 24, 2012)
  - FIX: updated Modernizr to 2.6.1
  - FIX: trimmed down the config

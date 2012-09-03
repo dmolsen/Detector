@@ -1,7 +1,7 @@
 <?php
 
 /*!
- * Detector v0.8.5
+ * Detector v0.9.5
  *
  * Copyright (c) 2011-2012 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -42,6 +42,8 @@ class Detector {
 	private static $uaDirCore				= "user-agents/core/";
 	private static $uaDirExtended			= "user-agents/extended/";
 	
+	// how random should the re-check for a UA be...
+	private static $ccRandomRange           = 10; // 10% chance of re-checking
 	
 	private static $featuresScriptWebPath;
 	
@@ -90,11 +92,11 @@ class Detector {
 	/**
 	* Tests to see if:
 	*     - see if this is a debug request with appropriately formed pid, else
+	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
 	*     - see if the cookie for the per user test has been set so we can record the results and add to the session
 	*     - see if a session has already been opened for the request browser, if so send the info back, else
-	*     - see if the cookie for the full test has been set so we can build the profile, if so build the profile & send the info back, else
-	*     - see if this browser reports being a spider, doesn't support JS or doesn't support cookies
 	*     - see if detector can find an already created profile for the browser, if so send the info back, else
+	*     - see if the cookie for the full test has been set so we can build the profile, if so build the profile & send the info back, else
 	*     - start the process for building a profile for this unknown browser
 	*
 	* Logic is based heavily on modernizr-server
@@ -109,9 +111,12 @@ class Detector {
 		// populate some variables specific to build()
 		$uaFileCore                 = __DIR__."/".self::$uaDirCore.self::uaDir()."ua.".self::$uaHash.".json";
 		$uaFileExtended             = __DIR__."/".self::$uaDirExtended.self::uaDir()."ua.".self::$uaHash.".json";
+		$ccFile                     = __DIR__."/".self::$uaDirCore.self::uaDir()."cc.".self::$uaHash.".json";
+		$ccFailure                  = __DIR__."/".self::$uaDirCore."cc-failures/cc.".self::$uaHash.".".time().".json";
 		
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
 		$uaTemplateExtended         = __DIR__."/".self::$uaDirExtended."ua.template.json";
+		$ccTemplate                 = __DIR__."/".self::$uaDirCore."cc.template.json";
 		
 		$pid                        = (isset($_REQUEST['pid']) && preg_match("/[a-z0-9]{32}/",$_REQUEST['pid'])) ? $_REQUEST['pid'] : false;
 		
@@ -140,6 +145,50 @@ class Detector {
 			}
 			
 			// return to the script
+			return $mergedInfo;
+		
+		} else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
+			
+			// where did we find this info to display... probably only need this for the demo
+			self::$foundIn = "nojs";
+
+			// open the JSON template core & extended files that will be populated
+			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
+			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
+			
+			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
+			// include the basic properties of the UA
+			$jsonTemplateCore->ua          = self::$ua;
+			$jsonTemplateCore->uaHash      = self::$uaHash;
+			$jsonTemplateCore->coreVersion = self::$coreVersion;
+			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
+			
+			// populate extended properties
+			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
+			$jsonTemplateExtended->ua              = self::$ua;
+			$jsonTemplateExtended->uaHash          = self::$uaHash;
+			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
+
+			$mergedInfo = new stdClass();
+			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
+			
+			// some general properties
+			$mergedInfo->nojs      = false;
+			$mergedInfo->nocookies = false;
+			
+			// add an attribute to the object in case no js or no cookies was sent
+			if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
+				$mergedInfo->nojs      = true;
+			} else if (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) {
+				$mergedInfo->nocookies = true;
+			} 
+
+			// try setting the session unless cookies are actively not supported
+			if (!(isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) && isset($_SESSION)) {
+				$_SESSION[self::$sessionID] = $mergedInfo;
+			}
+			
+			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
 		} else if (@session_start() && isset($_SESSION) && isset($_SESSION[self::$sessionID]) && isset($_COOKIE) && isset($_COOKIE[self::$cookieID."-ps"])) {
@@ -191,14 +240,17 @@ class Detector {
 			// send the data back to the script to be used
 			return $mergedInfo;
 			
-		} else if (($uaJSONCore = json_decode(@file_get_contents($uaFileCore))) && ($uaJSONExtended = json_decode(@file_get_contents($uaFileExtended)))) {
+		} else if (($uaJSONCore = json_decode(@file_get_contents($uaFileCore))) && ($uaJSONExtended = json_decode(@file_get_contents($uaFileExtended))) && isset($_SESSION) && !isset($_SESSION[self::$sessionID."-cc"]) && !isset($_SESSION[self::$sessionID."-b"])) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "file";
 			
-			// double-check that the already created profile matches the current version of the core & extended templates
+			// see if we should randomly re-test this UA or if the core/extended versions have changes
 			if (($uaJSONCore->coreVersion != self::$coreVersion) || ($uaJSONExtended->extendedVersion != self::$extendedVersion)) {
 				self::buildTestPage();	
+			} else if (rand(1,self::$ccRandomRange) == 1) {
+				$_SESSION[self::$sessionID."-cc"] = true;
+				self::buildTestPage();			
 			}
 				
 			// merge the data
@@ -219,50 +271,6 @@ class Detector {
 			}
 				
 			// return to the script
-			return $mergedInfo;
-		
-		}  else if (self::checkSpider() || (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) || (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true"))) {
-			
-			// where did we find this info to display... probably only need this for the demo
-			self::$foundIn = "nojs";
-
-			// open the JSON template core & extended files that will be populated
-			$jsonTemplateCore     = self::openUAFile($uaTemplateCore);
-			$jsonTemplateExtended = self::openUAFile($uaTemplateExtended);
-			
-			// use ua-parser-php to set-up the basic properties for this UA, populate other core properties
-			// include the basic properties of the UA
-			$jsonTemplateCore->ua          = self::$ua;
-			$jsonTemplateCore->uaHash      = self::$uaHash;
-			$jsonTemplateCore->coreVersion = self::$coreVersion;
-			$jsonTemplateCore              = self::createUAProperties($jsonTemplateCore);
-			
-			// populate extended properties
-			$jsonTemplateExtended                  = !isset($jsonTemplateExtended) ? new stdClass() : $jsonTemplateExtended;
-			$jsonTemplateExtended->ua              = self::$ua;
-			$jsonTemplateExtended->uaHash          = self::$uaHash;
-			$jsonTemplateExtended->extendedVersion = self::$extendedVersion;
-
-			$mergedInfo = new stdClass();
-			$mergedInfo = (object) array_merge((array) $jsonTemplateCore, (array) $jsonTemplateExtended);
-			
-			// some general properties
-			$mergedInfo->nojs      = false;
-			$mergedInfo->nocookies = false;
-			
-			// add an attribute to the object in case no js or no cookies was sent
-			if (isset($_REQUEST["nojs"]) && ($_REQUEST["nojs"] == "true")) {
-				$mergedInfo->nojs      = true;
-			} else if (isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) {
-				$mergedInfo->nocookies = true;
-			} 
-
-			// try setting the session unless cookies are actively not supported
-			if (!(isset($_REQUEST["nocookies"]) && ($_REQUEST["nocookies"] == "true")) && isset($_SESSION)) {
-				$_SESSION[self::$sessionID] = $mergedInfo;
-			}
-			
-			// return the collected data to the script for use in this go around
 			return $mergedInfo;
 		
 		} else if (isset($_COOKIE) && isset($_COOKIE[self::$cookieID])) {
@@ -310,21 +318,29 @@ class Detector {
 			$mergedInfo->nocookies = false;
 
 			// write out to disk for future requests that might have the same UA
-			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
-			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
-
+			$jsonTemplateCore     = json_encode($jsonTemplateCore);
+			$jsonTemplateExtended = json_encode($jsonTemplateExtended);
+			if (@session_start() && isset($_SESSION) && isset($_SESSION['confidenceCheck']) && ($_SESSION['confidenceCheck'] == true)) {
+				self::confidenceCheck($jsonTemplateCore,$ccFile,$ccFailure);
+			} else {
+				self::writeUAFile($jsonTemplateCore,$uaFileCore);
+				self::writeUAFile($jsonTemplateExtended,$uaFileExtended);
+				self::writeCCFile(md5($jsonTemplateCore),$ccTemplate,$ccFile);
+			}
+			
 			// add the user agent & hash to a list of already saved user agents
-			// not needed. a performance hit. really only necessary for detector.dmolsen.com
+			// this isn't really useful for anything beyond detector.dmolsen.com
 			// self::addToUAList();
 
 			// unset the cookie that held the vast amount of test data
-			setcookie(self::$cookieID,"");
 			setcookie(self::$cookieID,"",time()-3600);
 			
 			unset($jsonTemplateCore);
 			unset($jsonTemplateExtended);
 			unset($cookiePerSession);
 			unset($cookiePerRequest);
+			
+			unset($_SESSION[self::$sessionID."-b"]);
 
 			// add our collected data to the session for use in future requests, also add the per request data
 			if (isset($_SESSION)) {
@@ -383,6 +399,7 @@ class Detector {
 	* Builds the browser test page
 	*/
 	public static function buildTestPage() {		
+		$_SESSION[self::$sessionID."-b"] = true;
 		// gather info by sending Modernizr & custom tests
 		print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
 		readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
@@ -544,10 +561,43 @@ class Detector {
 			mkdir(__DIR__."/".self::$uaDirCore.$dir);
 			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
 			mkdir(__DIR__."/".self::$uaDirExtended.$dir);
-			chmod(__DIR__."/".self::$uaDirCore.$dir,0775);
+			chmod(__DIR__."/".self::$uaDirExtended.$dir,0775);
 		}
 		file_put_contents($uaFilePath,$jsonEncoded);
 		chmod($uaFilePath,0664);
+	}
+	
+	/**
+	* Writes out the Confidence Check file to the specified location
+	* @param  {String}        encoded JSON
+	* @param  {String}        file path
+	*/
+	private static function writeCCFile($md5Encoded,$ccTemplate,$ccFilePath) {
+		$ccFile              = json_decode(file_get_contents($ccTemplate));
+		$ccFile->ua          = self::$ua;
+		$ccFile->uaHash      = self::$uaHash;
+		$ccFile->coreVersion = self::$coreVersion;
+		$ccFile->featureHash = $md5Encoded;
+		file_put_contents($ccFilePath,json_encode($ccFile));
+		chmod($ccFilePath,0664);
+	}
+	
+	/**
+	* Checks to see if a given set of features from a browser matches what is already on disk
+	* @param  {String}        encoded JSON
+	* @param  {String}        file path
+	*/
+	private static function confidenceCheck($jsonEncoded,$ccFilePath,$ccFailure) {
+		$confidenceFile = json_decode(file_get_contents($ccFilePath));
+		if (md5($jsonEncoded) == $confidenceFile->featureHash) {
+			$confidenceFile->success++;
+		} else {
+			$confidenceFile->failure++;
+			file_put_contents($ccFailure,$jsonEncoded);
+		}
+		$confidenceFile->total++;
+		file_put_contents($ccFilePath,json_encode($confidenceFile));
+		unset($_SESSION[self::$sessionID."-cc"]);
 	}
 	
 	/**

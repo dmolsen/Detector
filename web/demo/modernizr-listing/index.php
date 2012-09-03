@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Modernizr Listing</title>
-	<script type="text/javascript" src="/js/modernizr.2.5.2.min.custom.js"></script>
+	<script type="text/javascript" src="/js/modernizr.full.js"></script>
   </head>
 
   <style type="text/css">
