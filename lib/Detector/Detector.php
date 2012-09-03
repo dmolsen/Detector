@@ -42,6 +42,8 @@ class Detector {
 	private static $uaDirCore				= "user-agents/core/";
 	private static $uaDirExtended			= "user-agents/extended/";
 	
+	// how random should the re-check for a UA be...
+	private static $ccRandomRange           = 10; // 10% chance of re-checking
 	
 	private static $featuresScriptWebPath;
 	
@@ -109,9 +111,12 @@ class Detector {
 		// populate some variables specific to build()
 		$uaFileCore                 = __DIR__."/".self::$uaDirCore.self::uaDir()."ua.".self::$uaHash.".json";
 		$uaFileExtended             = __DIR__."/".self::$uaDirExtended.self::uaDir()."ua.".self::$uaHash.".json";
+		$ccFile                     = __DIR__."/".self::$uaDirCore.self::uaDir()."cc.".self::$uaHash.".json";
+		$ccFailure                  = __DIR__."/".self::$uaDirCore."cc-failures/cc.".self::$uaHash.".".time().".json";
 		
 		$uaTemplateCore             = __DIR__."/".self::$uaDirCore."ua.template.json";
 		$uaTemplateExtended         = __DIR__."/".self::$uaDirExtended."ua.template.json";
+		$ccTemplate                 = __DIR__."/".self::$uaDirCore."cc.template.json";
 		
 		$pid                        = (isset($_REQUEST['pid']) && preg_match("/[a-z0-9]{32}/",$_REQUEST['pid'])) ? $_REQUEST['pid'] : false;
 		
@@ -235,14 +240,17 @@ class Detector {
 			// send the data back to the script to be used
 			return $mergedInfo;
 			
-		} else if (($uaJSONCore = json_decode(@file_get_contents($uaFileCore))) && ($uaJSONExtended = json_decode(@file_get_contents($uaFileExtended)))) {
+		} else if (($uaJSONCore = json_decode(@file_get_contents($uaFileCore))) && ($uaJSONExtended = json_decode(@file_get_contents($uaFileExtended))) && isset($_SESSION) && !isset($_SESSION[self::$sessionID."-cc"]) && !isset($_SESSION[self::$sessionID."-b"])) {
 			
 			// where did we find this info to display... probably only need this for the demo
 			self::$foundIn = "file";
 			
-			// double-check that the already created profile matches the current version of the core & extended templates
+			// see if we should randomly re-test this UA or if the core/extended versions have changes
 			if (($uaJSONCore->coreVersion != self::$coreVersion) || ($uaJSONExtended->extendedVersion != self::$extendedVersion)) {
 				self::buildTestPage();	
+			} else if (rand(1,self::$ccRandomRange) == 1) {
+				$_SESSION[self::$sessionID."-cc"] = true;
+				self::buildTestPage();			
 			}
 				
 			// merge the data
@@ -310,9 +318,16 @@ class Detector {
 			$mergedInfo->nocookies = false;
 
 			// write out to disk for future requests that might have the same UA
-			self::writeUAFile(json_encode($jsonTemplateCore),$uaFileCore);
-			self::writeUAFile(json_encode($jsonTemplateExtended),$uaFileExtended);
-
+			$jsonTemplateCore     = json_encode($jsonTemplateCore);
+			$jsonTemplateExtended = json_encode($jsonTemplateExtended);
+			if (@session_start() && isset($_SESSION) && isset($_SESSION['confidenceCheck']) && ($_SESSION['confidenceCheck'] == true)) {
+				self::confidenceCheck($jsonTemplateCore,$ccFile,$ccFailure);
+			} else {
+				self::writeUAFile($jsonTemplateCore,$uaFileCore);
+				self::writeUAFile($jsonTemplateExtended,$uaFileExtended);
+				self::writeCCFile(md5($jsonTemplateCore),$ccTemplate,$ccFile);
+			}
+			
 			// add the user agent & hash to a list of already saved user agents
 			// this isn't really useful for anything beyond detector.dmolsen.com
 			// self::addToUAList();
@@ -324,6 +339,8 @@ class Detector {
 			unset($jsonTemplateExtended);
 			unset($cookiePerSession);
 			unset($cookiePerRequest);
+			
+			unset($_SESSION[self::$sessionID."-b"]);
 
 			// add our collected data to the session for use in future requests, also add the per request data
 			if (isset($_SESSION)) {
@@ -382,6 +399,7 @@ class Detector {
 	* Builds the browser test page
 	*/
 	public static function buildTestPage() {		
+		$_SESSION[self::$sessionID."-b"] = true;
 		// gather info by sending Modernizr & custom tests
 		print "<!DOCTYPE html><html lang=\"en\"><head><meta name=\"viewport\" content=\"width=device-width\"><script type='text/javascript'>";
 		readfile(__DIR__ . '/lib/modernizr/cookieTest.js');
@@ -547,6 +565,39 @@ class Detector {
 		}
 		file_put_contents($uaFilePath,$jsonEncoded);
 		chmod($uaFilePath,0664);
+	}
+	
+	/**
+	* Writes out the Confidence Check file to the specified location
+	* @param  {String}        encoded JSON
+	* @param  {String}        file path
+	*/
+	private static function writeCCFile($md5Encoded,$ccTemplate,$ccFilePath) {
+		$ccFile              = json_decode(file_get_contents($ccTemplate));
+		$ccFile->ua          = self::$ua;
+		$ccFile->uaHash      = self::$uaHash;
+		$ccFile->coreVersion = self::$coreVersion;
+		$ccFile->featureHash = $md5Encoded;
+		file_put_contents($ccFilePath,json_encode($ccFile));
+		chmod($ccFilePath,0664);
+	}
+	
+	/**
+	* Checks to see if a given set of features from a browser matches what is already on disk
+	* @param  {String}        encoded JSON
+	* @param  {String}        file path
+	*/
+	private static function confidenceCheck($jsonEncoded,$ccFilePath,$ccFailure) {
+		$confidenceFile = json_decode(file_get_contents($ccFilePath));
+		if (md5($jsonEncoded) == $confidenceFile->featureHash) {
+			$confidenceFile->success++;
+		} else {
+			$confidenceFile->failure++;
+			file_put_contents($ccFailure,$jsonEncoded);
+		}
+		$confidenceFile->total++;
+		file_put_contents($ccFilePath,json_encode($confidenceFile));
+		unset($_SESSION[self::$sessionID."-cc"]);
 	}
 	
 	/**
