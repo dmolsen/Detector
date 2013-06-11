@@ -4,7 +4,7 @@
 	},
 	"mobile-advanced": { 
     "isMobile": true,
-    "features": [ "csstranforms" ]
+    "features": [ "csstransforms" ]
 	},
 	"mobile-basic": { 
     "isMobile": true
