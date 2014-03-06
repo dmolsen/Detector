@@ -4,6 +4,9 @@
  * and write out config.ini.
  */
 
+//Where to store User-Agent caches, e.g. cachePath = "/../../tmp/cache/ua-detector"
+cachePath               = ""
+
 // if we should run in debug mode. only useful if we want to view the site populated
 // w/ other Detector profiles
 debug                   = false
