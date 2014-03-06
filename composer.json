@@ -1,0 +1,17 @@
+{
+    "name": "dmolsen/Detector",
+    "type": "library",
+    "description": "Combined browser- & feature-detection for your app",
+    "keywords": ["useragent","user-agent","detector","device","YABFDL","ua-parser-php", "feature detection"],
+    "homepage": "http://detector.dmolsen.com/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dave Olsen",
+            "homepage": "https://github.com/dmolsen"
+        }
+    ],
+    "require": {
+        "composer/installers": "*"
+    }
+}
